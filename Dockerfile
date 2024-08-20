@@ -17,7 +17,7 @@ FROM nginx:alpine AS runner
 COPY --from=build /app/apps/main/dist /usr/share/nginx/html
 
 # Экспонируем порт 80
-EXPOSE 80
+EXPOSE 8080
 
 # Запускаем Nginx
 CMD ["nginx", "-g", "daemon off;"]
