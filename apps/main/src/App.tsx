@@ -10,7 +10,7 @@ export function App() {
 
   return (
     <div>
-      <div className="text-green font-bold">Welcome to ARC </div>
+      <div className="font-bold text-cyan-400">Welcome to ARC </div>
       <div>Wallet: {wallet?.create().hello || 'wait...'}</div>
     </div>
   );
