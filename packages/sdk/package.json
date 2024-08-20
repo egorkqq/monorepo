@@ -1,0 +1,21 @@
+{
+  "name": "@arc/sdk",
+  "version": "0.0.1",
+  "author": "ARC",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "rm -fr dist && tsc --outDir dist",
+    "start": "tsc -w"
+  },
+  "devDependencies": {
+    "typescript": "5.5.4",
+    "vitest": "2.0.5"
+  },
+  "dependencies": {
+    "@ton/core": "0.57.0",
+    "@ton/crypto": "3.3.0",
+    "@ton/ton": "15.0.0",
+    "bignumber.js": "9.1.2",
+    "eslint": "8.57.0"
+  }
+}

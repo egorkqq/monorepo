@@ -7,7 +7,7 @@
 
 
     "paths": {
-      "@repo/api/*": ["./src/*"]
+      "@arc/api/*": ["./src/*"]
     }
   }
 }

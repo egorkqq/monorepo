@@ -11,11 +11,11 @@
 
 ### Apps and Packages
 
-- `@repo/web`: Vite, React, TanStack Router and tRPC Client
-- `@repo/api`: Express.js, Drizzle and tRPC Server
-- `@repo/eslint-config`: `eslint` configurations
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
-- `@repo/tailwind-config`: shared Tailwind configuration
+- `@arc/main`: Vite, React, TanStack Router and tRPC Client
+- `@arc/api`: Express.js, Drizzle and tRPC Server
+- `@arc/eslint-config`: `eslint` configurations
+- `@arc/typescript-config`: `tsconfig.json`s used throughout the monorepo
+- `@arc/tailwind-config`: shared Tailwind configuration
 
 Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 

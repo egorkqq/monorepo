@@ -1,8 +1,8 @@
 {
-  "name": "react-trpc-turbo",
+  "name": "architecton-monorepo",
   "version": "1.0.0",
   "private": true,
-  "packageManager": "pnpm@8.9.0",
+  "packageManager": "pnpm@9.1.4",
   "engines": {
     "node": ">=18"
   },
@@ -14,11 +14,11 @@
     "start:backend": "node apps/api/dist/server.js"
   },
   "devDependencies": {
-    "@repo/eslint-config": "workspace:*",
-    "@repo/tailwind-config": "workspace:*",
-    "@repo/typescript-config": "workspace:*",
-    "prettier": "^3.3.3",
-    "prettier-plugin-tailwindcss": "^0.6.5",
+    "@arc/eslint-config": "workspace:*",
+    "@arc/tailwind-config": "workspace:*",
+    "@arc/typescript-config": "workspace:*",
+    "prettier": "3.3.3",
+    "prettier-plugin-tailwindcss": "0.6.6",
     "turbo": "latest"
   }
 }
