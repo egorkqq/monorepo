@@ -20,7 +20,7 @@ export const App = () => {
         Wallet:
         {wallet?.create().hello || "wait..."}
       </div>
-      <Button>TEST</Button>
+      <Button className="w-full">TEST</Button>
     </div>
   );
 };
