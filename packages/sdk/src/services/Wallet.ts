@@ -2,7 +2,7 @@ export class Wallet {
   constructor() {}
 
   create() {
-    return { hello: "man" };
+    return { hello: "123" };
   }
 
   change() {
