@@ -1,0 +1,1 @@
+{ "extends": ["@arc/eslint-config/eslint"] }
