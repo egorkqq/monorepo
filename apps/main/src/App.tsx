@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 
 import { Wallet } from "@arc/sdk";
-import { Button } from "@arc/uikit";
 
 export const App = () => {
   const [wallet, setWallet] = useState<Wallet | undefined>(undefined);
@@ -23,7 +22,7 @@ export const App = () => {
         Wallet:
         {wallet?.create().hello || "wait..."}
       </div>
-      <Button className="w-full bg-[#ccc]">TEST</Button>
+      <button className="w-full bg-[#ccc]">TEST</button>
     </div>
   );
 };

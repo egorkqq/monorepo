@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@arc/sdk": "workspace:*",
-    "@arc/uikit": "workspace:*",
     "@tanstack/react-query": "5.51.24",
     "clsx": "2.1.1",
     "react": "18.2.0",
