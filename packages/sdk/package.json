@@ -5,7 +5,8 @@
   "main": "src/index.ts",
   "scripts": {
     "build": "rm -fr dist && tsc --outDir dist",
-    "start": "tsc -w"
+    "start": "tsc -w",
+    "typecheck": "tsc"
   },
   "dependencies": {
     "@ton/core": "0.57.0",

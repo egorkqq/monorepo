@@ -11,15 +11,14 @@ node_modules
 .env.development.local
 .env.test.local
 .env.production.local
+.env.development
+.env.production
 
 # Testing
 coverage
 
 # Turbo
 .turbo
-
-# Vercel
-.vercel
 
 # Build Outputs
 .next/
@@ -37,3 +36,15 @@ yarn-error.log*
 .DS_Store
 *.pem
 .eslintcache
+
+# Storybook
+storybook-static
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Playwright
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/

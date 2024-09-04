@@ -5,7 +5,8 @@
   "scripts": {
     "build": "tsc && vite build",
     "dev": "vite",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "typecheck": "tsc"
   },
   "dependencies": {
     "@arc/sdk": "workspace:*",
