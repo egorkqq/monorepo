@@ -1,0 +1,4 @@
+{
+  "extends": ["@arc/typescript-config/base.json"],
+  "exclude": ["apps", "packages", "node_modules"]
+}

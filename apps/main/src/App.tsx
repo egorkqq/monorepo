@@ -5,6 +5,7 @@ import { Button } from "@arc/uikit";
 
 export const App = () => {
   const [wallet, setWallet] = useState<Wallet | undefined>(undefined);
+
   useEffect(() => {
     const walletInstance = new Wallet();
     setTimeout(() => setWallet(walletInstance), 1500);
@@ -16,6 +17,8 @@ export const App = () => {
     <div>
       <button type="button">test</button>
       <div className="font-bold text-cyan-400">Welcome to ARC </div>
+      <div>Super-Puper-Elemento</div>
+      <div>Super-Puper-Elemento</div>
       <div>
         Wallet:
         {wallet?.create().hello || "wait..."}

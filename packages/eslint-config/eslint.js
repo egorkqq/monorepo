@@ -43,4 +43,14 @@ module.exports = {
     "package.json",
     "**/*.config.ts",
   ],
+
+  overrides: [
+    {
+      files: ["packages/eslint-config/react.js", "packages/eslint-config/eslint.js"],
+      rules: {
+        "@typescript-eslint/no-require-imports": "off",
+        "no-undef": "off",
+      },
+    },
+  ],
 };

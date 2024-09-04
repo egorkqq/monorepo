@@ -1,13 +1,12 @@
+export const x: number = 1000;
 export class Wallet {
   constructor() {}
 
   create() {
-    return { hello: "123" };
+    return { hello: x };
   }
 
   change() {
     return { hello: "man" };
   }
 }
-
-export const x: any = 1000;

@@ -2,7 +2,11 @@
   "name": "@arc/typescript-config",
   "version": "1.0.0",
   "private": true,
-  "publishConfig": {
-    "access": "public"
-  }
+  "type": "module",
+  "files": [
+    "./base.json",
+    "./build.json",
+    "./react.json",
+    "./dom.json"
+  ]
 }

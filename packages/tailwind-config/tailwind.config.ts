@@ -1,14 +1,15 @@
-import type { Config } from 'tailwindcss';
-import forms from '@tailwindcss/forms';
+import type { Config } from "tailwindcss";
 
-const config: Omit<Config, 'content'> = {
+import forms from "@tailwindcss/forms";
+
+const config: Omit<Config, "content"> = {
   theme: {
     extend: {
       colors: {
-        primary: '#1B416F',
+        primary: "#1B416F",
       },
     },
   },
-  plugins: [forms({ strategy: 'class' })],
+  plugins: [forms({ strategy: "class" })],
 };
 export default config;

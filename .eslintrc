@@ -1,0 +1,4 @@
+{
+  "extends": ["@arc/eslint-config/eslint"],
+  "ignorePatterns": [".turbo", "node_modules"],
+}
