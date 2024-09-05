@@ -8,5 +8,5 @@
       "@arc/*": ["packages/*"]
     }
   },
-  "include": ["vite.config.ts", "./src/**/*.ts", "./src/**/*.tsx", "./src/**/*.js", "./src/**/*.jsx"]
+  "include": ["./src/**/*.ts", "./src/**/*.tsx", "./src/**/*.js", "./src/**/*.jsx"]
 }

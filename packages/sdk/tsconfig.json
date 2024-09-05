@@ -1,16 +1,3 @@
 {
-  "compilerOptions": {
-    "target": "es2017", // Целевая версия ECMAScript для генерации кода
-    "module": "commonjs", // Модульная система для генерации кода
-    "strict": true, // Включает строгие проверки типов
-    "esModuleInterop": true, // Улучшает работу с CommonJS и ES Modules
-    "forceConsistentCasingInFileNames": true, // Принудительное соблюдение правил именования файлов
-    "skipLibCheck": true, // Пропускает проверку типов для объявлений библиотек
-    "outDir": "./dist", // Папка для вывода скомпилированных файлов
-    "rootDir": "./src", // Корневая директория исходных файлов
-    "declaration": true, // Генерирует объявления типов (.d.ts файлы)
-    "sourceMap": true // Создает карты исходников для отладки
-  },
-  "include": ["src/**/*"], // Файлы и папки, включенные в компиляцию
-  "exclude": ["node_modules"] // Файлы и папки, исключаемые из компиляции
+  "extends": "@arc/typescript-config/dom.json"
 }

@@ -1,4 +1,4 @@
-export const x: any = 1000;
+export const x: number = 10100;
 export class Wallet {
   constructor() {}
 

@@ -4,12 +4,14 @@ export const Test = () => {
   const [a, setA] = useState(0);
 
   useEffect(() => {
-    setInterval(() => setA(a + 1), 1000);
+    const interval = setInterval(() => setA((ar) => ar + 1), 1000);
+
+    return () => clearInterval(interval);
   }, []);
 
   return (
     <div>
-      Test ===
+      TestValue ===
       {a}
     </div>
   );
