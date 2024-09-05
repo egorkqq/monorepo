@@ -1,0 +1,12 @@
+{
+  "extends": ["./tsconfig.json"],
+  "compilerOptions": {
+    "noEmit": false,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@arc/*": ["packages/*"]
+    }
+  },
+  "include": ["vite.config.ts", "./src/**/*.ts", "./src/**/*.tsx", "./src/**/*.js", "./src/**/*.jsx"]
+}

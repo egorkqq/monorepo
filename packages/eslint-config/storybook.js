@@ -1,8 +1,3 @@
-const path = require("path");
-
-const tsconfigPath = path.resolve(process.cwd(), "tsconfig.json");
-console.log(`Using tsconfig at: ${tsconfigPath}`);
-
 /** @type {import("eslint").Linter.Config} */
 module.exports = {
   parser: "@typescript-eslint/parser",
@@ -13,6 +8,9 @@ module.exports = {
     "airbnb/hooks",
     "plugin:react/recommended",
     "plugin:jsx-a11y/recommended",
+    "plugin:storybook/recommended",
+    "plugin:storybook/csf",
+    "plugin:storybook/csf-strict",
     "prettier",
   ],
   plugins: ["@typescript-eslint", "import", "unicorn"],
@@ -29,10 +27,9 @@ module.exports = {
   settings: {
     "import/resolver": {
       node: {
-        moduleDirectory: ["node_modules", "src/", "packages/", "apps/", "/dist"],
+        moduleDirectory: ["node_modules", "src/"],
         extensions: [".js", ".ts", ".jsx", ".tsx"],
       },
-
       typescript: {
         project: ["packages/*/tsconfig.json", "apps/*/tsconfig.json"],
       },
@@ -53,7 +50,7 @@ module.exports = {
 
   overrides: [
     // Force ESLint to detect .tsx files
-    { files: ["*.js?(x)", "*.ts?(x)"] },
+    { files: ["*.js?(x)", "*.ts?(x)", "*.stories.@(ts|tsx|js|jsx|mjs|cjs)"] },
   ],
 
   rules: {

@@ -1,1 +1,3 @@
-{ "extends": ["@arc/eslint-config/react"] }
+{
+  "extends": ["@arc/eslint-config/react"],
+}

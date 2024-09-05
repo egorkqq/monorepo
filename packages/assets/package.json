@@ -1,0 +1,11 @@
+{
+  "name": "@arc/assets",
+  "version": "0.4.3",
+  "private": true,
+  "description": "Arc's assets package",
+  "license": "MIT",
+  "author": "Arc",
+  "files": [
+    "**/*"
+  ]
+}

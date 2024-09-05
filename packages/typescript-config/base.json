@@ -48,7 +48,6 @@
   "include": [
     "${configDir}/.commitlintrc.ts",
     "${configDir}/.storybook/**/*",
-    "${configDir}/**/*.astro",
     "${configDir}/**/*.ts",
     "${configDir}/**/*.tsx",
     "${configDir}/**/*.cts",

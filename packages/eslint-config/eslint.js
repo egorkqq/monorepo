@@ -1,7 +1,3 @@
-const { resolve } = require("node:path");
-
-const project = resolve(process.cwd(), "tsconfig.json");
-
 /** @type {import("eslint").Linter.Config} */
 module.exports = {
   parser: "@typescript-eslint/parser",
@@ -20,7 +16,7 @@ module.exports = {
     "prefer-template": ["error"],
     "@typescript-eslint/consistent-type-imports": ["error", { fixStyle: "inline-type-imports" }],
     "no-empty": ["error", { allowEmptyCatch: true }],
-    quotes: "off",
+    "max-len": "off",
   },
   settings: {
     "import/resolver": {
@@ -29,7 +25,7 @@ module.exports = {
         extensions: [".js", ".ts", ".jsx", ".tsx"],
       },
       typescript: {
-        project,
+        project: ["packages/*/tsconfig.json", "apps/*/tsconfig.json"],
       },
     },
 
@@ -46,7 +42,7 @@ module.exports = {
 
   overrides: [
     {
-      files: ["packages/eslint-config/react.js", "packages/eslint-config/eslint.js"],
+      files: ["packages/eslint-config/*.js"],
       rules: {
         "@typescript-eslint/no-require-imports": "off",
         "no-undef": "off",

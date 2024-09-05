@@ -1,21 +1,19 @@
-# react-trpc-turbo
+# Architecton Monorepo
 
 ## Technologies used
 
 - Turborepo
 - React Vite
-- Express.js
-- tRPC
-- TanStack Router
 - Tailwind CSS
 
 ### Apps and Packages
 
 - `@arc/main`: Vite, React, TanStack Router and tRPC Client
-- `@arc/api`: Express.js, Drizzle and tRPC Server
 - `@arc/eslint-config`: `eslint` configurations
 - `@arc/typescript-config`: `tsconfig.json`s used throughout the monorepo
 - `@arc/tailwind-config`: shared Tailwind configuration
+- `@arc/sdk`: sdk
+- `@arc/ui`: uikit
 
 Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 
