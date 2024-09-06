@@ -23,7 +23,7 @@
       "inputs": ["$TURBO_DEFAULT$"]
     },
     "//#lint": {
-      "inputs": [".commitlintrc.ts", "*.ts", "*.js", "tsconfig.json"]
+      "inputs": ["*.ts", "*.js", "tsconfig.json"]
     },
     "typecheck": {
       "dependsOn": ["^build"],

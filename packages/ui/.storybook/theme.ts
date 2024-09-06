@@ -1,10 +1,10 @@
-import { blueDark, grayDark } from '@radix-ui/colors'
-import { create } from '@storybook/theming'
+import { blueDark, grayDark } from "@radix-ui/colors";
+import { create } from "@storybook/theming";
 
 export default create({
-  base: 'dark',
-  fontBase: 'var(--font-geist-sans)',
-  fontCode: 'var(--font-geist-mono)',
+  base: "dark",
+  fontBase: "var(--font-geist-sans)",
+  fontCode: "var(--font-geist-mono)",
   appContentBg: grayDark.gray1,
   appBg: grayDark.gray1,
   barBg: grayDark.gray1,
@@ -25,4 +25,4 @@ export default create({
   inputTextColor: grayDark.gray11,
   textMutedColor: grayDark.gray10,
   textInverseColor: grayDark.gray1,
-})
+});

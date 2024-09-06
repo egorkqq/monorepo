@@ -95,6 +95,7 @@ module.exports = {
 
     "jsx-a11y/anchor-is-valid": "off",
 
+    "react/require-default-props": "off",
     "react/react-in-jsx-scope": "off",
     "react/prop-types": "off",
     "react/jsx-filename-extension": [

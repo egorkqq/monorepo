@@ -33,10 +33,10 @@ To get started, clone the repository and install the dependencies:
 pnpm install
 ```
 
-Then, copy the `.env.example` file to `.env` in the web/ folder and fill in the necessary environment variables. For local development, the defaul value will work. If you want to deploy the app, you will need to specify where the backend is hosted.
+Then, copy the `.env.example` file to `.env` in the apps/main folder and fill in the necessary environment variables. For local development, the defaul value will work. If you want to deploy the app, you will need to specify where the backend is hosted.
 
 ```
-cp ./apps/web/.env.example ./apps/web/.env
+cp ./apps/main/.env.example ./apps/main/.env
 ```
 
 ### Build

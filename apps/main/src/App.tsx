@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Wallet } from "@arc/sdk";
 import { Button } from "@arc/ui/button";
 import { cn } from "@arc/ui/cn";
+import { Skeleton } from "@arc/ui/skeleton";
 
 import { Test } from "@/components/test";
 import { localFunc } from "@/utils/localFunc";
@@ -18,7 +19,6 @@ export const App = () => {
   useMemo(() => wallet?.create().hello, [wallet]);
 
   console.log(localFunc("w-full bg-red-500", "w-[300px] bg-blue-500"));
-  console.log(cn("w-full bg-red-500", "w-[300px] bg-blue-500"));
 
   return (
     <div>
@@ -36,6 +36,8 @@ export const App = () => {
         Testik
       </Button>
       <button className={cn("w-full bg-[#ccc]")}>TEST</button>
+
+      <Skeleton className={cn("my-6 h-4 w-[250px]", "h-8")} />
 
       <Test />
     </div>

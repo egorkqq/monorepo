@@ -10,12 +10,7 @@
     "build-storybook": {
       "dependsOn": ["^build"],
       "outputs": ["storybook-static/**"],
-      "inputs": [
-        "$TURBO_DEFAULT$",
-        "!CHANGELOG.md",
-        "!eslint.config.js",
-        "!tsconfig.build.json"
-      ]
+      "inputs": ["$TURBO_DEFAULT$", "!CHANGELOG.md", "!eslint.config.js", "!tsconfig.build.json"]
     }
   }
 }
