@@ -8,7 +8,7 @@
 
 ### Apps and Packages
 
-- `@arc/main`: Vite, React, TanStack Router and tRPC Client
+- `@arc/main`: Architecton main app
 - `@arc/eslint-config`: `eslint` configurations
 - `@arc/typescript-config`: `tsconfig.json`s used throughout the monorepo
 - `@arc/tailwind-config`: shared Tailwind configuration
@@ -18,8 +18,6 @@
 Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 
 ### Utilities
-
-This Turborepo has some additional tools already setup for you:
 
 - [TypeScript](https://www.typescriptlang.org/) for static type checking
 - [ESLint](https://eslint.org/) for code linting
@@ -31,12 +29,6 @@ To get started, clone the repository and install the dependencies:
 
 ```
 pnpm install
-```
-
-Then, copy the `.env.example` file to `.env` in the web/ folder and fill in the necessary environment variables. For local development, the defaul value will work. If you want to deploy the app, you will need to specify where the backend is hosted.
-
-```
-cp ./apps/web/.env.example ./apps/web/.env
 ```
 
 ### Build
