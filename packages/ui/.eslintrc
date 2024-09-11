@@ -1,0 +1,3 @@
+{
+  "extends": ["@arc/eslint-config/storybook"],
+}

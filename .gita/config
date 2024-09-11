@@ -1,0 +1,17 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+	ignorecase = true
+	precomposeunicode = true
+[remote "old-origin"]
+	url = git@github.com:egorkqq/monorepo.git
+	fetch = +refs/heads/*:refs/remotes/old-origin/*
+[branch "main"]
+	remote = old-origin
+	merge = refs/heads/main
+[branch "test/uikit"]
+	vscode-merge-base = origin/main
+	remote = old-origin
+	merge = refs/heads/test/uikit

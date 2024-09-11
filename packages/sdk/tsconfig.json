@@ -1,0 +1,3 @@
+{
+  "extends": "@arc/typescript-config/dom.json"
+}

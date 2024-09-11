@@ -1,0 +1,12 @@
+0000000000000000000000000000000000000000 2200fc2a7c890a108855516a9722ba1dd12a0961 egorkqq <egorkqq@gmail.com> 1724252330 +0300	branch: Created from HEAD
+2200fc2a7c890a108855516a9722ba1dd12a0961 24dae7205c5ae7e17af17bef8d6dbc87c862b634 egorkqq <egorkqq@gmail.com> 1724252338 +0300	commit: chore: add uikit
+24dae7205c5ae7e17af17bef8d6dbc87c862b634 946c39de4b4af016429c050851387eb649bf74cd egorkqq <egorkqq@gmail.com> 1724252606 +0300	commit: test
+946c39de4b4af016429c050851387eb649bf74cd 32d712ae352201c1a8a3978fdfb0bc29c574a22b egorkqq <egorkqq@gmail.com> 1724253195 +0300	commit: test
+32d712ae352201c1a8a3978fdfb0bc29c574a22b f8154c23a6a2b4c11c8a5ef7b0e74d4a29aafcf2 egorkqq <egorkqq@gmail.com> 1725457561 +0300	commit: fix: improves for project
+f8154c23a6a2b4c11c8a5ef7b0e74d4a29aafcf2 4ac5b704314e7b201456aed2c6fa3bed056e1b5e egorkqq <egorkqq@gmail.com> 1725464242 +0300	commit: fixes
+4ac5b704314e7b201456aed2c6fa3bed056e1b5e 9077d07c6bebc6dd5dee79992ca57c07d945d7a4 egorkqq <egorkqq@gmail.com> 1725464428 +0300	commit: feat: delete uikit
+9077d07c6bebc6dd5dee79992ca57c07d945d7a4 b5679846a765f1338d1c412f432f53b3ef06ef18 egorkqq <egorkqq@gmail.com> 1725464482 +0300	commit: feat: complete remove uikit
+b5679846a765f1338d1c412f432f53b3ef06ef18 fe5bffab13f4470ea29a17ede9ecf6ec3cf96a25 egorkqq <egorkqq@gmail.com> 1725544577 +0300	commit: chore: ui and setup
+fe5bffab13f4470ea29a17ede9ecf6ec3cf96a25 3a24401d8ab69957827a39a39066b7c90d78618b egorkqq <egorkqq@gmail.com> 1725550214 +0300	commit: fix: full setup
+3a24401d8ab69957827a39a39066b7c90d78618b 2b47752e220a2a166233560ef0003dbf61e946cd egorkqq <egorkqq@gmail.com> 1725607794 +0300	commit: lint fixes, etc
+2b47752e220a2a166233560ef0003dbf61e946cd f834c20ac9e3a9e8db06738ad90a49a758a55b19 egorkqq <egorkqq@gmail.com> 1725627135 +0300	commit: upd pnpm

@@ -1,0 +1,14 @@
+{
+  "extends": "@arc/typescript-config/react.json",
+  "compilerOptions": {
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+
+    // Custom settings
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  },
+
+  "include": ["src"]
+}
