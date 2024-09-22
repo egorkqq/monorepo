@@ -1,4 +1,4 @@
 {
   "extends": ["@arc/eslint-config/eslint"],
-  "ignorePatterns": [".turbo", "node_modules", "**/typescript-config/*.json"],
+  "ignorePatterns": [".turbo", "node_modules", "**/typescript-config/*.json", "apps/main/src/locales/*.json"],
 }

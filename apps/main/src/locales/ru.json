@@ -1,0 +1,20 @@
+{
+  "APP_LAYOUT": {
+    "COLLAPSE_SIDEBAR": "Свернуть",
+    "EXPAND_SIDEBAR": "Развернуть"
+  },
+
+  "UI": {
+    "ALERT": {
+      "TITLE": "Вы уверены?",
+      "DESCRIPTION": "Это действие не может быть отменено",
+      "CANCEL": "Отмена",
+      "ACTION": "Да, уверен",
+      "DONT_SHOW_AGAIN": "Больше не показывать"
+    }
+  },
+
+  "UTILS": {
+    "NUMBER": "{{value, number}}"
+  }
+}

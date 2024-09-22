@@ -50,3 +50,6 @@ blob-report/
 playwright/.cache/
 
 **/.rollup.cache/
+
+# SSL
+apps/main/cert
