@@ -1,0 +1,20 @@
+{
+  "APP_LAYOUT": {
+    "COLLAPSE_SIDEBAR": "Collapse",
+    "EXPAND_SIDEBAR": "Expand"
+  },
+
+  "UI": {
+    "ALERT": {
+      "TITLE": "Are you sure?",
+      "DESCRIPTION": "This action cannot be undone",
+      "CANCEL": "Cancel",
+      "ACTION": "YES",
+      "DONT_SHOW_AGAIN": "NO"
+    }
+  },
+
+  "UTILS": {
+    "NUMBER": "{{value, number}}"
+  }
+}

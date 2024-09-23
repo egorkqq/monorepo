@@ -7,7 +7,6 @@ console.log(`Using tsconfig at: ${tsconfigPath}`);
 module.exports = {
   parser: "@typescript-eslint/parser",
   extends: [
-    "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "airbnb",
     "airbnb/hooks",
@@ -15,7 +14,7 @@ module.exports = {
     "plugin:jsx-a11y/recommended",
     "prettier",
   ],
-  plugins: ["@typescript-eslint", "import", "unicorn"],
+  plugins: ["@typescript-eslint", "import", "unused-imports", "unicorn"],
 
   globals: {
     React: true,
@@ -75,8 +74,21 @@ module.exports = {
     "new-cap": "off",
     "prefer-template": "off",
     quotes: "off",
+    "consistent-return": "off",
     "no-plusplus": "off",
     "no-underscore-dangle": "off",
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "unused-imports/no-unused-imports": "error",
+    "unused-imports/no-unused-vars": [
+      "warn",
+      {
+        vars: "all",
+        varsIgnorePattern: "^_",
+        args: "after-used",
+        argsIgnorePattern: "^_",
+      },
+    ],
     "no-else-return": "off",
     "no-shadow": "warn",
     "no-console": [
@@ -109,6 +121,7 @@ module.exports = {
       "error",
       {
         html: "ignore",
+        exceptions: ["RouterLink", "Link"],
       },
     ],
     "react/function-component-definition": [

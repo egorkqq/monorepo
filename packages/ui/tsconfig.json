@@ -3,7 +3,8 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@arc/*": ["packages/*"]
     }
   },
   "include": ["**/*.ts", "**/*.tsx", "**/*.js", ".storybook/**/*"],

@@ -9,11 +9,11 @@ const config = {
 
   importOrder: [
     "",
-    "^react$",
-    "^next(/.*)?$",
-    "",
     "<TYPES>",
     "<TYPES>^[.]",
+    "",
+    "^react$",
+    "^react(.*)$",
     "",
     "<BUILTIN_MODULES>",
     "",
