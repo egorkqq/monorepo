@@ -4,7 +4,7 @@ import type { ConnectionType } from "@/state/user";
 
 import React, { Suspense, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, Navigate, Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import { Navigate, Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
@@ -22,7 +22,6 @@ import {
 import { useAtomValue } from "jotai/react";
 
 import { ErrorBoundary, ErrorBoundaryError } from "@/components/ErrorBoundary";
-import { SecretKey } from "@/pages/SecretKey";
 import { AppRoute, RegisterRoute } from "@/routes";
 import { activeUserWalletAtom, ConnectionTypes } from "@/state/user";
 
@@ -34,8 +33,20 @@ const TonConnectUIProvider = React.lazy(() =>
   import("@tonconnect/ui-react").then((module) => ({ default: module.TonConnectUIProvider })),
 );
 
-const TonConnectButton = React.lazy(() =>
-  import("@tonconnect/ui-react").then((module) => ({ default: module.TonConnectButton })),
+const RegisterAddWallet = React.lazy(() =>
+  import("@/pages/Register").then((module) => ({ default: module.RegisterAddWallet })),
+);
+
+const RegisterSecretKey = React.lazy(() =>
+  import("@/pages/Register").then((module) => ({ default: module.RegisterSecretKey })),
+);
+
+const RegisterExisting = React.lazy(() =>
+  import("@/pages/Register").then((module) => ({ default: module.RegisterExisting })),
+);
+
+const RegisterWelcome = React.lazy(() =>
+  import("@/pages/Register").then((module) => ({ default: module.RegisterWelcome })),
 );
 
 const queryClient = new QueryClient({
@@ -48,8 +59,7 @@ const queryClient = new QueryClient({
 });
 
 export const App = () => {
-  const debug = useLaunchParams().startParam === "debug";
-  const manifestUrl = useMemo(() => new URL("https://architecton.site/tonconnect-manifest.json").toString(), []);
+  const debug = useLaunchParams().initData?.startParam === "debug";
 
   // Enable debug mode to see all the methods sent and events received.
   useEffect(() => {
@@ -120,6 +130,7 @@ const AuthLayer = () => {
     <div className="flex flex-col rounded-lg border border-gray-300 bg-pink-300 p-3">
       <h4>Auth Layer</h4>
       <code>{activeUserWallet ? "Authorised" : "Not Authorised"}</code>
+      {activeUserWallet && <code>{activeUserWallet?.address}</code>}
       <code>Connect Mode: {activeUserWallet?.connectionType}</code>
 
       {activeUserWallet ? <Web3Layer connectionType={activeUserWallet?.connectionType} /> : <RegisterRoutes />}
@@ -146,6 +157,7 @@ const Web3Layer = ({ connectionType }: { connectionType: ConnectionType }) => {
 
 // TODO: выносим в кор сдк пакет
 const SDKContext = React.createContext<null>(null);
+
 const WalletSDKProvider = ({ children, manifestUrl }: { children: React.ReactNode; manifestUrl: string }) => (
   <SDKContext.Provider value={null}>
     <div className="rounded-lg border border-gray-300 bg-red-900 p-3">
@@ -194,82 +206,43 @@ const InitTelegramDataListener = () => {
   return null;
 };
 
-export const RegisterRoutes = () => (
-  <Suspense fallback={<Loading />}>
-    <TonConnectUIProvider manifestUrl="https://architecton.site/tonconnect-manifest.json">
-      <Routes>
-        <Route
-          path={RegisterRoute.index}
-          element={
-            <div className="h-screen w-full bg-gray-300">
-              Its <b>RegisterRoute.index</b>
-              <pre>
-                Welcome to Architec.TON <br />
-                <br />
-                Low transaction fees <br />
-                Combining Game <br />
-                Data Sec Level <br />
-                <br />
-              </pre>
-              <Link to={RegisterRoute["add-wallet"]}>Add wallet</Link>
-            </div>
-          }
-        />
+export const RegisterRoutes = () => {
+  const manifestUrl = useMemo(() => new URL("https://architecton.site/tonconnect-manifest.json").toString(), []);
 
-        <Route
-          path={RegisterRoute["add-wallet"]}
-          element={
-            <div className="flex h-screen w-full flex-col gap-3 bg-gray-300">
-              Its <b>RegisterRoute.add-wallet</b>
-              <Link
-                className="flex h-10 w-fit items-center gap-1 rounded-full bg-[#0098EA] p-2 pl-3 pr-4 text-white shadow-md"
-                to={RegisterRoute["secret-key"]}
-              >
-                Create wallet
-              </Link>
-              <Link
-                className="flex h-10 w-fit items-center gap-1 rounded-full bg-[#0098EA] p-2 pl-3 pr-4 text-white shadow-md"
-                to={RegisterRoute.existing}
-              >
-                Add existing
-              </Link>
-              <TonConnectButton />
-            </div>
-          }
-        />
+  return (
+    <Suspense fallback={<Loading />}>
+      <TonConnectUIProvider manifestUrl={manifestUrl}>
+        <Routes>
+          <Route path={RegisterRoute.index} element={<RegisterWelcome />} />
 
-        <Route path={RegisterRoute["secret-key"]} element={<SecretKey />} />
+          <Route path={RegisterRoute["add-wallet"]} element={<RegisterAddWallet />} />
 
-        <Route
-          path={RegisterRoute["confirm-secret-key"]}
-          element={
-            <div className="h-screen w-full bg-gray-300">
-              Its <b>RegisterRoute.confirm-secret-key</b>
-            </div>
-          }
-        />
+          <Route path={RegisterRoute["secret-key"]} element={<RegisterSecretKey />} />
 
-        <Route
-          path={RegisterRoute.existing}
-          element={
-            <div className="h-screen w-full bg-gray-300">
-              Its <b>RegisterRoute.existing</b>
-            </div>
-          }
-        />
+          <Route
+            path={RegisterRoute["confirm-secret-key"]}
+            element={
+              <div className="h-screen w-full bg-gray-300">
+                Its <b>RegisterRoute.confirm-secret-key</b>
+              </div>
+            }
+          />
 
-        <Route
-          path={RegisterRoute.finish}
-          element={
-            <div className="h-screen w-full bg-gray-300">
-              Its <b>RegisterRoute.finish</b>
-            </div>
-          }
-        />
-        <Route path="*" element={<Navigate to={RegisterRoute.index} />} />
-      </Routes>
-    </TonConnectUIProvider>
-  </Suspense>
-);
+          <Route path={RegisterRoute.existing} element={<RegisterExisting />} />
+
+          <Route
+            path={RegisterRoute.finish}
+            element={
+              <div className="h-screen w-full bg-gray-300">
+                Its <b>RegisterRoute.finish</b>
+              </div>
+            }
+          />
+          <Route path="*" element={<Navigate to={RegisterRoute.index} />} />
+        </Routes>
+      </TonConnectUIProvider>
+    </Suspense>
+  );
+};
 
 const Loading = () => <div>Loading...</div>;

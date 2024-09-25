@@ -1,23 +1,25 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
-import { randomUUID } from "crypto";
-
-import { mnemonicNew } from "@ton/crypto";
+import { mnemonicNew, mnemonicToPrivateKey } from "@ton/crypto";
+import { WalletContractV5R1 } from "@ton/ton";
 import { useSetAtom } from "jotai/react";
 
 import { cn } from "@arc/ui/cn";
 
-import { ConnectionTypes, userWalletsAtom } from "@/state/user";
+import { activeUserWalletIdAtom, ConnectionTypes, userWalletsAtom } from "@/state/user";
 import { getRandomIndexes } from "@/utils/getRandomIndexes";
 
-export const SecretKey = () => {
+export const RegisterSecretKey = () => {
+  const { t } = useTranslation();
+
   const [mnemonic, setMnemonic] = useState<string[]>([]);
   const [isConfirmationMode, setIsConfirmationMode] = useState(false);
   const [confirmationWords, setConfirmationWords] = useState<{ index: number; word: string }[]>([]);
   const [userInputs, setUserInputs] = useState<string[]>(["", "", ""]);
-  const [isConfirmed, setIsConfirmed] = useState(false);
 
   const setWallet = useSetAtom(userWalletsAtom);
+  const setActiveUserWalletId = useSetAtom(activeUserWalletIdAtom);
 
   useEffect(() => {
     mnemonicNew(24).then((mn) => {
@@ -37,12 +39,40 @@ export const SecretKey = () => {
     const newInputs = [...userInputs];
     newInputs[index] = value;
     setUserInputs(newInputs);
+  };
 
-    if (newInputs.every((input, i) => input.toLowerCase() === confirmationWords[i]?.word.toLowerCase())) {
-      setIsConfirmed(true);
-    } else {
-      setIsConfirmed(false);
-    }
+  const isConfirmed = useMemo(
+    () => userInputs.every((input, i) => input.toLowerCase() === confirmationWords[i]?.word.toLowerCase()),
+    [userInputs, confirmationWords],
+  );
+
+  const handleSubmit = async () => {
+    const keyPair = await mnemonicToPrivateKey(mnemonic);
+
+    const workchain = 0; // Usually you need a workchain 0
+    const wallet = WalletContractV5R1.create({
+      workchain,
+      publicKey: keyPair.publicKey,
+    });
+
+    const id = crypto.randomUUID();
+
+    setWallet((prev) => [
+      ...prev,
+      {
+        id,
+        address: wallet.address.toString({
+          urlSafe: true,
+          bounceable: true,
+        }),
+        privateKey: mnemonic.join(" "),
+        publicKey: wallet.publicKey.toString(),
+        network: "ton",
+        connectionType: ConnectionTypes.SDK,
+      },
+    ]);
+
+    setActiveUserWalletId(id);
   };
 
   return (
@@ -55,6 +85,7 @@ export const SecretKey = () => {
 
       {!isConfirmationMode ? (
         <button
+          type="button"
           onClick={startConfirmation}
           className={cn(
             "mt-2 flex h-10 w-fit items-center gap-1 rounded-full bg-[#0098EA] p-2 pl-3 pr-4 text-white shadow-md",
@@ -64,7 +95,7 @@ export const SecretKey = () => {
         </button>
       ) : (
         <div className="mt-4">
-          <h3>Подтвердите вашу мнемоническую фразу:</h3>
+          <h3>{t("REGISTER.CONFIRM_SECRET_KEY")}:</h3>
           {confirmationWords.map((item, index) => (
             <div key={item.index} className="mt-2">
               <label htmlFor={`word-${item.index}`}>Слово #{item.index + 1}: </label>
@@ -78,19 +109,8 @@ export const SecretKey = () => {
             </div>
           ))}
           <button
-            onClick={() => {
-              setWallet((prev) => [
-                ...prev,
-                {
-                  id: randomUUID(),
-                  address: "",
-                  privateKey: "",
-                  publicKey: "",
-                  network: "ton",
-                  connectionType: ConnectionTypes.SDK,
-                },
-              ]);
-            }}
+            type="button"
+            onClick={handleSubmit}
             disabled={!isConfirmed}
             className={cn(
               "mt-4 flex h-10 w-fit items-center gap-1 rounded-full p-2 pl-3 pr-4 text-white shadow-md",

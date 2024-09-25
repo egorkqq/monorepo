@@ -5,5 +5,5 @@ export const getRandomIndexes = (count: number, max: number): number[] => {
     indexes.add(Math.floor(Math.random() * max));
   }
 
-  return Array.from(indexes);
+  return Array.from(indexes).sort((a, b) => a - b);
 };

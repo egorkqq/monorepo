@@ -16,5 +16,17 @@
 
   "UTILS": {
     "NUMBER": "{{value, number}}"
+  },
+
+  "REGISTER": {
+    "ADD_WALLET": "Добавить кошелек",
+    "ADD_EXISTING": "Добавить существующий",
+    "CREATE_WALLET": "Создать кошелек",
+    "SECRET_KEY": "Секретный ключ",
+    "CONFIRM_SECRET_KEY": "Подтвердите ваш секретный ключ",
+    "EXISTING": "Существующий кошелек",
+    "PASTE": "Вставить",
+    "NEXT": "Далее",
+    "INVALID_CLIPBOARD": "Буфер обмена не содержит 24 слова"
   }
 }

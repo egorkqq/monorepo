@@ -12,32 +12,32 @@ export const AppRoute = {
 } as const;
 
 export const RegisterRoute = {
-  index: "/",
-  "add-wallet": "/register/add-wallet",
-  "secret-key": "/register/secret-key",
-  "confirm-secret-key": "/register/confirm-secret-key",
-  finish: "/register/finish",
-  existing: "/register/existing",
+  index: AppRoute.register,
+  "add-wallet": `${AppRoute.register}/add-wallet`,
+  "secret-key": `${AppRoute.register}/secret-key`,
+  "confirm-secret-key": `${AppRoute.register}/confirm-secret-key`,
+  finish: `${AppRoute.register}/finish`,
+  existing: `${AppRoute.register}/existing`,
 } as const;
 
 export const DepositRoute = {
-  index: "/",
-  external: "/external",
+  index: AppRoute.deposit,
+  external: `${AppRoute.deposit}/external`,
 } as const;
 
 export const CatalogRoute = {
-  index: "/",
-  game: "/:id",
-  leaders: "/:id/leaders",
-  category: "/category/:id",
+  index: AppRoute.catalog,
+  game: `${AppRoute.catalog}/:id`,
+  leaders: `${AppRoute.catalog}/:id/leaders`,
+  category: `${AppRoute.catalog}/category/:id`,
 } as const;
 
 export const BankRoute = {
   index: "/",
-  tasks: "/tasks",
-  stake: "/stake",
-  buy: "/buy",
-  history: "/stake/history",
+  tasks: `${AppRoute.bank}/tasks`,
+  stake: `${AppRoute.bank}/stake`,
+  buy: `${AppRoute.bank}/buy`,
+  history: `${AppRoute.bank}/stake/history`,
 } as const;
 
 export const any = (route: string): string => `${route}/*`;

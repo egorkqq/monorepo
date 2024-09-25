@@ -1,4 +1,6 @@
 export const x: number = 10100;
+
+// TODO: getWalletInstanceByMnemonic
 export class Wallet {
   constructor() {}
 

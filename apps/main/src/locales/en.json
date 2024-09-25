@@ -16,5 +16,17 @@
 
   "UTILS": {
     "NUMBER": "{{value, number}}"
+  },
+
+  "REGISTER": {
+    "ADD_WALLET": "Add wallet",
+    "ADD_EXISTING": "Add existing",
+    "CREATE_WALLET": "Create wallet",
+    "SECRET_KEY": "Secret key",
+    "CONFIRM_SECRET_KEY": "Confirm your secret key",
+    "EXISTING": "Existing Wallet",
+    "PASTE": "Paste",
+    "NEXT": "Next",
+    "INVALID_CLIPBOARD": "Clipboard does not contain 24 words"
   }
 }
