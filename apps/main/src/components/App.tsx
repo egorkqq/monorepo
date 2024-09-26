@@ -4,7 +4,7 @@ import type { ConnectionType } from "@/state/user";
 
 import React, { Suspense, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { Navigate, Outlet, Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import { Navigate, Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
@@ -24,6 +24,8 @@ import { useAtomValue } from "jotai/react";
 import { ErrorBoundary, ErrorBoundaryError } from "@/components/ErrorBoundary";
 import { AppRoute, BankRoute, CatalogRoute, DepositRoute, MarketRoute, RegisterRoute, SettingsRoute } from "@/routes";
 import { activeUserWalletAtom, ConnectionTypes } from "@/state/user";
+
+import { Layout } from "./Layout";
 
 const Home = React.lazy(() => import("@/pages/Home").then((module) => ({ default: module.Home })));
 const Send = React.lazy(() => import("@/pages/Home").then((module) => ({ default: module.Send })));
@@ -124,6 +126,20 @@ const TWALayer = () => {
 
   useEffect(() => viewport && bindViewportCSSVars(viewport), [viewport]);
 
+  useEffect(() => {
+    if (!viewport) return;
+
+    const handler = (height: number) => {
+      document.documentElement.style.setProperty("--app-height", `${height}px`);
+    };
+
+    viewport.on("change:height", handler);
+
+    return () => {
+      viewport.off("change:height", handler);
+    };
+  }, [viewport]);
+
   if (!viewport) return null; // TODO: Loader
 
   // TODO: все взаимодействия со стилями тут (Сетаем тему например)
@@ -176,11 +192,13 @@ const Web3Layer = ({ connectionType }: { connectionType: ConnectionType }) => {
   // SDK должен быть классом, который мы можем потом екстендануть и обвязать тон-коннектовским дерьмом (для всяких сенд и тд)
   const Provider = connectionType === ConnectionTypes.TonConnect ? TonConnectUIProvider : WalletSDKProvider;
 
+  const manifestUrl = useMemo(() => new URL("https://architecton.site/tonconnect-manifest.json").toString(), []);
+
   return (
     <div className="rounded-lg border border-gray-300 bg-purple-300 p-3">
       <h4>Web3 Layer</h4>
       <Suspense fallback={<Loading />}>
-        <Provider manifestUrl="https://architecton.site/tonconnect-manifest.json">
+        <Provider manifestUrl={manifestUrl}>
           <MainRoutes />
         </Provider>
       </Suspense>
@@ -200,60 +218,57 @@ const WalletSDKProvider = ({ children, manifestUrl }: { children: React.ReactNod
   </SDKContext.Provider>
 );
 
-const MainRoutes = () => (
-  <Suspense fallback={<Loading />}>
-    <Routes>
-      <Route
-        element={
-          <div>
-            <h1>MainRoutes</h1>
-            <Outlet />
-          </div>
-        }
-      >
-        {/* Home group */}
-        <Route path={AppRoute.home} element={<Home />} />
-        <Route path={AppRoute.swap} element={<Swap />} />
-        <Route path={AppRoute.send} element={<Send />} />
-        {/* Home group --- Bank  */}
-        <Route path={BankRoute.index} element={<Bank />} />
-        <Route path={BankRoute.tasks} element={<BankTasks />} />
-        <Route path={BankRoute.stake} element={<BankStake />} />
-        <Route path={BankRoute.buy} element={<BankBuy />} />
-        <Route path={BankRoute.history} element={<BankHistory />} />
-        {/* Home group --- Deposit  */}
-        <Route path={DepositRoute.index} element={<Deposit />} />
-        <Route path={DepositRoute.external} element={<DepositExternal />} />
+const MainRoutes = () => {
+  const lp = useLaunchParams();
 
-        {/* Catalog group */}
-        <Route path={CatalogRoute.index} element={<Catalog />} />
-        <Route path={CatalogRoute.game} element={<CatalogGame />} />
-        <Route path={CatalogRoute.leaders} element={<CatalogLeaders />} />
-        <Route path={CatalogRoute.category} element={<CatalogCategory />} />
+  return (
+    <Suspense fallback={<Loading />}>
+      <Routes>
+        <Route element={<Layout platform={lp.platform} showMenu />}>
+          {/* Home group */}
+          <Route path={AppRoute.home} element={<Home />} />
+          <Route path={AppRoute.swap} element={<Swap />} />
+          <Route path={AppRoute.send} element={<Send />} />
+          {/* Home group --- Bank  */}
+          <Route path={BankRoute.index} element={<Bank />} />
+          <Route path={BankRoute.tasks} element={<BankTasks />} />
+          <Route path={BankRoute.stake} element={<BankStake />} />
+          <Route path={BankRoute.buy} element={<BankBuy />} />
+          <Route path={BankRoute.history} element={<BankHistory />} />
+          {/* Home group --- Deposit  */}
+          <Route path={DepositRoute.index} element={<Deposit />} />
+          <Route path={DepositRoute.external} element={<DepositExternal />} />
 
-        {/* Market group */}
-        <Route path={MarketRoute.index} element={<Market />} />
-        <Route path={MarketRoute.list} element={<OrdersList />} />
-        <Route path={MarketRoute.order} element={<Order />} />
-        <Route path={MarketRoute.create} element={<CreateOrder />} />
-        <Route path={MarketRoute.confirm} element={<ConfirmCreateOrder />} />
+          {/* Catalog group */}
+          <Route path={CatalogRoute.index} element={<Catalog />} />
+          <Route path={CatalogRoute.game} element={<CatalogGame />} />
+          <Route path={CatalogRoute.leaders} element={<CatalogLeaders />} />
+          <Route path={CatalogRoute.category} element={<CatalogCategory />} />
 
-        {/* News group */}
-        <Route path={AppRoute.news} element={<News />} />
+          {/* Market group */}
+          <Route path={MarketRoute.index} element={<Market />} />
+          <Route path={MarketRoute.list} element={<OrdersList />} />
+          <Route path={MarketRoute.order} element={<Order />} />
+          <Route path={MarketRoute.create} element={<CreateOrder />} />
+          <Route path={MarketRoute.confirm} element={<ConfirmCreateOrder />} />
 
-        {/* Settings group */}
-        <Route path={SettingsRoute.index} element={<Settings />} />
-        <Route path={SettingsRoute.walletSafety} element={<WalletSafety />} />
+          {/* News group */}
+          <Route path={AppRoute.news} element={<News />} />
 
-        <Route path="*" element={<Navigate to="/" />} />
-      </Route>
-    </Routes>
-  </Suspense>
-);
+          {/* Settings group */}
+          <Route path={SettingsRoute.index} element={<Settings />} />
+          <Route path={SettingsRoute.walletSafety} element={<WalletSafety />} />
+
+          <Route path="*" element={<Navigate to="/" />} />
+        </Route>
+      </Routes>
+    </Suspense>
+  );
+};
 
 const InitTelegramDataListener = () => {
   const { t: _t, i18n } = useTranslation();
-  const launchParams = useLaunchParams();
+  const lp = useLaunchParams();
 
   const button = useMainButton();
   const backButton = useBackButton();
@@ -264,51 +279,54 @@ const InitTelegramDataListener = () => {
   }, []);
 
   useEffect(() => {
-    if (launchParams.initData?.user?.languageCode) {
+    if (lp.initData?.user?.languageCode) {
       i18n.languages.forEach((lang) => {
-        if (launchParams.initData?.user?.languageCode === lang) {
+        if (lp.initData?.user?.languageCode === lang) {
           i18n.reloadResources([lang]).then(() => i18n.changeLanguage(lang));
         }
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [launchParams.initData?.user?.languageCode]);
+  }, [lp.initData?.user?.languageCode]);
   return null;
 };
 
 export const RegisterRoutes = () => {
   const manifestUrl = useMemo(() => new URL("https://architecton.site/tonconnect-manifest.json").toString(), []);
+  const lp = useLaunchParams();
 
   return (
     <Suspense fallback={<Loading />}>
       <TonConnectUIProvider manifestUrl={manifestUrl}>
         <Routes>
-          <Route path={RegisterRoute.index} element={<RegisterWelcome />} />
+          <Route element={<Layout platform={lp.platform} showMenu={false} />}>
+            <Route path={RegisterRoute.index} element={<RegisterWelcome />} />
 
-          <Route path={RegisterRoute["add-wallet"]} element={<RegisterAddWallet />} />
+            <Route path={RegisterRoute["add-wallet"]} element={<RegisterAddWallet />} />
 
-          <Route path={RegisterRoute["secret-key"]} element={<RegisterSecretKey />} />
+            <Route path={RegisterRoute["secret-key"]} element={<RegisterSecretKey />} />
 
-          <Route
-            path={RegisterRoute["confirm-secret-key"]}
-            element={
-              <div className="h-screen w-full bg-gray-300">
-                Its <b>RegisterRoute.confirm-secret-key</b>
-              </div>
-            }
-          />
+            <Route
+              path={RegisterRoute["confirm-secret-key"]}
+              element={
+                <div className="h-screen w-full bg-gray-300">
+                  Its <b>RegisterRoute.confirm-secret-key</b>
+                </div>
+              }
+            />
 
-          <Route path={RegisterRoute.existing} element={<RegisterExisting />} />
+            <Route path={RegisterRoute.existing} element={<RegisterExisting />} />
 
-          <Route
-            path={RegisterRoute.finish}
-            element={
-              <div className="h-screen w-full bg-gray-300">
-                Its <b>RegisterRoute.finish</b>
-              </div>
-            }
-          />
-          <Route path="*" element={<Navigate to={RegisterRoute.index} />} />
+            <Route
+              path={RegisterRoute.finish}
+              element={
+                <div className="h-screen w-full bg-gray-300">
+                  Its <b>RegisterRoute.finish</b>
+                </div>
+              }
+            />
+            <Route path="*" element={<Navigate to={RegisterRoute.index} />} />
+          </Route>
         </Routes>
       </TonConnectUIProvider>
     </Suspense>
