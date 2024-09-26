@@ -4,7 +4,7 @@ import type { ConnectionType } from "@/state/user";
 
 import React, { Suspense, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { Navigate, Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import { Navigate, Outlet, Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
@@ -22,12 +22,45 @@ import {
 import { useAtomValue } from "jotai/react";
 
 import { ErrorBoundary, ErrorBoundaryError } from "@/components/ErrorBoundary";
-import { AppRoute, RegisterRoute } from "@/routes";
+import { AppRoute, BankRoute, CatalogRoute, DepositRoute, MarketRoute, RegisterRoute, SettingsRoute } from "@/routes";
 import { activeUserWalletAtom, ConnectionTypes } from "@/state/user";
 
-const IndexPage = React.lazy(() =>
-  import("@/pages/IndexPage/IndexPage").then((module) => ({ default: module.IndexPage })),
+const Home = React.lazy(() => import("@/pages/Home").then((module) => ({ default: module.Home })));
+const Send = React.lazy(() => import("@/pages/Home").then((module) => ({ default: module.Send })));
+const Swap = React.lazy(() => import("@/pages/Home").then((module) => ({ default: module.Swap })));
+
+const Bank = React.lazy(() => import("@/pages/Bank").then((module) => ({ default: module.Bank })));
+const BankTasks = React.lazy(() => import("@/pages/Bank").then((module) => ({ default: module.BankTasks })));
+const BankStake = React.lazy(() => import("@/pages/Bank").then((module) => ({ default: module.BankStake })));
+const BankBuy = React.lazy(() => import("@/pages/Bank").then((module) => ({ default: module.BankBuy })));
+const BankHistory = React.lazy(() => import("@/pages/Bank").then((module) => ({ default: module.BankHistory })));
+
+const Deposit = React.lazy(() => import("@/pages/Deposit").then((module) => ({ default: module.Deposit })));
+const DepositExternal = React.lazy(() =>
+  import("@/pages/Deposit").then((module) => ({ default: module.DepositExternal })),
 );
+
+const Catalog = React.lazy(() => import("@/pages/Catalog").then((module) => ({ default: module.Catalog })));
+const CatalogGame = React.lazy(() => import("@/pages/Catalog").then((module) => ({ default: module.CatalogGame })));
+const CatalogLeaders = React.lazy(() =>
+  import("@/pages/Catalog").then((module) => ({ default: module.CatalogLeaders })),
+);
+const CatalogCategory = React.lazy(() =>
+  import("@/pages/Catalog").then((module) => ({ default: module.CatalogCategory })),
+);
+
+const Market = React.lazy(() => import("@/pages/Market").then((module) => ({ default: module.Market })));
+const OrdersList = React.lazy(() => import("@/pages/Market").then((module) => ({ default: module.OrdersList })));
+const Order = React.lazy(() => import("@/pages/Market").then((module) => ({ default: module.Order })));
+const CreateOrder = React.lazy(() => import("@/pages/Market").then((module) => ({ default: module.CreateOrder })));
+const ConfirmCreateOrder = React.lazy(() =>
+  import("@/pages/Market").then((module) => ({ default: module.ConfirmCreateOrder })),
+);
+
+const News = React.lazy(() => import("@/pages/News").then((module) => ({ default: module.News })));
+
+const Settings = React.lazy(() => import("@/pages/Settings").then((module) => ({ default: module.Settings })));
+const WalletSafety = React.lazy(() => import("@/pages/Settings").then((module) => ({ default: module.WalletSafety })));
 
 const TonConnectUIProvider = React.lazy(() =>
   import("@tonconnect/ui-react").then((module) => ({ default: module.TonConnectUIProvider })),
@@ -148,7 +181,7 @@ const Web3Layer = ({ connectionType }: { connectionType: ConnectionType }) => {
       <h4>Web3 Layer</h4>
       <Suspense fallback={<Loading />}>
         <Provider manifestUrl="https://architecton.site/tonconnect-manifest.json">
-          <Content />
+          <MainRoutes />
         </Provider>
       </Suspense>
     </div>
@@ -167,19 +200,56 @@ const WalletSDKProvider = ({ children, manifestUrl }: { children: React.ReactNod
   </SDKContext.Provider>
 );
 
-const Content = () => {
-  console.log("a");
-  return (
-    <div className="rounded-lg border border-gray-300 bg-green-300 p-3">
-      <h4>Content</h4>
+const MainRoutes = () => (
+  <Suspense fallback={<Loading />}>
+    <Routes>
+      <Route
+        element={
+          <div>
+            <h1>MainRoutes</h1>
+            <Outlet />
+          </div>
+        }
+      >
+        {/* Home group */}
+        <Route path={AppRoute.home} element={<Home />} />
+        <Route path={AppRoute.swap} element={<Swap />} />
+        <Route path={AppRoute.send} element={<Send />} />
+        {/* Home group --- Bank  */}
+        <Route path={BankRoute.index} element={<Bank />} />
+        <Route path={BankRoute.tasks} element={<BankTasks />} />
+        <Route path={BankRoute.stake} element={<BankStake />} />
+        <Route path={BankRoute.buy} element={<BankBuy />} />
+        <Route path={BankRoute.history} element={<BankHistory />} />
+        {/* Home group --- Deposit  */}
+        <Route path={DepositRoute.index} element={<Deposit />} />
+        <Route path={DepositRoute.external} element={<DepositExternal />} />
 
-      <Routes>
-        <Route path={AppRoute.home} element={<IndexPage />} />
+        {/* Catalog group */}
+        <Route path={CatalogRoute.index} element={<Catalog />} />
+        <Route path={CatalogRoute.game} element={<CatalogGame />} />
+        <Route path={CatalogRoute.leaders} element={<CatalogLeaders />} />
+        <Route path={CatalogRoute.category} element={<CatalogCategory />} />
+
+        {/* Market group */}
+        <Route path={MarketRoute.index} element={<Market />} />
+        <Route path={MarketRoute.list} element={<OrdersList />} />
+        <Route path={MarketRoute.order} element={<Order />} />
+        <Route path={MarketRoute.create} element={<CreateOrder />} />
+        <Route path={MarketRoute.confirm} element={<ConfirmCreateOrder />} />
+
+        {/* News group */}
+        <Route path={AppRoute.news} element={<News />} />
+
+        {/* Settings group */}
+        <Route path={SettingsRoute.index} element={<Settings />} />
+        <Route path={SettingsRoute.walletSafety} element={<WalletSafety />} />
+
         <Route path="*" element={<Navigate to="/" />} />
-      </Routes>
-    </div>
-  );
-};
+      </Route>
+    </Routes>
+  </Suspense>
+);
 
 const InitTelegramDataListener = () => {
   const { t: _t, i18n } = useTranslation();

@@ -23,7 +23,7 @@ export default defineConfig({
   ],
 
   server: {
-    host: "architecton.local",
+    // host: "architecton.local",
     port: 1111,
   },
   css: {

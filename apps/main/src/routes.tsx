@@ -33,11 +33,24 @@ export const CatalogRoute = {
 } as const;
 
 export const BankRoute = {
-  index: "/",
+  index: AppRoute.bank,
   tasks: `${AppRoute.bank}/tasks`,
   stake: `${AppRoute.bank}/stake`,
   buy: `${AppRoute.bank}/buy`,
   history: `${AppRoute.bank}/stake/history`,
+} as const;
+
+export const MarketRoute = {
+  index: AppRoute.market,
+  list: `${AppRoute.market}/orders`,
+  order: `${AppRoute.market}/orders/:orderId`,
+  create: `${AppRoute.market}/create`,
+  confirm: `${AppRoute.market}/create/confirm`,
+} as const;
+
+export const SettingsRoute = {
+  index: AppRoute.settings,
+  walletSafety: `${AppRoute.settings}/wallet-safety`,
 } as const;
 
 export const any = (route: string): string => `${route}/*`;
