@@ -1,15 +1,81 @@
 import type { Config } from "tailwindcss";
 
-import forms from "@tailwindcss/forms";
+import plugin from "tailwindcss";
 
 const config: Omit<Config, "content"> = {
+  boxShadow: {
+    none: "0 0 #0000",
+    md: "0px 4px 8px -2px #18181B0F",
+  },
+
   theme: {
     extend: {
+      spacing: {
+        19: "4.75rem",
+        17: "4.25rem",
+      },
+
       colors: {
-        primary: "#1B416F",
+        text: "var(--text)",
+        "text-secondary": "var(--text-secondary)",
+
+        background: "var(--background)",
+        "background-secondary": "var(--background-secondary)",
+
+        accent: {
+          DEFAULT: "var(--accent)",
+          hover: "red",
+          active: "blue",
+        },
+
+        "accent-2": {
+          DEFAULT: "var(--accent-2)",
+          hover: "red",
+          active: "blue",
+        },
+
+        positive: {
+          DEFAULT: "var(--text-positive)",
+          background: "var(--background-positive)",
+        },
+
+        negative: {
+          DEFAULT: "var(--text-negative)",
+          background: "var(--background-negative)",
+        },
+
+        warning: "var(--warning)",
+        info: "var(--info)",
+
+        separator: "var(--separator)",
+
+        "icon-fill": "var(--icon-fill)",
+      },
+
+      fontSize: {
+        text: ["15px", "20px"],
+
+        headline: ["16px", "20px"],
+        subhead: ["14px", "18px"],
+
+        "caption-1": ["13px", "16px"],
+        "caption-2": ["12px", "14px"],
+        "caption-3": ["11px", "14px"],
+        "caption-4": ["9px", "12px"],
+
+        "title-1": ["24px", "28px"],
+        "title-2": ["20px", "24px"],
       },
     },
   },
-  plugins: [forms({ strategy: "class" })],
+
+  plugins: [
+    // @ts-ignore
+    plugin(({ addVariant }) => {
+      addVariant("hover-not-disabled", "&:hover:not(:disabled)");
+      addVariant("focus-not-disabled", "&:focus:not(:disabled)");
+      addVariant("active-not-disabled", "&:active:not(:disabled)");
+    }),
+  ],
 };
 export default config;

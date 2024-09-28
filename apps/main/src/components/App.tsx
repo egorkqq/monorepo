@@ -93,32 +93,28 @@ const queryClient = new QueryClient({
   },
 });
 
-export const App = () => {
-  const debug = useLaunchParams().initData?.startParam === "debug";
-
-  // Enable debug mode to see all the methods sent and events received.
-  useEffect(() => {
-    if (debug) {
-      import("eruda").then((lib) => lib.default.init());
-    }
-  }, [debug]);
-
-  return (
-    <ErrorBoundary fallback={ErrorBoundaryError}>
-      <SDKProvider>
-        <QueryClientProvider client={queryClient}>
-          <TWALayer />
-        </QueryClientProvider>
-      </SDKProvider>
-    </ErrorBoundary>
-  );
-};
+export const App = () => (
+  <ErrorBoundary fallback={ErrorBoundaryError}>
+    <SDKProvider>
+      <QueryClientProvider client={queryClient}>
+        <TWALayer />
+      </QueryClientProvider>
+    </SDKProvider>
+  </ErrorBoundary>
+);
 
 const TWALayer = () => {
   const lp = useLaunchParams();
   const miniApp = useMiniApp();
   const themeParams = useThemeParams();
   const viewport = useViewport();
+
+  // Enable debug mode to see all the methods sent and events received.
+  useEffect(() => {
+    if (lp.initData?.startParam === "debug") {
+      import("eruda").then((lib) => lib.default.init());
+    }
+  }, [lp.initData?.startParam]);
 
   useEffect(() => bindMiniAppCSSVars(miniApp, themeParams), [miniApp, themeParams]);
 
@@ -144,24 +140,15 @@ const TWALayer = () => {
 
   // TODO: все взаимодействия со стилями тут (Сетаем тему например)
   // TODO: также, если будем хранить в глобальном сторе наш core SDK объект, то конеткст/стор будем инициалиизровать тут.
-  return (
-    <Router>
-      <div className="rounded-lg border border-gray-300 bg-red-300 p-3">
-        <h4>TWA Layer</h4>
-        <I18NLayer />
-      </div>
-    </Router>
-  );
+  return <I18NLayer />;
 };
 
 const I18NLayer = () => (
   // TODO: i18n Provider context?
-
-  <div className="rounded-lg border border-gray-300 bg-yellow-300 p-3">
-    <h4>I18N Layer </h4>
+  <>
     <AuthLayer />
     <InitTelegramDataListener />
-  </div>
+  </>
 );
 
 const AuthLayer = () => {
@@ -176,14 +163,9 @@ const AuthLayer = () => {
 
   // инициализация нашего глобального состояния авторизации или сдк объекта должна быть выше, то есть внутри роутов авторизации мы будем к нему обращаться и менять его состояние
   return (
-    <div className="flex flex-col rounded-lg border border-gray-300 bg-pink-300 p-3">
-      <h4>Auth Layer</h4>
-      <code>{activeUserWallet ? "Authorised" : "Not Authorised"}</code>
-      {activeUserWallet && <code>{activeUserWallet?.address}</code>}
-      <code>Connect Mode: {activeUserWallet?.connectionType}</code>
-
+    <Router>
       {activeUserWallet ? <Web3Layer connectionType={activeUserWallet?.connectionType} /> : <RegisterRoutes />}
-    </div>
+    </Router>
   );
 };
 
@@ -195,14 +177,11 @@ const Web3Layer = ({ connectionType }: { connectionType: ConnectionType }) => {
   const manifestUrl = useMemo(() => new URL("https://architecton.site/tonconnect-manifest.json").toString(), []);
 
   return (
-    <div className="rounded-lg border border-gray-300 bg-purple-300 p-3">
-      <h4>Web3 Layer</h4>
-      <Suspense fallback={<Loading />}>
-        <Provider manifestUrl={manifestUrl}>
-          <MainRoutes />
-        </Provider>
-      </Suspense>
-    </div>
+    <Suspense fallback={<Loading />}>
+      <Provider manifestUrl={manifestUrl}>
+        <MainRoutes />
+      </Provider>
+    </Suspense>
   );
 };
 
@@ -210,12 +189,7 @@ const Web3Layer = ({ connectionType }: { connectionType: ConnectionType }) => {
 const SDKContext = React.createContext<null>(null);
 
 const WalletSDKProvider = ({ children, manifestUrl }: { children: React.ReactNode; manifestUrl: string }) => (
-  <SDKContext.Provider value={null}>
-    <div className="rounded-lg border border-gray-300 bg-red-900 p-3">
-      <h4>WalletSDKProvider Layer</h4>
-      {children}
-    </div>
-  </SDKContext.Provider>
+  <SDKContext.Provider value={null}>{children}</SDKContext.Provider>
 );
 
 const MainRoutes = () => {

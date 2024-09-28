@@ -1,3 +1,66 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  img {
+    max-width: initial;
+  }
+
+  /* For Webkit-based browsers (Chrome, Safari and Opera) */
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* For IE, Edge and Firefox */
+  .scrollbar-hide {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+}
+
+:root {
+  color-scheme: light dark;
+  font-size: 16px;
+
+  --accent: #07acff;
+  --accent-2: #6acdff;
+
+  --text-positive: #4bb44b;
+  --background-positive: #4bb44b1f;
+
+  --text-negative: #e64646;
+  --background-negative: #faebeb;
+
+  --warning: #ffc107;
+  --info: #17a2b8;
+
+  --separator: rgba(0, 0, 0, 0.04);
+
+  --background: #ffffff;
+  --background-secondary: #f7f9fb;
+  --text: #232328;
+  --text-secondary: #818c99;
+
+  --icon-fill: #b5e7ff;
+
+  @media (prefers-color-scheme: light) {
+    --background: #ffffff;
+    --background-secondary: #f7f9fb;
+    --text: #232328;
+    --text-secondary: #818c99;
+    --separator: rgba(0, 0, 0, 0.12);
+
+    --icon-fill: #b5e7ff;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    --background: #0a0a0a;
+    --background-secondary: #232324;
+    --text: #ffffff;
+    --text-secondary: #76787a;
+    --separator: rgba(255, 255, 255, 0.04);
+
+    --icon-fill: #1e6284;
+  }
+}

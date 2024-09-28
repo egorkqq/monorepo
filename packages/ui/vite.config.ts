@@ -51,7 +51,7 @@ export default defineConfig({
     },
     lib: {
       formats: ["es", "cjs"],
-      entry: globbySync(["./src/primitives/*/index.tsx", "./src/utils/cn.ts"]),
+      entry: globbySync(["./src/primitives/*/index.tsx", "./src/utils/cn.ts", "./src/assets/icons/*.tsx"]),
     },
   },
 });

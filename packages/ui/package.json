@@ -17,6 +17,11 @@
       "types": "./dist/utils/cn.d.ts",
       "require": "./dist/utils/cn.cjs",
       "default": "./dist/utils/cn.js"
+    },
+    "./icons/*": {
+      "types": "./dist/assets/icons/*.d.ts",
+      "require": "./dist/assets/icons/*.cjs",
+      "default": "./dist/assets/icons/*.js"
     }
   },
   "files": [
