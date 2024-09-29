@@ -31,7 +31,9 @@ export const Layout: React.FC<LayoutProps> = memo(({ platform, showMenu }) => {
       onClick: () => {
         navigate(AppRoute.home);
       },
-      active: ![AppRoute.catalog, AppRoute.market, AppRoute.news, AppRoute.settings].includes(location.pathname),
+      active: !([AppRoute.catalog, AppRoute.market, AppRoute.news, AppRoute.settings] as string[]).includes(
+        location.pathname,
+      ),
     },
     {
       label: "Apps",

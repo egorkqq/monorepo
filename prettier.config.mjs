@@ -30,7 +30,7 @@ const config = {
   ],
   importOrderTypeScriptVersion: "5.4.5",
 
-  tailwindFunctions: ["cn"],
+  tailwindFunctions: ["cn", "clsx"],
 };
 
 export default config;

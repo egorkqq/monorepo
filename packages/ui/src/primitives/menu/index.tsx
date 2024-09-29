@@ -1,3 +1,5 @@
+import { memo } from "react";
+
 import clsx from "clsx";
 
 import { cn } from "@/utils/cn";
@@ -14,7 +16,7 @@ interface MenuProps {
   items: MenuItem[];
 }
 
-const MenuButton: React.FC<MenuItem> = ({ label, icon, onClick, active }) => (
+const MenuButton: React.FC<MenuItem> = memo(({ label, icon, onClick, active }) => (
   <button type="button" onClick={onClick} className="flex flex-1 flex-col items-center justify-center gap-1 p-3">
     <div className={cn({ "stroke-text-secondary flex fill-none": true, "stroke-accent fill-icon-fill": active })}>
       {icon}
@@ -29,7 +31,9 @@ const MenuButton: React.FC<MenuItem> = ({ label, icon, onClick, active }) => (
       {label}
     </div>
   </button>
-);
+));
+
+MenuButton.displayName = "MenuButton";
 
 export const Menu: React.FC<MenuProps> = ({ standalone, items }) => (
   <nav
