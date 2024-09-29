@@ -7,18 +7,18 @@ import { Svg } from "@/utils/svg-wrapper";
 export const CopyIcon: React.FC<SvgProps> = ({ className }) => (
   <Svg width="24" height="24" viewBox="0 0 24 24" className={className}>
     <path
-      d="M10.6668 8.59967V11.3997C10.6668 13.733 9.7335 14.6663 7.40016 14.6663H4.60016C2.26683 14.6663 1.3335 13.733 1.3335 11.3997V8.59967C1.3335 6.26634 2.26683 5.33301 4.60016 5.33301H7.40016C9.7335 5.33301 10.6668 6.26634 10.6668 8.59967Z"
       stroke="inherit"
-      strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
+      strokeWidth="2.5"
+      d="M16 12.9v4.2c0 3.5-1.4 4.9-4.9 4.9H6.9C3.4 22 2 20.6 2 17.1v-4.2C2 9.4 3.4 8 6.9 8h4.2c3.5 0 4.9 1.4 4.9 4.9z"
     />
     <path
-      d="M14.6668 4.59967V7.39967C14.6668 9.73301 13.7335 10.6663 11.4002 10.6663H10.6668V8.59967C10.6668 6.26634 9.7335 5.33301 7.40016 5.33301H5.3335V4.59967C5.3335 2.26634 6.26683 1.33301 8.60016 1.33301H11.4002C13.7335 1.33301 14.6668 2.26634 14.6668 4.59967Z"
       stroke="inherit"
-      strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
+      strokeWidth="2.5"
+      d="M22 6.9v4.2c0 3.5-1.4 4.9-4.9 4.9H16v-3.1C16 9.4 14.6 8 11.1 8H8V6.9C8 3.4 9.4 2 12.9 2h4.2C20.6 2 22 3.4 22 6.9z"
     />
   </Svg>
 );

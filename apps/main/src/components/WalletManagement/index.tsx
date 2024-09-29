@@ -5,6 +5,7 @@ import { ArrowCircleDownIcon } from "@arc/ui/icons/arrow-circle-down";
 import { ArrowSwapHorizontalIcon } from "@arc/ui/icons/arrow-swap-horizontal";
 import { ArrowUpIcon } from "@arc/ui/icons/arrow-up";
 import { BankIcon } from "@arc/ui/icons/bank";
+import { CopyIcon } from "@arc/ui/icons/copy";
 import { ScannerIcon } from "@arc/ui/icons/scanner";
 import { Setting2Icon } from "@arc/ui/icons/setting-2";
 
@@ -83,29 +84,16 @@ export const WalletManagement = () => {
             <Setting2Icon className="stroke-text h-6 w-6 fill-none" />
           </div>
         </div>
-        <div className="mb-4">
+        <div className="mb-7">
           <h2 className="text-3xl font-bold">$52 814,17</h2>
           <div className="text-positive flex items-center text-sm">
             <ArrowUpIcon className="stroke-positive inline h-4 w-4 fill-none" />
             <span>6,18% • $10,34</span>
           </div>
         </div>
-        <div className="flex items-center text-sm text-gray-500">
-          <span>UQANa2....PLy_z</span>
-          <svg
-            className="ml-1 h-4 w-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
-            />
-          </svg>
+        <div className="flex items-center">
+          <span className="text-text-secondary text-headline font-medium">UQANa2....PLy_z</span>
+          <CopyIcon className="stroke-text-secondary ml-1 h-4 w-4 fill-none" />
         </div>
       </div>
       <div className="bg-background-secondary mb-4 flex justify-center rounded-2xl">
