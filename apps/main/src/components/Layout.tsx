@@ -72,7 +72,7 @@ export const Layout: React.FC<LayoutProps> = memo(({ platform, showMenu }) => {
   return (
     <div
       className={cn({
-        "bg-background m-auto box-border flex min-h-screen w-full flex-col": true,
+        "bg-background m-auto box-border flex min-h-screen w-full flex-col p-4": true,
         [bottomSpacing]: showMenu,
       })}
     >

@@ -53,7 +53,7 @@ const config: Omit<Config, "content"> = {
       },
 
       fontSize: {
-        text: ["15px", "20px"],
+        base: ["15px", "20px"],
 
         headline: ["16px", "20px"],
         subhead: ["14px", "18px"],
@@ -65,6 +65,9 @@ const config: Omit<Config, "content"> = {
 
         "title-1": ["24px", "28px"],
         "title-2": ["20px", "24px"],
+      },
+      fontFamily: {
+        sans: ["Roboto", "'Helvetica Neue'", "Arial", "sans-serif"],
       },
     },
   },
