@@ -21,6 +21,8 @@ import {
 } from "@telegram-apps/sdk-react";
 import { useAtomValue, useSetAtom } from "jotai/react";
 
+import { useAuth } from "@/api/architecton/useAuth";
+import { useWalletsInfo } from "@/api/architecton/useWalletsInfo";
 import { ErrorBoundary, ErrorBoundaryError } from "@/components/ErrorBoundary";
 import { AppRoute, BankRoute, CatalogRoute, DepositRoute, MarketRoute, RegisterRoute, SettingsRoute } from "@/routes";
 import { showMenuAtom } from "@/state/uiAtoms";
@@ -154,6 +156,24 @@ const I18NLayer = () => (
 
 const AuthLayer = () => {
   const activeUserWallet = useAtomValue(activeUserWalletAtom);
+  const { initDataRaw } = useLaunchParams();
+
+  const authMutation = useAuth();
+
+  const initTon = useMemo(() => {
+    if (!activeUserWallet) return undefined;
+
+    return {
+      network: activeUserWallet.network,
+      address: activeUserWallet.address?.toString(),
+      publicKey: activeUserWallet.publicKey,
+    };
+  }, [activeUserWallet]);
+
+  useEffect(() => {
+    authMutation.mutate({ authType: "telegram", initDataRaw: undefined, initTon });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initTon]);
 
   // TODO: аналог Loader, тут мы забираем из сторейджа инфу о прошлых логинах пользователя, засовываем их в глобальное состояние/контекст иделаем запрос на наш бек за токеном и тп
 
@@ -164,7 +184,6 @@ const AuthLayer = () => {
 
   // инициализация нашего глобального состояния авторизации или сдк объекта должна быть выше, то есть внутри роутов авторизации мы будем к нему обращаться и менять его состояние
 
-  console.log("activeUserWallet", activeUserWallet?.connectionType);
   return (
     <Router>
       {activeUserWallet ? <Web3Layer connectionType={activeUserWallet?.connectionType} /> : <RegisterRoutes />}
@@ -172,12 +191,18 @@ const AuthLayer = () => {
   );
 };
 
+AuthLayer.displayName = "AuthLayer";
+
 const Web3Layer = ({ connectionType }: { connectionType: ConnectionType }) => {
   // TODO: детектим что ипользует юзер: ton-connect или наш sdk/core
   // SDK должен быть классом, который мы можем потом екстендануть и обвязать тон-коннектовским дерьмом (для всяких сенд и тд)
   const Provider = connectionType === ConnectionTypes.TonConnect ? TonConnectUIProvider : WalletSDKProvider;
 
   const manifestUrl = useMemo(() => new URL("https://architecton.site/tonconnect-manifest.json").toString(), []);
+
+  const { data, isError, isLoading } = useWalletsInfo();
+
+  console.log({ data, isError, isLoading });
 
   return (
     <Suspense fallback={<Loading />}>

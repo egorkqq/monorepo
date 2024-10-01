@@ -57,6 +57,8 @@ export const RegisterSecretKey = () => {
 
     const id = crypto.randomUUID();
 
+    console.log(wallet);
+
     setWallet((prev) => [
       ...prev,
       {

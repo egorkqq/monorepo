@@ -37,7 +37,7 @@ export const RegisterExisting = () => {
           bounceable: true,
         }),
         privateKey: seedPhrase.join(" "),
-        publicKey: wallet.publicKey.toString(),
+        publicKey: wallet.publicKey.toString("hex"),
         network: "ton",
         connectionType: ConnectionTypes.SDK,
       },

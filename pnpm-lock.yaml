@@ -74,6 +74,9 @@ importers:
       '@tonconnect/ui-react':
         specifier: ^2.0.9
         version: 2.0.9(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      axios:
+        specifier: ^1.7.7
+        version: 1.7.7
       eruda:
         specifier: ^3.3.0
         version: 3.3.0
@@ -89,6 +92,9 @@ importers:
       jotai:
         specifier: ^2.9.3
         version: 2.9.3(@types/react@18.3.5)(react@18.3.1)
+      jotai-tanstack-query:
+        specifier: ^0.9.0
+        version: 0.9.0(@tanstack/query-core@5.55.4)(jotai@2.9.3(@types/react@18.3.5)(react@18.3.1))
       qr-code-styling:
         specifier: 1.6.0-rc.1
         version: 1.6.0-rc.1
@@ -3284,6 +3290,12 @@ packages:
 
   jju@1.4.0:
     resolution: {integrity: sha512-8wb9Yw966OSxApiCt0K3yNJL8pnNeIv+OEq2YMidz4FKP6nonSRoOXc80iXY4JaN2FC11B9qsNmDsm+ZOfMROA==}
+
+  jotai-tanstack-query@0.9.0:
+    resolution: {integrity: sha512-8n7/xV14+ZE63dyqngtmqs6aV1bNnQJF9bJN5Bj70USc2cMFRmsVhGGzL1cSvp5E/xXasU37czFFaZ0vavmyfA==}
+    peerDependencies:
+      '@tanstack/query-core': '*'
+      jotai: '>=2.0.0'
 
   jotai@2.9.3:
     resolution: {integrity: sha512-IqMWKoXuEzWSShjd9UhalNsRGbdju5G2FrqNLQJT+Ih6p41VNYe2sav5hnwQx4HJr25jq9wRqvGSWGviGG6Gjw==}
@@ -8126,6 +8138,11 @@ snapshots:
   jiti@1.21.6: {}
 
   jju@1.4.0: {}
+
+  jotai-tanstack-query@0.9.0(@tanstack/query-core@5.55.4)(jotai@2.9.3(@types/react@18.3.5)(react@18.3.1)):
+    dependencies:
+      '@tanstack/query-core': 5.55.4
+      jotai: 2.9.3(@types/react@18.3.5)(react@18.3.1)
 
   jotai@2.9.3(@types/react@18.3.5)(react@18.3.1):
     optionalDependencies:
