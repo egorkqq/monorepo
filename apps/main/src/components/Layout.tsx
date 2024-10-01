@@ -2,6 +2,7 @@ import { memo } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
 import { type Platform } from "@telegram-apps/sdk";
+import { useAtomValue } from "jotai";
 
 import { cn } from "@arc/ui/cn";
 import { BookIcon } from "@arc/ui/icons/book";
@@ -12,16 +13,19 @@ import { Wallet2Icon } from "@arc/ui/icons/wallet-2";
 import { Menu } from "@arc/ui/menu";
 
 import { AppRoute } from "@/routes";
+import { showMenuAtom } from "@/state/uiAtoms";
+
+import { MainButton } from "./MainButton";
 
 interface LayoutProps {
   platform: Platform;
-  showMenu: boolean;
 }
 
-export const Layout: React.FC<LayoutProps> = memo(({ platform, showMenu }) => {
+export const Layout: React.FC<LayoutProps> = memo(({ platform }) => {
   const bottomSpacing = platform === "ios" ? "pb-19" : "pb-17";
   const navigate = useNavigate();
   const location = useLocation();
+  const showMenu = useAtomValue(showMenuAtom);
 
   // TODO: Придумать куда это вынести
   const items = [
@@ -79,6 +83,7 @@ export const Layout: React.FC<LayoutProps> = memo(({ platform, showMenu }) => {
       <Outlet />
 
       {showMenu && <Menu standalone={platform === "ios"} items={items} />}
+      <MainButton />
     </div>
   );
 });

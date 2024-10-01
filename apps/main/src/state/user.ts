@@ -23,8 +23,15 @@ export interface UserWallet {
   privateKey?: string;
 }
 
-export const userWalletsAtom = atomWithStorage<UserWallet[]>(StorageKeys.UserWallets, []);
-export const activeUserWalletIdAtom = atomWithStorage<UUID | undefined>(StorageKeys.ActiveUserWalletId, undefined);
+export const userWalletsAtom = atomWithStorage<UserWallet[]>(StorageKeys.UserWallets, [], undefined, {
+  getOnInit: true,
+});
+export const activeUserWalletIdAtom = atomWithStorage<UUID | undefined>(
+  StorageKeys.ActiveUserWalletId,
+  undefined,
+  undefined,
+  { getOnInit: true },
+);
 
 export const activeUserWalletAtom = atom<UserWallet | undefined>((get) => {
   const userWallets = get(userWalletsAtom);

@@ -19,10 +19,11 @@ import {
   useThemeParams,
   useViewport,
 } from "@telegram-apps/sdk-react";
-import { useAtomValue } from "jotai/react";
+import { useAtomValue, useSetAtom } from "jotai/react";
 
 import { ErrorBoundary, ErrorBoundaryError } from "@/components/ErrorBoundary";
 import { AppRoute, BankRoute, CatalogRoute, DepositRoute, MarketRoute, RegisterRoute, SettingsRoute } from "@/routes";
+import { showMenuAtom } from "@/state/uiAtoms";
 import { activeUserWalletAtom, ConnectionTypes } from "@/state/user";
 
 import { Layout } from "./Layout";
@@ -162,6 +163,8 @@ const AuthLayer = () => {
   // TODO: если юзер залогинен, то показываем ему Web3Layer, в который мы прокинем тип авторизации пользователя (ton-connect или наш sdk/core)
 
   // инициализация нашего глобального состояния авторизации или сдк объекта должна быть выше, то есть внутри роутов авторизации мы будем к нему обращаться и менять его состояние
+
+  console.log("activeUserWallet", activeUserWallet?.connectionType);
   return (
     <Router>
       {activeUserWallet ? <Web3Layer connectionType={activeUserWallet?.connectionType} /> : <RegisterRoutes />}
@@ -194,11 +197,17 @@ const WalletSDKProvider = ({ children, manifestUrl }: { children: React.ReactNod
 
 const MainRoutes = () => {
   const lp = useLaunchParams();
+  const showMenu = useSetAtom(showMenuAtom);
+
+  useEffect(() => {
+    showMenu(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Suspense fallback={<Loading />}>
       <Routes>
-        <Route element={<Layout platform={lp.platform} showMenu />}>
+        <Route element={<Layout platform={lp.platform} />}>
           {/* Home group */}
           <Route path={AppRoute.home} element={<Home />} />
           <Route path={AppRoute.swap} element={<Swap />} />
@@ -269,11 +278,18 @@ export const RegisterRoutes = () => {
   const manifestUrl = useMemo(() => new URL("https://architecton.site/tonconnect-manifest.json").toString(), []);
   const lp = useLaunchParams();
 
+  const showMenu = useSetAtom(showMenuAtom);
+
+  useEffect(() => {
+    showMenu(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <Suspense fallback={<Loading />}>
       <TonConnectUIProvider manifestUrl={manifestUrl}>
         <Routes>
-          <Route element={<Layout platform={lp.platform} showMenu={false} />}>
+          <Route element={<Layout platform={lp.platform} />}>
             <Route path={RegisterRoute.index} element={<RegisterWelcome />} />
 
             <Route path={RegisterRoute["add-wallet"]} element={<RegisterAddWallet />} />
