@@ -1,38 +1,35 @@
-import { useAtomValue } from "jotai";
+import { Address, toNano } from "@ton/core";
 
-import { useSendTransaction } from "@arc/sdk";
-
-import { activeUserWalletAtom } from "@/atoms/user";
+import { useSendTransaction, useTonWallet } from "@arc/sdk";
 
 export const Send = () => {
-  const send = useSendTransaction("testnet");
-
-  const activeWallet = useAtomValue(activeUserWalletAtom);
+  const send = useSendTransaction();
+  const activeWallet = useTonWallet();
 
   if (!activeWallet) {
     return <h4>No active wallet</h4>;
   }
 
-  if (!activeWallet.publicKey || !activeWallet.privateKey) {
-    return <h4>No active wallet keys</h4>;
-  }
+  const sendTon = () =>
+    send.mutate(
+      {
+        publicKey: activeWallet.publicKey,
+        mnemonics: activeWallet.mnemonics,
+        walletVersion: activeWallet.walletVersion,
+        value: toNano("0.1"),
+        to: Address.parse("EQCuqXYo2J8SYjSUgnnTdRxR4qRTtfEs7JaC3_U0o5M1keGE"),
+      },
+      {
+        onError: (error) => {
+          console.log({ error });
+        },
+      },
+    );
 
   return (
     <div>
-      <button
-        type="button"
-        onClick={() =>
-          send.mutate({
-            publicKey: activeWallet.publicKey,
-            privateKey: activeWallet.privateKey,
-            walletVersion: "V5R1",
-            value: 1,
-            boc: "",
-            to: "EQCuqXYo2J8SYjSUgnnTdRxR4qRTtfEs7JaC3_U0o5M1keGE",
-          })
-        }
-      >
-        Send
+      <button type="button" onClick={sendTon}>
+        Send 0.1 TON
       </button>
 
       {send.isPending && <div>Loading...</div>}

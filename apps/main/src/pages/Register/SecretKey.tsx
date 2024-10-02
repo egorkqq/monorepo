@@ -1,13 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { mnemonicNew, mnemonicToPrivateKey } from "@ton/crypto";
-import { WalletContractV5R1 } from "@ton/ton";
-import { useSetAtom } from "jotai/react";
+import { mnemonicNew } from "@ton/crypto";
 
+import { useTonWallets } from "@arc/sdk";
 import { cn } from "@arc/ui/cn";
 
-import { activeUserWalletIdAtom, ConnectionTypes, userWalletsAtom } from "@/atoms/user";
 import { getRandomIndexes } from "@/utils/getRandomIndexes";
 
 export const RegisterSecretKey = () => {
@@ -18,8 +16,7 @@ export const RegisterSecretKey = () => {
   const [confirmationWords, setConfirmationWords] = useState<{ index: number; word: string }[]>([]);
   const [userInputs, setUserInputs] = useState<string[]>(["", "", ""]);
 
-  const setWallet = useSetAtom(userWalletsAtom);
-  const setActiveUserWalletId = useSetAtom(activeUserWalletIdAtom);
+  const { addWallet } = useTonWallets();
 
   useEffect(() => {
     mnemonicNew(24).then((mn) => {
@@ -47,34 +44,12 @@ export const RegisterSecretKey = () => {
   );
 
   const handleSubmit = async () => {
-    const keyPair = await mnemonicToPrivateKey(mnemonic);
-
-    const workchain = 0; // Usually you need a workchain 0
-    const wallet = WalletContractV5R1.create({
-      workchain,
-      publicKey: keyPair.publicKey,
-    });
-
-    const id = crypto.randomUUID();
-
-    console.log(wallet);
-
-    setWallet((prev) => [
-      ...prev,
-      {
-        id,
-        address: wallet.address.toString({
-          urlSafe: true,
-          bounceable: true,
-        }),
-        privateKey: mnemonic.join(" "),
-        publicKey: wallet.publicKey.toString(),
-        network: "ton",
-        connectionType: ConnectionTypes.SDK,
-      },
-    ]);
-
-    setActiveUserWalletId(id);
+    try {
+      addWallet(mnemonic, "V5R1");
+    } catch (err) {
+      // TODO: Alert
+      console.error("Failed to add wallet: ", err);
+    }
   };
 
   return (

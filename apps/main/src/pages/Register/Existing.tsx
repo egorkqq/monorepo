@@ -1,49 +1,23 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { mnemonicToPrivateKey } from "@ton/crypto";
-import { WalletContractV5R1 } from "@ton/ton";
-import { useSetAtom } from "jotai";
-
+import { useTonWallets } from "@arc/sdk";
 import { cn } from "@arc/ui/cn";
-
-import { activeUserWalletIdAtom, ConnectionTypes, userWalletsAtom } from "@/atoms/user";
 
 export const RegisterExisting = () => {
   const { t } = useTranslation();
-  const [seedPhrase, setSeedPhrase] = useState(Array(24).fill(""));
+  const [seedPhrase, setSeedPhrase] = useState<string[]>(Array(24).fill(""));
   const [isValid, setIsValid] = useState(false);
 
-  const setWallet = useSetAtom(userWalletsAtom);
-  const setActiveUserWalletId = useSetAtom(activeUserWalletIdAtom);
+  const { addWallet } = useTonWallets();
 
-  const handleSubmit = async () => {
-    const keyPair = await mnemonicToPrivateKey(seedPhrase);
-
-    const workchain = 0; // Usually you need a workchain 0
-    const wallet = WalletContractV5R1.create({
-      workchain,
-      publicKey: keyPair.publicKey,
-    });
-
-    const id = crypto.randomUUID();
-
-    setWallet((prev) => [
-      ...prev,
-      {
-        id,
-        address: wallet.address.toString({
-          urlSafe: true,
-          bounceable: true,
-        }),
-        privateKey: seedPhrase.join(" "),
-        publicKey: wallet.publicKey.toString("hex"),
-        network: "ton",
-        connectionType: ConnectionTypes.SDK,
-      },
-    ]);
-
-    setActiveUserWalletId(id);
+  const handleSubmit = () => {
+    try {
+      addWallet(seedPhrase, "V5R1");
+    } catch (err) {
+      // TODO: Alert
+      console.error("Failed to add wallet: ", err);
+    }
   };
 
   const handleInputChange = (index: number, value: string) => {
