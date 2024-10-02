@@ -21,6 +21,8 @@ import {
 } from "@telegram-apps/sdk-react";
 import { useAtomValue, useSetAtom } from "jotai/react";
 
+import { useTonClient } from "@arc/sdk";
+
 import { useAuth } from "@/api/architecton/useAuth";
 import { useWalletsInfo } from "@/api/architecton/useWalletsInfo";
 import { ErrorBoundary, ErrorBoundaryError } from "@/components/ErrorBoundary";
@@ -90,8 +92,9 @@ const RegisterWelcome = React.lazy(() =>
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 30000,
+      staleTime: 60000, // 1 min
       refetchOnWindowFocus: false,
+      refetchOnMount: false,
     },
   },
 });
@@ -201,8 +204,9 @@ const Web3Layer = ({ connectionType }: { connectionType: ConnectionType }) => {
   const manifestUrl = useMemo(() => new URL("https://architecton.site/tonconnect-manifest.json").toString(), []);
 
   const { data, isError, isLoading } = useWalletsInfo();
+  console.log({ walletsInfo: data });
 
-  console.log({ data, isError, isLoading });
+  const tonClient = useTonClient({ network: "testnet" });
 
   return (
     <Suspense fallback={<Loading />}>

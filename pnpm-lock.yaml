@@ -209,6 +209,9 @@ importers:
       '@ton/ton':
         specifier: ^15.0.0
         version: 15.0.0(@ton/core@0.58.1(@ton/crypto@3.3.0))(@ton/crypto@3.3.0)
+      axios:
+        specifier: ^1.7.7
+        version: 1.7.7
       jotai:
         specifier: ^2.9.3
         version: 2.9.3(@types/react@18.3.5)(react@18.3.1)

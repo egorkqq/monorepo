@@ -2,6 +2,10 @@
 
 interface ImportMetaEnv {
   readonly VITE_ARCHITECTON_API_FQDN: string;
+  readonly VITE_TESTNET_NODE_1: string;
+  readonly VITE_TESTNET_NODE_2: string;
+  readonly VITE_MAINNET_NODE_1: string;
+  readonly VITE_MAINNET_NODE_2: string;
   // old
   readonly VITE_MANIFEST_URL: string;
   readonly VITE_APP_URL: string;
