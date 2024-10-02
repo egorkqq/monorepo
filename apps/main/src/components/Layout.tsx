@@ -12,8 +12,8 @@ import { UserIcon } from "@arc/ui/icons/user";
 import { Wallet2Icon } from "@arc/ui/icons/wallet-2";
 import { Menu } from "@arc/ui/menu";
 
+import { showMenuAtom } from "@/atoms/ui";
 import { AppRoute } from "@/routes";
-import { showMenuAtom } from "@/state/uiAtoms";
 
 import { MainButton } from "./MainButton";
 

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { getDefaultStore } from "jotai";
 
-import { authTokenAtom } from "@/state/user";
+import { authTokenAtom } from "@/atoms/user";
 
 export const ARCHITECTON_API_FQDN = import.meta.env.VITE_ARCHITECTON_API_FQDN;
 

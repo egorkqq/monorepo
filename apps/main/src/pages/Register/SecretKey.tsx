@@ -7,7 +7,7 @@ import { useSetAtom } from "jotai/react";
 
 import { cn } from "@arc/ui/cn";
 
-import { activeUserWalletIdAtom, ConnectionTypes, userWalletsAtom } from "@/state/user";
+import { activeUserWalletIdAtom, ConnectionTypes, userWalletsAtom } from "@/atoms/user";
 import { getRandomIndexes } from "@/utils/getRandomIndexes";
 
 export const RegisterSecretKey = () => {

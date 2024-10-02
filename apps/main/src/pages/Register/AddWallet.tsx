@@ -4,8 +4,8 @@ import { Link, useLocation } from "react-router-dom";
 import { TonConnectButton, useTonAddress, useTonConnectModal } from "@tonconnect/ui-react";
 import { useSetAtom } from "jotai";
 
+import { activeUserWalletIdAtom, ConnectionTypes, userWalletsAtom } from "@/atoms/user";
 import { RegisterRoute } from "@/routes";
-import { activeUserWalletIdAtom, ConnectionTypes, userWalletsAtom } from "@/state/user";
 
 export const RegisterAddWallet = () => {
   const location = useLocation();

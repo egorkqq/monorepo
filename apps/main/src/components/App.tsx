@@ -1,6 +1,6 @@
 /* eslint-disable no-use-before-define */
 
-import type { ConnectionType } from "@/state/user";
+import type { ConnectionType } from "@/atoms/user";
 
 import React, { Suspense, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
@@ -25,10 +25,10 @@ import { useTonClient } from "@arc/sdk";
 
 import { useAuth } from "@/api/architecton/useAuth";
 import { useWalletsInfo } from "@/api/architecton/useWalletsInfo";
+import { showMenuAtom } from "@/atoms/ui";
+import { activeUserWalletAtom, ConnectionTypes } from "@/atoms/user";
 import { ErrorBoundary, ErrorBoundaryError } from "@/components/ErrorBoundary";
 import { AppRoute, BankRoute, CatalogRoute, DepositRoute, MarketRoute, RegisterRoute, SettingsRoute } from "@/routes";
-import { showMenuAtom } from "@/state/uiAtoms";
-import { activeUserWalletAtom, ConnectionTypes } from "@/state/user";
 
 import { Layout } from "./Layout";
 

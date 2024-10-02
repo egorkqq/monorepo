@@ -7,7 +7,7 @@ import { useSetAtom } from "jotai";
 
 import { cn } from "@arc/ui/cn";
 
-import { activeUserWalletIdAtom, ConnectionTypes, userWalletsAtom } from "@/state/user";
+import { activeUserWalletIdAtom, ConnectionTypes, userWalletsAtom } from "@/atoms/user";
 
 export const RegisterExisting = () => {
   const { t } = useTranslation();

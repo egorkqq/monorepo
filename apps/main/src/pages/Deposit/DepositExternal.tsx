@@ -4,8 +4,8 @@ import { useAtomValue, useSetAtom } from "jotai";
 
 import { cn } from "@arc/ui/cn";
 
-import { mainButtonAtom, showMenuAtom } from "@/state/uiAtoms";
-import { activeUserWalletAtom, authTokenAtom } from "@/state/user";
+import { mainButtonAtom, showMenuAtom } from "@/atoms/ui";
+import { activeUserWalletAtom, authTokenAtom } from "@/atoms/user";
 
 interface QRCodeStylingInterface {
   append: (element: HTMLElement) => void;

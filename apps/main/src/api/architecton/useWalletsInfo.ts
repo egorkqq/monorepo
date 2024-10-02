@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useAtomValue } from "jotai";
 
 import axiosInstance from "@/api/architecton";
-import { authTokenAtom } from "@/state/user";
+import { authTokenAtom } from "@/atoms/user";
 
 interface CoinMetaDTO {
   name: string;

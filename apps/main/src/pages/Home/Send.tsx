@@ -2,7 +2,7 @@ import { useAtomValue } from "jotai";
 
 import { useSendTransaction } from "@arc/sdk";
 
-import { activeUserWalletAtom } from "@/state/user";
+import { activeUserWalletAtom } from "@/atoms/user";
 
 export const Send = () => {
   const send = useSendTransaction("testnet");

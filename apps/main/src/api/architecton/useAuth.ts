@@ -5,7 +5,7 @@ import { type AxiosError, type AxiosResponse } from "axios";
 import { useSetAtom } from "jotai";
 
 import axiosInstance from "@/api/architecton";
-import { authTokenAtom } from "@/state/user";
+import { authTokenAtom } from "@/atoms/user";
 
 interface AuthRequest {
   initDataRaw?: string;

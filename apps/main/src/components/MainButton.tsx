@@ -2,7 +2,7 @@ import { memo } from "react";
 
 import { useAtomValue } from "jotai";
 
-import { isTmaEnvironmentAtom, mainButtonAtom } from "@/state/uiAtoms";
+import { isTmaEnvironmentAtom, mainButtonAtom } from "@/atoms/ui";
 
 export const MainButton = memo(() => {
   const { onClick, title } = useAtomValue(mainButtonAtom);
