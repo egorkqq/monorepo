@@ -38,7 +38,7 @@ MenuButton.displayName = "MenuButton";
 export const Menu: React.FC<MenuProps> = ({ standalone, items }) => (
   <nav
     className={cn({
-      "bg-background border-separator fixed bottom-0 left-0 right-0 z-50 w-full border-t": true,
+      "bg-background border-separator fixed bottom-0 left-0 right-0 z-10 w-full border-t": true,
       "pb-2": standalone,
     })}
   >

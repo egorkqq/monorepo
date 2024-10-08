@@ -72,6 +72,7 @@ module.exports = {
     "new-cap": "off",
     "prefer-template": "off",
     quotes: "off",
+    "consistent-return": "off",
     "no-plusplus": "off",
     "no-underscore-dangle": "off",
     "no-else-return": "off",
@@ -116,5 +117,6 @@ module.exports = {
     ],
 
     "react-hooks/exhaustive-deps": "warn",
+    "react/require-default-props": "off",
   },
 };

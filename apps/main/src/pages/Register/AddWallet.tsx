@@ -1,39 +1,9 @@
-import { useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 
-import { TonConnectButton, useTonAddress, useTonConnectModal } from "@tonconnect/ui-react";
-import { useSetAtom } from "jotai";
-
 import { RegisterRoute } from "@/routes";
-import { activeUserWalletIdAtom, ConnectionTypes, userWalletsAtom } from "@/state/user";
 
 export const RegisterAddWallet = () => {
   const location = useLocation();
-
-  const { state } = useTonConnectModal();
-  const address = useTonAddress();
-
-  const setWallet = useSetAtom(userWalletsAtom);
-  const setActiveUserWalletId = useSetAtom(activeUserWalletIdAtom);
-
-  useEffect(() => {
-    if (state.status === "closed" && state.closeReason === "wallet-selected" && address) {
-      const id = crypto.randomUUID();
-
-      setWallet((prev) => [
-        ...prev,
-        {
-          id,
-          address,
-          connectionType: ConnectionTypes.TonConnect,
-          network: "ton",
-        },
-      ]);
-
-      setActiveUserWalletId(id);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state]);
 
   return (
     <>
@@ -50,7 +20,6 @@ export const RegisterAddWallet = () => {
       >
         Add existing
       </Link>
-      <TonConnectButton />
     </>
   );
 };

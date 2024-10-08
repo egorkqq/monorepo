@@ -1,7 +1,5 @@
 /* eslint-disable no-use-before-define */
 
-import type { ConnectionType } from "@/state/user";
-
 import React, { Suspense, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Navigate, Route, BrowserRouter as Router, Routes } from "react-router-dom";
@@ -19,11 +17,15 @@ import {
   useThemeParams,
   useViewport,
 } from "@telegram-apps/sdk-react";
-import { useAtomValue } from "jotai/react";
+import { useSetAtom } from "jotai/react";
 
+import { useNetwork, useTonWallet } from "@arc/sdk";
+
+import { useAuth } from "@/api/architecton/useAuth";
+import { useWalletsInfo } from "@/api/architecton/useWalletsInfo";
+import { showMenuAtom } from "@/atoms/ui";
 import { ErrorBoundary, ErrorBoundaryError } from "@/components/ErrorBoundary";
 import { AppRoute, BankRoute, CatalogRoute, DepositRoute, MarketRoute, RegisterRoute, SettingsRoute } from "@/routes";
-import { activeUserWalletAtom, ConnectionTypes } from "@/state/user";
 
 import { Layout } from "./Layout";
 
@@ -64,10 +66,6 @@ const News = React.lazy(() => import("@/pages/News").then((module) => ({ default
 const Settings = React.lazy(() => import("@/pages/Settings").then((module) => ({ default: module.Settings })));
 const WalletSafety = React.lazy(() => import("@/pages/Settings").then((module) => ({ default: module.WalletSafety })));
 
-const TonConnectUIProvider = React.lazy(() =>
-  import("@tonconnect/ui-react").then((module) => ({ default: module.TonConnectUIProvider })),
-);
-
 const RegisterAddWallet = React.lazy(() =>
   import("@/pages/Register").then((module) => ({ default: module.RegisterAddWallet })),
 );
@@ -87,8 +85,9 @@ const RegisterWelcome = React.lazy(() =>
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 30000,
+      staleTime: 60000, // 1 min
       refetchOnWindowFocus: false,
+      refetchOnMount: false,
     },
   },
 });
@@ -152,7 +151,26 @@ const I18NLayer = () => (
 );
 
 const AuthLayer = () => {
-  const activeUserWallet = useAtomValue(activeUserWalletAtom);
+  const activeWallet = useTonWallet();
+  const { network } = useNetwork();
+  const { initDataRaw } = useLaunchParams();
+
+  const authMutation = useAuth();
+
+  const initTon = useMemo(() => {
+    if (!activeWallet) return undefined;
+
+    return {
+      network,
+      address: activeWallet.address?.toString(),
+      publicKey: activeWallet.publicKey,
+    };
+  }, [network, activeWallet]);
+
+  useEffect(() => {
+    authMutation.mutate({ authType: "telegram", initDataRaw: undefined, initTon });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initTon]);
 
   // TODO: аналог Loader, тут мы забираем из сторейджа инфу о прошлых логинах пользователя, засовываем их в глобальное состояние/контекст иделаем запрос на наш бек за токеном и тп
 
@@ -162,43 +180,27 @@ const AuthLayer = () => {
   // TODO: если юзер залогинен, то показываем ему Web3Layer, в который мы прокинем тип авторизации пользователя (ton-connect или наш sdk/core)
 
   // инициализация нашего глобального состояния авторизации или сдк объекта должна быть выше, то есть внутри роутов авторизации мы будем к нему обращаться и менять его состояние
-  return (
-    <Router>
-      {activeUserWallet ? <Web3Layer connectionType={activeUserWallet?.connectionType} /> : <RegisterRoutes />}
-    </Router>
-  );
+
+  return <Router>{activeWallet ? <MainRoutes /> : <RegisterRoutes />}</Router>;
 };
 
-const Web3Layer = ({ connectionType }: { connectionType: ConnectionType }) => {
-  // TODO: детектим что ипользует юзер: ton-connect или наш sdk/core
-  // SDK должен быть классом, который мы можем потом екстендануть и обвязать тон-коннектовским дерьмом (для всяких сенд и тд)
-  const Provider = connectionType === ConnectionTypes.TonConnect ? TonConnectUIProvider : WalletSDKProvider;
-
-  const manifestUrl = useMemo(() => new URL("https://architecton.site/tonconnect-manifest.json").toString(), []);
-
-  return (
-    <Suspense fallback={<Loading />}>
-      <Provider manifestUrl={manifestUrl}>
-        <MainRoutes />
-      </Provider>
-    </Suspense>
-  );
-};
-
-// TODO: выносим в кор сдк пакет
-const SDKContext = React.createContext<null>(null);
-
-const WalletSDKProvider = ({ children, manifestUrl }: { children: React.ReactNode; manifestUrl: string }) => (
-  <SDKContext.Provider value={null}>{children}</SDKContext.Provider>
-);
+AuthLayer.displayName = "AuthLayer";
 
 const MainRoutes = () => {
   const lp = useLaunchParams();
+  const showMenu = useSetAtom(showMenuAtom);
+
+  const { data: walletsInfo } = useWalletsInfo();
+
+  useEffect(() => {
+    showMenu(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Suspense fallback={<Loading />}>
       <Routes>
-        <Route element={<Layout platform={lp.platform} showMenu />}>
+        <Route element={<Layout platform={lp.platform} />}>
           {/* Home group */}
           <Route path={AppRoute.home} element={<Home />} />
           <Route path={AppRoute.swap} element={<Swap />} />
@@ -266,43 +268,47 @@ const InitTelegramDataListener = () => {
 };
 
 export const RegisterRoutes = () => {
-  const manifestUrl = useMemo(() => new URL("https://architecton.site/tonconnect-manifest.json").toString(), []);
   const lp = useLaunchParams();
+
+  const showMenu = useSetAtom(showMenuAtom);
+
+  useEffect(() => {
+    showMenu(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Suspense fallback={<Loading />}>
-      <TonConnectUIProvider manifestUrl={manifestUrl}>
-        <Routes>
-          <Route element={<Layout platform={lp.platform} showMenu={false} />}>
-            <Route path={RegisterRoute.index} element={<RegisterWelcome />} />
+      <Routes>
+        <Route element={<Layout platform={lp.platform} />}>
+          <Route path={RegisterRoute.index} element={<RegisterWelcome />} />
 
-            <Route path={RegisterRoute["add-wallet"]} element={<RegisterAddWallet />} />
+          <Route path={RegisterRoute["add-wallet"]} element={<RegisterAddWallet />} />
 
-            <Route path={RegisterRoute["secret-key"]} element={<RegisterSecretKey />} />
+          <Route path={RegisterRoute["secret-key"]} element={<RegisterSecretKey />} />
 
-            <Route
-              path={RegisterRoute["confirm-secret-key"]}
-              element={
-                <div className="h-screen w-full bg-gray-300">
-                  Its <b>RegisterRoute.confirm-secret-key</b>
-                </div>
-              }
-            />
+          <Route
+            path={RegisterRoute["confirm-secret-key"]}
+            element={
+              <div className="h-screen w-full bg-gray-300">
+                Its <b>RegisterRoute.confirm-secret-key</b>
+              </div>
+            }
+          />
 
-            <Route path={RegisterRoute.existing} element={<RegisterExisting />} />
+          <Route path={RegisterRoute.existing} element={<RegisterExisting />} />
 
-            <Route
-              path={RegisterRoute.finish}
-              element={
-                <div className="h-screen w-full bg-gray-300">
-                  Its <b>RegisterRoute.finish</b>
-                </div>
-              }
-            />
-            <Route path="*" element={<Navigate to={RegisterRoute.index} />} />
-          </Route>
-        </Routes>
-      </TonConnectUIProvider>
+          <Route
+            path={RegisterRoute.finish}
+            element={
+              <div className="h-screen w-full bg-gray-300">
+                Its <b>RegisterRoute.finish</b>
+              </div>
+            }
+          />
+          <Route path="*" element={<Navigate to={RegisterRoute.index} />} />
+        </Route>
+      </Routes>
     </Suspense>
   );
 };
