@@ -1,32 +1,30 @@
 import type { Address } from "@ton/core";
 
 import { useMutation } from "@tanstack/react-query";
-import { internal, SendMode } from "@ton/core";
+import { Cell, internal, SendMode } from "@ton/core";
 import { mnemonicToPrivateKey } from "@ton/crypto";
 
 import { getWalletContract } from "../utils/getWalletContract";
-import { useNetwork } from "./useNetwork";
 import { useTonClient } from "./useTonClient";
 
 interface MutateOptions {
+  // TODO: useActiveWallet
   // TODO: will be hashed key
   mnemonics: string[];
   publicKey: string;
   walletVersion: "V5R1" | "V4";
   value: bigint;
   to: Address;
-  boc?: string;
+  body?: string;
   lastSeqno?: number;
+  mode?: SendMode;
 }
 
 interface Options {
   network?: "testnet" | "mainnet";
 }
 
-export const useSendTransaction = ({ network: userNetwork }: Options = {}) => {
-  const { network: sdkNetwork } = useNetwork();
-  const network = userNetwork || sdkNetwork;
-
+export const useSendTransaction = ({ network }: Options = {}) => {
   const { data: tonClient } = useTonClient({ network });
 
   return useMutation({
@@ -55,19 +53,20 @@ export const useSendTransaction = ({ network: userNetwork }: Options = {}) => {
         throw new Error("Seqno is not current");
       }
 
+      // TODO: if toAddress is not deployed, add TON?
+
       // setLastSeqno
 
       // @ts-ignore
       const transfer = await contract.createTransfer({
         seqno: seqnoCurrent,
         secretKey: keyPair.secretKey,
-        sendMode: SendMode.PAY_GAS_SEPARATELY,
+        sendMode: options.mode === undefined ? SendMode.PAY_GAS_SEPARATELY : options.mode,
         messages: [
           internal({
             value: options.value,
             to: options.to,
-            body: options.boc,
-            // bounce: true,
+            body: options.body ? Cell.fromBase64(options.body) : undefined,
           }),
         ],
       });

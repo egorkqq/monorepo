@@ -1,3 +1,4 @@
+// NOTE: never make backend calls in sdk.
 export { useTonWallets } from "./hooks/useTonWallets";
 export { useTonWallet } from "./hooks/useTonWallet";
 export { useNetwork } from "./hooks/useNetwork";
