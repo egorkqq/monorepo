@@ -1,16 +1,14 @@
-import { useState } from "react";
-
 import { Address, toNano } from "@ton/core";
 
 import { useSendTransaction, useTonWallet } from "@arc/sdk";
-import { Drawer } from "@arc/ui/drawer";
 
 import { useCreateSendJettonTransfer } from "@/api/node/useGenerateSend";
+import { usePincodeModal } from "@/components/Pincode/usePincodeModal";
 
 export const Send = () => {
   const send = useSendTransaction();
   const activeWallet = useTonWallet();
-  const [isOpen, setIsOpen] = useState(false);
+  const { promptPincode } = usePincodeModal();
 
   const { data: transfer } = useCreateSendJettonTransfer({
     toAddress: "0QC8OkLiHlll4qYDRRwUYU1Vy0gojzIX1MFKjQKFnndzpKq4",
@@ -57,6 +55,28 @@ export const Send = () => {
     });
   };
 
+  const handleSend = async () => {
+    console.log("here");
+    let pin: string | null = null;
+    try {
+      pin = await promptPincode();
+    } catch (error) {
+      console.error("Error unhashing or sending:", error);
+    }
+
+    console.log({ pin });
+
+    if (!pin) return;
+
+    // try {
+    //   const mnemonic = await unhash(hashedMnemonic, pin);
+    //   await sendSignedBoc(boc, mnemonic);
+    // } catch (error) {
+    //   console.error('Error unhashing or sending:', error);
+    //   // Показать сообщение об ошибке пользователю
+    // }
+  };
+
   return (
     <>
       <div>Current Wallet: {activeWallet.address}</div>
@@ -81,13 +101,9 @@ export const Send = () => {
         {send.isSuccess && <div>Success</div>}
       </div>
 
-      <button type="button" onClick={() => setIsOpen(true)}>
-        Open Drawer
+      <button type="button" onClick={handleSend}>
+        Try send )))))))
       </button>
-
-      <Drawer isOpen={isOpen} title="Drawer" onClose={() => setIsOpen(false)}>
-        <div className="p-4">Drawer content</div>
-      </Drawer>
     </>
   );
 };

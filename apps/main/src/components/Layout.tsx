@@ -16,6 +16,7 @@ import { showMenuAtom } from "@/atoms/ui";
 import { AppRoute } from "@/routes";
 
 import { MainButton } from "./MainButton";
+import { PincodeModalContainer } from "./Pincode/usePincodeModal";
 
 interface LayoutProps {
   platform: Platform;
@@ -84,6 +85,7 @@ export const Layout: React.FC<LayoutProps> = memo(({ platform }) => {
 
       {showMenu && <Menu standalone={platform === "ios"} items={items} />}
       <MainButton />
+      <PincodeModalContainer />
     </div>
   );
 });
