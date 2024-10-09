@@ -7,6 +7,7 @@ import { cn } from "@arc/ui/cn";
 
 import { mainButtonAtom, showMenuAtom } from "@/atoms/ui";
 import { authTokenAtom } from "@/atoms/user";
+import { prefersDarkColorScheme } from "@/utils/prefersDarkColorScheme";
 
 interface QRCodeStylingInterface {
   append: (element: HTMLElement) => void;
@@ -16,7 +17,7 @@ interface QRCodeStylingInterface {
 export const DepositExternal = () => {
   const wallet = useTonWallet();
   const authToken = useAtomValue(authTokenAtom);
-  console.log({ authToken });
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -40,7 +41,7 @@ export const DepositExternal = () => {
           height: 220,
           image: "/images/arc.png",
           dotsOptions: {
-            color: "#232328",
+            color: prefersDarkColorScheme() ? "#ffffff" : "#232328",
             type: "extra-rounded",
           },
           imageOptions: {
@@ -50,16 +51,17 @@ export const DepositExternal = () => {
             margin: 2,
           },
           backgroundOptions: {
-            // TODO: DARK THEME
-            color: "#f7f9fb",
-            round: 16,
+            color: prefersDarkColorScheme() ? "#232324" : "#f7f9fb",
           },
           cornersSquareOptions: {
             type: "extra-rounded",
-            color: "#232328",
+            color: prefersDarkColorScheme() ? "#ffffff" : "#232328",
           },
           cornersDotOptions: {
-            color: "#232328",
+            color: prefersDarkColorScheme() ? "#ffffff" : "#232328",
+          },
+          qrOptions: {
+            errorCorrectionLevel: "Q",
           },
         });
       } else {

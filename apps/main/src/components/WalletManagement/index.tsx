@@ -72,7 +72,7 @@ export const WalletManagement = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="overflow-hidden rounded-lg bg-white">
+    <div className="bg-background overflow-hidden rounded-lg">
       <div className="bg-background-secondary mb-4 rounded-2xl bg-[url('/images/balance-bg.svg')] p-5">
         <div className="mb-4 flex items-center justify-between">
           <div className="flex items-center">
