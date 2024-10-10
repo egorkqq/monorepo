@@ -164,8 +164,8 @@ const ActionButton = ({ icon: Icon, label, onClick }: ActionButtonProps) => (
     className="flex flex-1 flex-col items-center justify-center gap-1 px-1 pb-2 pt-3"
     onClick={onClick}
   >
-    <div className="bg-accent w-min rounded-full p-2">
-      <Icon className="h-5 w-5 fill-none stroke-white" />
+    <div className="bg-accent flex w-min items-center justify-center rounded-full p-3">
+      <Icon className="h-6 w-6 fill-none stroke-white" />
     </div>
     <div className="text-accent text-caption-2 whitespace-nowrap font-medium">{label}</div>
   </button>
