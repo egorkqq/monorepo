@@ -11,27 +11,48 @@ import { BankIcon } from "@arc/ui/icons/bank";
 import { CopyIcon } from "@arc/ui/icons/copy";
 import { ScannerIcon } from "@arc/ui/icons/scanner";
 import { Setting2Icon } from "@arc/ui/icons/setting-2";
+import { List } from "@arc/ui/list";
+import { ListItem } from "@arc/ui/list-item";
 
 import { AppRoute } from "@/routes";
 
 import { WalletsList } from "./WalletsList";
 
-const Card = "div";
 const assetsMock = [
   {
     name: "Toncoin",
-    icon: "▼",
+    icon: <div className="bg-accent flex h-8 w-8 items-center justify-center rounded-full fill-none text-white">▼</div>,
     amount: "31.04",
+    price: "5.9",
     value: "$ 161,41",
     change: "-7.64%",
     changeColor: "text-red-500",
   },
-  { name: "USDT", icon: "₮", amount: "221,14", value: "$ 221,14", change: "", changeColor: "" },
-  { name: "BNK", icon: "🏛", amount: "100 000", value: "$ 150 000", change: "", changeColor: "" },
   {
-    name: "ARH",
-    icon: "◈",
+    name: "USDT",
+    icon: <div className="bg-accent flex h-8 w-8 items-center justify-center rounded-full fill-none text-white">₮</div>,
+    amount: "221,14",
+    price: "1.01",
+    value: "$ 221,14",
+    change: "",
+    changeColor: "",
+  },
+  {
+    name: "BNK",
+    icon: (
+      <div className="bg-accent flex h-8 w-8 items-center justify-center rounded-full fill-none text-white">🏛</div>
+    ),
+    amount: "100 000",
+    price: "10",
+    value: "$ 150 000",
+    change: "",
+    changeColor: "",
+  },
+  {
+    name: "ARC",
+    icon: <div className="bg-accent flex h-8 w-8 items-center justify-center rounded-full fill-none text-white">◈</div>,
     amount: "10 000",
+    price: "0.5",
     value: "$ 2 000",
     change: "+67.64%",
     changeColor: "text-positive",
@@ -42,21 +63,19 @@ const historyMock = [
   {
     type: "Transaction is proceed",
     amount: "+2 000 TON",
-    date: "Yesterday, 14:02",
-    icon: (
-      <div className="bg-accent flex h-8 w-8 items-center justify-center rounded-full fill-none stroke-white">O</div>
-    ),
+    date: "Today, 14:02",
+    icon: <div className="bg-accent flex h-8 w-8 items-center justify-center rounded-full fill-none text-white">O</div>,
   },
   {
     type: "Recieved",
     amount: "+2 000 TON",
-    date: "Yesterday, 14:02",
+    date: "Yesterday, 19:42",
     icon: <ArrowSwapHorizontalIcon className="bg-accent h-8 w-8 rounded-full fill-none stroke-white p-1.5" />,
   },
   {
     type: "Sent",
     amount: "-2 000 TON",
-    date: "2 June, 14:02",
+    date: "30 June, 14:02",
     icon: <ArrowUpIcon className="bg-accent h-8 w-8 rounded-full fill-none stroke-white p-1.5" />,
   },
   {
@@ -79,7 +98,7 @@ export const WalletManagement = () => {
   const activeWallet = useTonWallet();
 
   return (
-    <div className="bg-background overflow-hidden rounded-lg">
+    <div className="bg-background overflow-hidden rounded-lg pb-4">
       <div className="bg-background-secondary mb-4 rounded-2xl bg-[url('/images/balance-bg.svg')] p-5">
         <div className="mb-4 flex items-center justify-between">
           <button type="button" className="flex items-center" onClick={() => setIsOpen(true)}>
@@ -122,25 +141,19 @@ export const WalletManagement = () => {
         </div>
       </div>
 
-      <div className="bg-background-secondary mb-4 flex justify-center rounded-2xl">
+      <div className="bg-background-secondary mb-[30px] flex justify-center rounded-2xl">
         <ActionButton icon={AddIcon} label="Add Crypto " onClick={() => navigate(AppRoute.deposit)} />
         <ActionButton icon={ArrowUpIcon} label="Send" onClick={() => navigate(AppRoute.send)} />
-        <ActionButton icon={ArrowSwapHorizontalIcon} label="Swap" onClick={() => navigate(AppRoute.swap)} />
-        <ActionButton icon={BankIcon} label="Bank" onClick={() => navigate(AppRoute.bank)} />
+        <ActionButton icon={ArrowSwapHorizontalIcon} label="Swap" onClick={() => navigate(AppRoute.swap)} disabled />
+        <ActionButton icon={BankIcon} label="Bank" onClick={() => navigate(AppRoute.bank)} disabled />
       </div>
-      <h3 className="mb-2 font-semibold">Assets</h3>
-      <Card className="mb-4">
-        <AssetsList assets={assetsMock} />
-      </Card>
-      <div className="mb-2 flex items-center justify-between">
-        <h3 className="font-semibold">History</h3>
-        <button type="button" className="text-accent">
-          See all
-        </button>
-      </div>
-      <Card>
-        <TransactionHistory transactions={historyMock} />
-      </Card>
+      <h3 className="text-title-1 text-text mb-2 font-medium">Assets</h3>
+
+      <AssetsList assets={assetsMock} />
+
+      <h3 className="text-title-1 text-text mb-2 font-medium">History</h3>
+
+      <TransactionHistory transactions={historyMock} />
 
       <WalletsList
         isOpen={isOpen}
@@ -155,13 +168,15 @@ export const WalletManagement = () => {
 interface ActionButtonProps {
   icon: React.ElementType;
   label: string;
-  onClick: () => void;
+  disabled?: boolean;
+  onClick?: () => void;
 }
 
-const ActionButton = ({ icon: Icon, label, onClick }: ActionButtonProps) => (
+const ActionButton = ({ icon: Icon, label, disabled, onClick }: ActionButtonProps) => (
   <button
     type="button"
-    className="flex flex-1 flex-col items-center justify-center gap-1 px-1 pb-2 pt-3"
+    className="flex flex-1 flex-col items-center justify-center gap-1 px-1 pb-2 pt-3 disabled:opacity-50"
+    disabled={disabled || !onClick}
     onClick={onClick}
   >
     <div className="bg-accent flex w-min items-center justify-center rounded-full p-3">
@@ -175,6 +190,7 @@ interface Asset {
   name: string;
   icon: string;
   amount: string;
+  price: string;
   value: string;
   change: string;
   changeColor: string;
@@ -185,22 +201,19 @@ interface AssetsListProps {
 }
 
 export const AssetsList: React.FC<AssetsListProps> = ({ assets }) => (
-  <div className="divide-y">
-    {assets.map((asset, index) => (
-      <div key={index} className="flex items-center justify-between py-2">
-        <div className="flex items-center">
-          <span className="mr-2 flex h-6 w-6 items-center justify-center text-2xl">{asset.icon}</span>
-          <div>
-            <p className="font-medium">{asset.name}</p>
-            <p className="text-sm text-gray-500">
-              $ {asset.amount} <span className={asset.changeColor}>{asset.change}</span>
-            </p>
-          </div>
-        </div>
-        <p className="font-medium">{asset.value}</p>
-      </div>
+  <List className="mb-6" onExpand={assets.length > 4 ? () => console.log("expand") : undefined}>
+    {assets.map((asset) => (
+      <ListItem
+        key={asset.name}
+        leftIcon={asset.icon}
+        leftTopText={<p className="font-medium">{asset.name}</p>}
+        leftBottomText={"$ " + asset.price}
+        rightTopText={<p className="font-medium">{asset.value}</p>}
+        rightBottomText={"$ " + asset.amount}
+        withSeparator
+      />
     ))}
-  </div>
+  </List>
 );
 
 interface Transaction {
@@ -215,21 +228,17 @@ interface TransactionHistoryProps {
 }
 
 export const TransactionHistory: React.FC<TransactionHistoryProps> = ({ transactions }) => (
-  <div className="divide-y">
-    {transactions.map((transaction, index) => (
-      <div key={index} className="flex items-center justify-between py-2">
-        <div className="flex items-center">
-          {transaction.icon}
-          <div className="ml-3">
-            <p className="font-medium">{transaction.type}</p>
-            <p className="text-sm text-gray-500">UQCX...XKdd</p>
-          </div>
-        </div>
-        <div className="text-right">
-          <p className="font-medium">{transaction.amount}</p>
-          <p className="text-sm text-gray-500">{transaction.date}</p>
-        </div>
-      </div>
+  <List onExpand={transactions.length > 4 ? () => console.log("expand") : undefined}>
+    {transactions.slice(0, 4).map((tx) => (
+      <ListItem
+        key={tx.date}
+        leftIcon={tx.icon}
+        leftTopText={<p className="font-normal">{tx.type}</p>}
+        leftBottomText="UQB6Y...31231"
+        rightTopText={<p className="font-medium">{tx.amount}</p>}
+        rightBottomText={tx.date}
+        withSeparator
+      />
     ))}
-  </div>
+  </List>
 );

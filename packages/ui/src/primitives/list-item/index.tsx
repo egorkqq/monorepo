@@ -28,11 +28,11 @@ const listItemVariants = cva(
 
 interface ListItemProps extends VariantProps<typeof listItemVariants> {
   leftIcon?: React.ReactNode;
-  leftTopText?: string;
-  leftBottomText?: string;
+  leftTopText?: string | React.ReactNode;
+  leftBottomText?: string | React.ReactNode;
   rightIcon?: React.ReactNode;
-  rightTopText?: string;
-  rightBottomText?: string;
+  rightTopText?: string | React.ReactNode;
+  rightBottomText?: string | React.ReactNode;
   withSeparator?: boolean;
   children?: React.ReactNode;
   className?: string;
@@ -55,7 +55,8 @@ export const ListItem: React.FC<ListItemProps> = ({
   <div
     className={cn(
       listItemVariants({ fullWidth, gap }),
-      withSeparator && "border-separator focus:bg-background-secondary/70 rounded-b-none border-b focus:outline-none",
+      withSeparator &&
+        "focus:bg-background-secondary/70 not-last:rounded-b-none border-b border-black/5 focus:outline-none dark:border-white/5",
       className,
     )}
     onClick={onClick}
