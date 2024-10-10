@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 
-import { decodePrivateKeyByPin, useTonWallet } from "@arc/sdk";
+import { decodePrivateKeyByPin, useTonWallet, useTonWallets } from "@arc/sdk";
 
 import { PincodeModal } from "./PincodeModal";
 
@@ -13,6 +13,7 @@ export const usePincodeModal = (initialMode: ModalMode = "get") => {
   const [error, setError] = useState(false);
 
   const activeWallet = useTonWallet();
+  const { list } = useTonWallets();
 
   const promptPincode = useCallback(<T extends ModalMode>(modeOverride?: T) => {
     if (modeOverride) setMode(modeOverride);
@@ -53,14 +54,28 @@ export const usePincodeModal = (initialMode: ModalMode = "get") => {
           console.error("Error unhashing or sending:", err);
           setError(true);
         }
+      } else if (mode === "get") {
+        // NOTE: берем первый, так как по дефолту общий пароль для всех
+        // также пока не будет "set" хоть раз (list[0]), "get" не будет работать
+        if (!list?.[0]) {
+          return;
+        }
 
-        // Implement your unhash logic here
-        // For example:
-        // const mnemonic = unhashMnemonic(pin);
-        // resolvePromise(mnemonic);
-        // setIsOpen(false);
+        let mnemonic: string[];
+
+        try {
+          mnemonic = await decodePrivateKeyByPin(list[0].encodedMnemonics, pin);
+
+          if (resolvePromise) {
+            resolvePromise(mnemonic);
+            setResolvePromise(null);
+          }
+          setIsOpen(false);
+        } catch (err) {
+          console.error("Error unhashing or sending:", err);
+          setError(true);
+        }
       } else {
-        // Mode is 'set' or 'get', return the PIN
         if (resolvePromise) {
           resolvePromise(pin);
           setResolvePromise(null);
@@ -68,7 +83,7 @@ export const usePincodeModal = (initialMode: ModalMode = "get") => {
         setIsOpen(false);
       }
     },
-    [mode, resolvePromise, activeWallet],
+    [mode, resolvePromise, activeWallet, list],
   );
 
   const handleClose = useCallback(() => {

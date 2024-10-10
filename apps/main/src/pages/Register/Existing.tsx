@@ -12,11 +12,11 @@ export const RegisterExisting = () => {
   const [seedPhrase, setSeedPhrase] = useState<string[]>(Array(24).fill(""));
   const [isValid, setIsValid] = useState(false);
 
-  const { addWallet } = useTonWallets();
+  const { addWallet, list } = useTonWallets();
 
   const handleSubmit = async () => {
     try {
-      const pin = await promptPincode("set");
+      const pin = await promptPincode(list.length > 0 ? "get" : "set");
 
       if (!pin) {
         throw new Error("User cancelled");

@@ -1,5 +1,8 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { trimAddress, useTonWallet } from "@arc/sdk";
+import { cn } from "@arc/ui/cn";
 import { AddIcon } from "@arc/ui/icons/add";
 import { ArrowCircleDownIcon } from "@arc/ui/icons/arrow-circle-down";
 import { ArrowSwapHorizontalIcon } from "@arc/ui/icons/arrow-swap-horizontal";
@@ -10,6 +13,8 @@ import { ScannerIcon } from "@arc/ui/icons/scanner";
 import { Setting2Icon } from "@arc/ui/icons/setting-2";
 
 import { AppRoute } from "@/routes";
+
+import { WalletsList } from "./WalletsList";
 
 const Card = "div";
 const assetsMock = [
@@ -70,15 +75,19 @@ const historyMock = [
 
 export const WalletManagement = () => {
   const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
+  const activeWallet = useTonWallet();
 
   return (
     <div className="bg-background overflow-hidden rounded-lg">
       <div className="bg-background-secondary mb-4 rounded-2xl bg-[url('/images/balance-bg.svg')] p-5">
         <div className="mb-4 flex items-center justify-between">
-          <div className="flex items-center">
-            <span className="text-text text-headline font-medium">MyWalletCustomName</span>
-            <ArrowCircleDownIcon className="stroke-text fill-none" />
-          </div>
+          <button type="button" className="flex items-center" onClick={() => setIsOpen(true)}>
+            <span className="text-text text-headline font-medium">{activeWallet?.walletName || "N/A"}</span>
+            <ArrowCircleDownIcon
+              className={cn("stroke-text fill-none transition-transform duration-300", isOpen ? "rotate-180" : "")}
+            />
+          </button>
           <div className="flex items-center space-x-2">
             <ScannerIcon className="stroke-text h-6 w-6 fill-none" />
             <Setting2Icon className="stroke-text h-6 w-6 fill-none" />
@@ -91,11 +100,28 @@ export const WalletManagement = () => {
             <span>6,18% • $10,34</span>
           </div>
         </div>
-        <div className="flex items-center">
-          <span className="text-text-secondary text-headline font-medium">UQANa2....PLy_z</span>
+        <div
+          className="flex items-center"
+          onClick={() => {
+            if (activeWallet?.address) {
+              navigator.clipboard.writeText(activeWallet.address);
+            }
+          }}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              if (activeWallet?.address) {
+                navigator.clipboard.writeText(activeWallet.address);
+              }
+            }
+          }}
+        >
+          <span className="text-text-secondary text-headline font-medium">{trimAddress(activeWallet?.address)}</span>
           <CopyIcon className="stroke-text-secondary ml-1 h-4 w-4 fill-none" />
         </div>
       </div>
+
       <div className="bg-background-secondary mb-4 flex justify-center rounded-2xl">
         <ActionButton icon={AddIcon} label="Add Crypto " onClick={() => navigate(AppRoute.deposit)} />
         <ActionButton icon={ArrowUpIcon} label="Send" onClick={() => navigate(AppRoute.send)} />
@@ -115,6 +141,13 @@ export const WalletManagement = () => {
       <Card>
         <TransactionHistory transactions={historyMock} />
       </Card>
+
+      <WalletsList
+        isOpen={isOpen}
+        onClose={() => {
+          setIsOpen(false);
+        }}
+      />
     </div>
   );
 };

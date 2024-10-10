@@ -24,13 +24,13 @@ const config: Omit<Config, "content"> = {
 
         accent: {
           DEFAULT: "var(--accent)",
-          hover: "red",
           active: "blue",
+          focus: "red",
         },
 
         "accent-2": {
           DEFAULT: "var(--accent-2)",
-          hover: "red",
+          focus: "red",
           active: "blue",
         },
 

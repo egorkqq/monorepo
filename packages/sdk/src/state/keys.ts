@@ -5,9 +5,11 @@ import { atomWithStorage } from "jotai/utils";
 
 export interface UserWallet {
   id: UUID;
+  address: string;
   publicKey: string;
   encodedMnemonics: string;
   walletVersion: "V4" | "V5R1";
+  walletName: string;
 }
 
 export const storedWalletsAtom = atomWithStorage<UserWallet[]>("@arc/sdk/userWallets", [], undefined, {
@@ -26,4 +28,8 @@ export const activeWalletAtom = atom<UserWallet | undefined>((get) => {
   const activeWalletId = get(activeWalletIdAtom);
 
   return storedWallets.find((wallet) => wallet.id === activeWalletId);
+});
+
+export const walletsCounterAtom = atomWithStorage<number>("@arc/sdk/walletsCounter", 0, undefined, {
+  getOnInit: true,
 });
