@@ -188,7 +188,7 @@ const ActionButton = ({ icon: Icon, label, disabled, onClick }: ActionButtonProp
 
 interface Asset {
   name: string;
-  icon: string;
+  icon: string | React.ReactNode;
   amount: string;
   price: string;
   value: string;
