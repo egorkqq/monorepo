@@ -195,47 +195,45 @@ const MainRoutes = () => {
   }, []);
 
   return (
-    <Suspense fallback={<Loading />}>
-      <Routes>
-        <Route element={<Layout platform={lp.platform} />}>
-          {/* Home group */}
-          <Route path={AppRoute.home} element={<Home />} />
-          <Route path={AppRoute.swap} element={<Swap />} />
-          <Route path={AppRoute.send} element={<Send />} />
-          {/* Home group --- Bank  */}
-          <Route path={BankRoute.index} element={<Bank />} />
-          <Route path={BankRoute.tasks} element={<BankTasks />} />
-          <Route path={BankRoute.stake} element={<BankStake />} />
-          <Route path={BankRoute.buy} element={<BankBuy />} />
-          <Route path={BankRoute.history} element={<BankHistory />} />
-          {/* Home group --- Deposit  */}
-          <Route path={DepositRoute.index} element={<Deposit />} />
-          <Route path={DepositRoute.external} element={<DepositExternal />} />
+    <Routes>
+      <Route element={<Layout platform={lp.platform} />}>
+        {/* Home group */}
+        <Route path={AppRoute.home} element={<Home />} />
+        <Route path={AppRoute.swap} element={<Swap />} />
+        <Route path={AppRoute.send} element={<Send />} />
+        {/* Home group --- Bank  */}
+        <Route path={BankRoute.index} element={<Bank />} />
+        <Route path={BankRoute.tasks} element={<BankTasks />} />
+        <Route path={BankRoute.stake} element={<BankStake />} />
+        <Route path={BankRoute.buy} element={<BankBuy />} />
+        <Route path={BankRoute.history} element={<BankHistory />} />
+        {/* Home group --- Deposit  */}
+        <Route path={DepositRoute.index} element={<Deposit />} />
+        <Route path={DepositRoute.external} element={<DepositExternal />} />
 
-          {/* Catalog group */}
-          <Route path={CatalogRoute.index} element={<Catalog />} />
-          <Route path={CatalogRoute.game} element={<CatalogGame />} />
-          <Route path={CatalogRoute.leaders} element={<CatalogLeaders />} />
-          <Route path={CatalogRoute.category} element={<CatalogCategory />} />
+        {/* Catalog group */}
+        <Route path={CatalogRoute.index} element={<Catalog />} />
+        <Route path={CatalogRoute.game} element={<CatalogGame />} />
+        <Route path={CatalogRoute.leaders} element={<CatalogLeaders />} />
+        <Route path={CatalogRoute.category} element={<CatalogCategory />} />
 
-          {/* Market group */}
-          <Route path={MarketRoute.index} element={<Market />} />
-          <Route path={MarketRoute.list} element={<OrdersList />} />
-          <Route path={MarketRoute.order} element={<Order />} />
-          <Route path={MarketRoute.create} element={<CreateOrder />} />
-          <Route path={MarketRoute.confirm} element={<ConfirmCreateOrder />} />
+        {/* Market group */}
+        <Route path={MarketRoute.index} element={<Market />} />
+        <Route path={MarketRoute.list} element={<OrdersList />} />
+        <Route path={MarketRoute.order} element={<Order />} />
+        <Route path={MarketRoute.create} element={<CreateOrder />} />
+        <Route path={MarketRoute.confirm} element={<ConfirmCreateOrder />} />
 
-          {/* News group */}
-          <Route path={AppRoute.news} element={<News />} />
+        {/* News group */}
+        <Route path={AppRoute.news} element={<News />} />
 
-          {/* Settings group */}
-          <Route path={SettingsRoute.index} element={<Settings />} />
-          <Route path={SettingsRoute.walletSafety} element={<WalletSafety />} />
+        {/* Settings group */}
+        <Route path={SettingsRoute.index} element={<Settings />} />
+        <Route path={SettingsRoute.walletSafety} element={<WalletSafety />} />
 
-          <Route path="*" element={<Navigate to="/" />} />
-        </Route>
-      </Routes>
-    </Suspense>
+        <Route path="*" element={<Navigate to="/" />} />
+      </Route>
+    </Routes>
   );
 };
 

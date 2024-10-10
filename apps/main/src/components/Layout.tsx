@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, Suspense } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
 import { type Platform } from "@telegram-apps/sdk";
@@ -87,7 +87,9 @@ export const Layout: React.FC<LayoutProps> = memo(({ platform }) => {
         [bottomSpacing]: showMenu,
       })}
     >
-      <Outlet />
+      <Suspense fallback={<div>load...</div>}>
+        <Outlet />
+      </Suspense>
 
       {showMenu && <Menu standalone={platform === "ios"} items={items} />}
       <MainButton />
