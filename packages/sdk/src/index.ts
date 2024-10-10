@@ -4,3 +4,5 @@ export { useTonWallet } from "./hooks/useTonWallet";
 export { useNetwork } from "./hooks/useNetwork";
 export { useTonClient } from "./hooks/useTonClient";
 export { useSendTransaction } from "./hooks/useSendTransaction";
+
+export { decodePrivateKeyByPin, encodePrivateKeyByPin } from "./utils/pincode";

@@ -23,8 +23,9 @@ export const useTonWallet = () => {
     return {
       id: walletInfo?.id,
       publicKey: walletInfo?.publicKey,
-      mnemonics: walletInfo?.mnemonics,
+      encodedMnemonics: walletInfo?.encodedMnemonics,
       walletVersion: walletInfo?.walletVersion,
+
       address: walletAddress,
       contract: walletContract,
     };

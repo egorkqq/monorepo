@@ -6,7 +6,7 @@ import { atomWithStorage } from "jotai/utils";
 export interface UserWallet {
   id: UUID;
   publicKey: string;
-  mnemonics: string[]; // TODO: privateHashedKey via PIN
+  encodedMnemonics: string;
   walletVersion: "V4" | "V5R1";
 }
 

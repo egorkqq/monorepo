@@ -1,50 +1,94 @@
-import { memo, useCallback } from "react";
+import { useCallback, useState } from "react";
 
-import { atom, useAtom } from "jotai";
+import { decodePrivateKeyByPin, useTonWallet } from "@arc/sdk";
 
 import { PincodeModal } from "./PincodeModal";
 
-const isOpenAtom = atom(false);
-const pinAtom = atom<string | null>(null);
-const resolveAtom = atom<((value: string | null) => void) | null>(null);
+export type ModalMode = "set" | "get" | "decode";
 
-export const usePincodeModal = () => {
-  const [isOpen, setIsOpen] = useAtom(isOpenAtom);
-  const [, setPin] = useAtom(pinAtom);
-  const [resolve, setResolve] = useAtom(resolveAtom);
+export const usePincodeModal = (initialMode: ModalMode = "get") => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [mode, setMode] = useState<ModalMode>(initialMode);
+  const [resolvePromise, setResolvePromise] = useState<((value: string | string[] | null) => void) | null>(null);
+  const [error, setError] = useState(false);
 
-  const promptPincode = useCallback(() => {
+  const activeWallet = useTonWallet();
+
+  const promptPincode = useCallback(<T extends ModalMode>(modeOverride?: T) => {
+    if (modeOverride) setMode(modeOverride);
     setIsOpen(true);
-    setPin(null);
 
-    return new Promise<string | null>((res) => {
-      setResolve(() => res);
+    return new Promise<T extends "decode" ? string[] | null : string | null>((resolve) => {
+      setResolvePromise(() => resolve);
     });
-  }, [setPin, setResolve, setIsOpen]);
+  }, []);
 
-  const handleSuccess = useCallback(
-    (pin: string | null) => {
-      setIsOpen(false);
-      setPin(pin);
-      if (resolve) {
-        resolve(pin);
-        setResolve(null);
+  const handlePinComplete = useCallback(
+    async (pin: string | null) => {
+      if (!pin) {
+        setIsOpen(false);
+        if (resolvePromise) {
+          resolvePromise(null);
+          setResolvePromise(null);
+        }
+        return;
+      }
+
+      if (mode === "decode") {
+        if (!activeWallet) {
+          return; // TODO THROW ERROR
+        }
+
+        let mnemonic: string[];
+
+        try {
+          mnemonic = await decodePrivateKeyByPin(activeWallet.encodedMnemonics, pin);
+
+          if (resolvePromise) {
+            resolvePromise(mnemonic);
+            setResolvePromise(null);
+          }
+          setIsOpen(false);
+        } catch (err) {
+          console.error("Error unhashing or sending:", err);
+          setError(true);
+        }
+
+        // Implement your unhash logic here
+        // For example:
+        // const mnemonic = unhashMnemonic(pin);
+        // resolvePromise(mnemonic);
+        // setIsOpen(false);
+      } else {
+        // Mode is 'set' or 'get', return the PIN
+        if (resolvePromise) {
+          resolvePromise(pin);
+          setResolvePromise(null);
+        }
+        setIsOpen(false);
       }
     },
-    [resolve, setPin, setResolve, setIsOpen],
+    [mode, resolvePromise, activeWallet],
   );
 
   const handleClose = useCallback(() => {
-    handleSuccess(null);
-  }, [handleSuccess]);
+    if (mode === "set") {
+      // TODO: alert with error, when reg we NEED pin (maybe in future, when wallet will be not main part of app)
+      return;
+    }
+    handlePinComplete(null);
+  }, [handlePinComplete, mode]);
 
-  return { isOpen, promptPincode, handleSuccess, handleClose };
+  const PincodeModalComponent = (
+    <PincodeModal
+      mode={mode}
+      topLevelError={error}
+      isOpen={isOpen}
+      setTopLevelError={setError}
+      onPinComplete={handlePinComplete}
+      onClose={handleClose}
+    />
+  );
+
+  return { promptPincode, PincodeModalComponent, setMode };
 };
-
-export const PincodeModalContainer = memo(() => {
-  const { isOpen, handleSuccess, handleClose } = usePincodeModal();
-
-  return <PincodeModal isOpen={isOpen} onSuccess={handleSuccess} onClose={handleClose} />;
-});
-
-PincodeModalContainer.displayName = "PincodeModalContainer";

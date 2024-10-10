@@ -2,6 +2,7 @@ import { memo } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
 import { type Platform } from "@telegram-apps/sdk";
+import { useHapticFeedback } from "@telegram-apps/sdk-react";
 import { useAtomValue } from "jotai";
 
 import { cn } from "@arc/ui/cn";
@@ -16,7 +17,6 @@ import { showMenuAtom } from "@/atoms/ui";
 import { AppRoute } from "@/routes";
 
 import { MainButton } from "./MainButton";
-import { PincodeModalContainer } from "./Pincode/usePincodeModal";
 
 interface LayoutProps {
   platform: Platform;
@@ -27,6 +27,7 @@ export const Layout: React.FC<LayoutProps> = memo(({ platform }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const showMenu = useAtomValue(showMenuAtom);
+  const haptic = useHapticFeedback();
 
   // TODO: Придумать куда это вынести
   const items = [
@@ -34,6 +35,7 @@ export const Layout: React.FC<LayoutProps> = memo(({ platform }) => {
       label: "Wallet",
       icon: <Wallet2Icon />,
       onClick: () => {
+        haptic.impactOccurred("light");
         navigate(AppRoute.home);
       },
       active: !([AppRoute.catalog, AppRoute.market, AppRoute.news, AppRoute.settings] as string[]).includes(
@@ -44,6 +46,7 @@ export const Layout: React.FC<LayoutProps> = memo(({ platform }) => {
       label: "Apps",
       icon: <BriefcaseIcon />,
       onClick: () => {
+        haptic.impactOccurred("light");
         navigate(AppRoute.catalog);
       },
       active: location.pathname.startsWith(AppRoute.catalog),
@@ -52,6 +55,7 @@ export const Layout: React.FC<LayoutProps> = memo(({ platform }) => {
       label: "Market",
       icon: <Convert3DCubeIcon />,
       onClick: () => {
+        haptic.impactOccurred("light");
         navigate(AppRoute.market);
       },
       active: location.pathname.startsWith(AppRoute.market),
@@ -60,6 +64,7 @@ export const Layout: React.FC<LayoutProps> = memo(({ platform }) => {
       label: "News",
       icon: <BookIcon />,
       onClick: () => {
+        haptic.impactOccurred("light");
         navigate(AppRoute.news);
       },
       active: location.pathname.startsWith(AppRoute.news),
@@ -68,6 +73,7 @@ export const Layout: React.FC<LayoutProps> = memo(({ platform }) => {
       label: "Account",
       icon: <UserIcon />,
       onClick: () => {
+        haptic.impactOccurred("light");
         navigate(AppRoute.settings);
       },
       active: location.pathname.startsWith(AppRoute.settings),
@@ -85,7 +91,6 @@ export const Layout: React.FC<LayoutProps> = memo(({ platform }) => {
 
       {showMenu && <Menu standalone={platform === "ios"} items={items} />}
       <MainButton />
-      <PincodeModalContainer />
     </div>
   );
 });

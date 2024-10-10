@@ -56,5 +56,6 @@ export const useCreateSendJettonTransfer = (options: Options) => {
 
       return response.data;
     },
+    enabled: !!options.toAddress && !!options.fromAsset && !!options.amount,
   });
 };

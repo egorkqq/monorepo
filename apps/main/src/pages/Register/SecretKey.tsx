@@ -91,7 +91,7 @@ export const RegisterSecretKey = () => {
             disabled={!isConfirmed}
             className={cn(
               "mt-4 flex h-10 w-fit items-center gap-1 rounded-full p-2 pl-3 pr-4 text-white shadow-md",
-              isConfirmed ? "bg-[#0098EA]" : "bg-gray-400",
+              isConfirmed ? "bg-accent" : "bg-background-secondary",
             )}
           >
             Подтвердить

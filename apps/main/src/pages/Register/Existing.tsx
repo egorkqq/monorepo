@@ -4,16 +4,25 @@ import { useTranslation } from "react-i18next";
 import { useTonWallets } from "@arc/sdk";
 import { cn } from "@arc/ui/cn";
 
+import { usePincodeModal } from "@/components/Pincode/usePincodeModal";
+
 export const RegisterExisting = () => {
   const { t } = useTranslation();
+  const { promptPincode, PincodeModalComponent } = usePincodeModal();
   const [seedPhrase, setSeedPhrase] = useState<string[]>(Array(24).fill(""));
   const [isValid, setIsValid] = useState(false);
 
   const { addWallet } = useTonWallets();
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     try {
-      addWallet(seedPhrase, "V5R1");
+      const pin = await promptPincode("set");
+
+      if (!pin) {
+        throw new Error("User cancelled");
+      }
+
+      addWallet(seedPhrase, pin, "V5R1");
     } catch (err) {
       // TODO: Alert
       console.error("Failed to add wallet: ", err);
@@ -63,7 +72,7 @@ export const RegisterExisting = () => {
       <button
         type="button"
         className={cn(
-          "mt-4 flex h-10 w-fit items-center gap-1 rounded-full bg-[#0098EA] p-2 pl-3 pr-4 text-white shadow-md",
+          "bg-accent mt-4 flex h-10 w-fit items-center gap-1 rounded-full p-2 pl-3 pr-4 text-white shadow-md",
         )}
         onClick={handlePaste}
       >
@@ -73,13 +82,14 @@ export const RegisterExisting = () => {
         type="button"
         className={cn(
           "mt-4 flex h-10 w-fit items-center gap-1 rounded-full p-2 pl-3 pr-4 text-white shadow-md",
-          isValid ? "bg-[#0098EA]" : "bg-gray-400",
+          isValid ? "bg-accent" : "bg-gray-400",
         )}
         disabled={!isValid}
         onClick={handleSubmit}
       >
         {t("REGISTER.NEXT")}
       </button>
+      {PincodeModalComponent}
     </div>
   );
 };

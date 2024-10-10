@@ -64,7 +64,9 @@ export const Drawer = ({ children, isOpen, onClose, title, fullHeight = false }:
 
   return (
     <div className="z-40 flex">
-      {isOpen && <div className={cn("fixed inset-0 z-10 bg-black/35")} role="presentation" onClick={onClose} />}
+      {isOpen && (
+        <div className={cn("fixed inset-0 z-10 bg-black/35 dark:bg-white/35")} role="presentation" onClick={onClose} />
+      )}
 
       <div
         ref={drawerRef}
@@ -85,7 +87,7 @@ export const Drawer = ({ children, isOpen, onClose, title, fullHeight = false }:
         <div className="flex flex-grow flex-col overflow-hidden rounded-t-2xl">
           <div
             className={cn("flex items-center justify-between pb-2 pl-4 pr-2 pt-2", {
-              "border-b border-black/5 pt-4": !!title,
+              "border-b border-black/5 pt-4 dark:border-white/5": !!title,
             })}
           >
             <h2 className="text-text text-title-1 font-normal">{title}</h2>
