@@ -1,7 +1,5 @@
 import type { Address } from "@ton/core";
 
-import { Buffer } from "buffer";
-
 import { useMutation } from "@tanstack/react-query";
 import { Cell, internal, SendMode } from "@ton/core";
 import { mnemonicToPrivateKey } from "@ton/crypto";
@@ -41,7 +39,7 @@ export const useSendTransaction = ({ network }: Options = {}) => {
       const WalletContract = getWalletContract(options.walletVersion);
       const wallet = WalletContract.create({
         workchain: 0,
-        publicKey: Buffer.from(options.publicKey, "hex"),
+        publicKey: keyPair.publicKey,
       });
 
       const contract = tonClient.open(wallet);
@@ -77,9 +75,9 @@ export const useSendTransaction = ({ network }: Options = {}) => {
 
       const trx = await contract.send(transfer);
 
-      const hash = Buffer.from(`${options.to.toString()}.${seqnoCurrent}`, "utf-8").toString("hex");
+      // const hash = Buffer.from(`${options.to.toString()}.${seqnoCurrent}`, "utf-8").toString("hex");
 
-      console.log({ hash, trx });
+      console.log({ trx });
       // dispatch(setExpiration());
 
       return transfer;
