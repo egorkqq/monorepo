@@ -101,8 +101,6 @@ export const Send = () => {
 
   const handleSend = async () => {
     if ((isValidAddress() && debouncedAmount) || (selectedAsset === "ARC" && !transfer)) {
-      console.log("Sending", debouncedAmount, selectedAsset, "to", debouncedAddress);
-
       let mnemonics: string[] | null;
 
       try {

@@ -1,5 +1,7 @@
 import type { Address } from "@ton/core";
 
+import { Buffer } from "buffer";
+
 import { useMutation } from "@tanstack/react-query";
 import { Cell, internal, SendMode } from "@ton/core";
 import { mnemonicToPrivateKey } from "@ton/crypto";
@@ -33,7 +35,6 @@ export const useSendTransaction = ({ network }: Options = {}) => {
       if (!tonClient) {
         throw new Error("Ton client not found");
       }
-      console.log({ network, tonClientN: await tonClient.getBalance(options.to) });
 
       const keyPair = await mnemonicToPrivateKey(options.mnemonics);
 

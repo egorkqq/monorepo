@@ -53,7 +53,7 @@ export const useWalletsInfo = () => {
   const authToken = useAtomValue(authTokenAtom);
 
   return useQuery<WalletsInfoResponse>({
-    queryKey: ["info"],
+    queryKey: ["info", authToken],
     queryFn: async () => {
       const response = await axiosInstance.get<WalletsInfoResponse>("/info");
       return response.data;

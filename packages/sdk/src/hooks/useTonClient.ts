@@ -31,9 +31,10 @@ export const useTonClient = (options: Options) => {
       for (const endpoint of endpoints) {
         try {
           const client = new TonClient({ endpoint });
+
           // Проверяем подключение
-          const info = await client.getMasterchainInfo();
-          console.log({ info });
+          await client.getMasterchainInfo();
+
           return client;
         } catch (error) {
           console.log({ error });

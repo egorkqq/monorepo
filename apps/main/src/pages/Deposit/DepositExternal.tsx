@@ -1,12 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { useAtomValue, useSetAtom } from "jotai";
+import { useSetAtom } from "jotai";
 
 import { useTonWallet } from "@arc/sdk";
 import { cn } from "@arc/ui/cn";
 
 import { mainButtonAtom, showMenuAtom } from "@/atoms/ui";
-import { authTokenAtom } from "@/atoms/user";
 import { prefersDarkColorScheme } from "@/utils/prefersDarkColorScheme";
 
 interface QRCodeStylingInterface {
@@ -16,7 +15,6 @@ interface QRCodeStylingInterface {
 
 export const DepositExternal = () => {
   const wallet = useTonWallet();
-  const authToken = useAtomValue(authTokenAtom);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

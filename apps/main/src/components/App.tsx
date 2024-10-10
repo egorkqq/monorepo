@@ -19,10 +19,9 @@ import {
 } from "@telegram-apps/sdk-react";
 import { useSetAtom } from "jotai/react";
 
-import { useNetwork, useTonWallet } from "@arc/sdk";
+import { useNetwork, useTonWallet, useTonWallets } from "@arc/sdk";
 
 import { useAuth } from "@/api/architecton/useAuth";
-import { useWalletsInfo } from "@/api/architecton/useWalletsInfo";
 import { showMenuAtom } from "@/atoms/ui";
 import { ErrorBoundary, ErrorBoundaryError } from "@/components/ErrorBoundary";
 import { AppRoute, BankRoute, CatalogRoute, DepositRoute, MarketRoute, RegisterRoute, SettingsRoute } from "@/routes";
@@ -153,7 +152,7 @@ const I18NLayer = () => (
 const AuthLayer = () => {
   const activeWallet = useTonWallet();
   const { network } = useNetwork();
-  const { initDataRaw } = useLaunchParams();
+  // const { initDataRaw } = useLaunchParams();
 
   const authMutation = useAuth();
 
@@ -189,8 +188,6 @@ AuthLayer.displayName = "AuthLayer";
 const MainRoutes = () => {
   const lp = useLaunchParams();
   const showMenu = useSetAtom(showMenuAtom);
-
-  const { data: walletsInfo } = useWalletsInfo();
 
   useEffect(() => {
     showMenu(true);
@@ -246,13 +243,19 @@ const InitTelegramDataListener = () => {
   const { t: _t, i18n } = useTranslation();
   const lp = useLaunchParams();
 
-  const button = useMainButton();
+  const mb = useMainButton();
   const backButton = useBackButton();
 
   useEffect(() => {
-    button.hide();
+    mb.hide();
     backButton.hide();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    mb.setBgColor("#07ACFF");
+    mb.setTextColor("#FFFFFF");
+  }, [mb]);
 
   useEffect(() => {
     if (lp.initData?.user?.languageCode) {
@@ -269,8 +272,29 @@ const InitTelegramDataListener = () => {
 
 export const RegisterRoutes = () => {
   const lp = useLaunchParams();
+  const backButton = useBackButton();
+  const { list, selectWallet } = useTonWallets();
 
   const showMenu = useSetAtom(showMenuAtom);
+
+  useEffect(() => {
+    if (list.length === 0) {
+      return;
+    }
+
+    const handler = () => {
+      selectWallet(list[0]?.id);
+    };
+
+    backButton.show();
+    backButton.on("click", handler);
+
+    return () => {
+      backButton.off("click", handler);
+      backButton.hide();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [list.length]);
 
   useEffect(() => {
     showMenu(false);

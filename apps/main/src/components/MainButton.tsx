@@ -1,5 +1,6 @@
-import { memo } from "react";
+import { memo, useEffect } from "react";
 
+import { useMainButton } from "@telegram-apps/sdk-react";
 import { useAtomValue } from "jotai";
 
 import { isTmaEnvironmentAtom, mainButtonAtom } from "@/atoms/ui";
@@ -9,7 +10,7 @@ export const MainButton = memo(() => {
 
   const isTma = useAtomValue(isTmaEnvironmentAtom);
 
-  //   if (isTma) return <MainButtonTMA title={title} onClick={onClick} />;
+  if (isTma) return <MainButtonTMA title={title} onClick={onClick} />;
 
   return (
     !!onClick && (
@@ -31,3 +32,30 @@ export const MainButton = memo(() => {
 });
 
 MainButton.displayName = "MainButton";
+
+const MainButtonTMA = ({ title, onClick }: { title: string | undefined; onClick: (() => void) | undefined }) => {
+  const mb = useMainButton();
+
+  useEffect(() => {
+    if (onClick !== undefined) {
+      const rmfn = mb.on("click", onClick);
+
+      return () => rmfn();
+    }
+
+    return undefined;
+  }, [onClick, mb]);
+
+  useEffect(() => {
+    if (title) {
+      mb.setText(title);
+      mb.hideLoader();
+      mb.enable();
+      mb.show();
+    } else {
+      mb.hide();
+    }
+  }, [title, mb]);
+
+  return null;
+};

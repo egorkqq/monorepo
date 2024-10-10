@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 
 import { mnemonicNew } from "@ton/crypto";
 
@@ -9,8 +8,6 @@ import { cn } from "@arc/ui/cn";
 import { usePincodeModal } from "@/components/Pincode/usePincodeModal";
 
 export const RegisterSecretKey = () => {
-  const { t } = useTranslation();
-
   const [mnemonic, setMnemonic] = useState<string[]>([]);
 
   const { promptPincode, PincodeModalComponent } = usePincodeModal();
