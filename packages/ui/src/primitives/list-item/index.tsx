@@ -6,25 +6,22 @@ import { cva } from "class-variance-authority";
 
 import { cn } from "@/utils/cn";
 
-const listItemVariants = cva(
-  "flex items-center justify-between bg-background-secondary rounded-2xl px-4 py-3 active:outline-accent focus:outline-accent",
-  {
-    variants: {
-      fullWidth: {
-        true: "w-full",
-        false: "w-auto",
-      },
-      gap: {
-        true: "gap-4",
-        false: "gap-2",
-      },
+const listItemVariants = cva("flex items-center justify-between bg-background-secondary rounded-2xl px-4 py-3 ", {
+  variants: {
+    fullWidth: {
+      true: "w-full",
+      false: "w-auto",
     },
-    defaultVariants: {
-      fullWidth: true,
-      gap: true,
+    gap: {
+      true: "gap-4",
+      false: "gap-2",
     },
   },
-);
+  defaultVariants: {
+    fullWidth: true,
+    gap: true,
+  },
+});
 
 interface ListItemProps extends VariantProps<typeof listItemVariants> {
   leftIcon?: React.ReactNode;
@@ -55,6 +52,7 @@ export const ListItem: React.FC<ListItemProps> = ({
   <div
     className={cn(
       listItemVariants({ fullWidth, gap }),
+      onClick && "active:outline-accent focus:outline-accent",
       withSeparator &&
         "focus:bg-background-secondary/70 not-last:rounded-b-none border-b border-black/5 focus:outline-none dark:border-white/5",
       className,
