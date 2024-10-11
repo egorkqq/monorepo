@@ -61,7 +61,7 @@ export const Deposit = () => {
   ];
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-full">
       <h1 className="text-title-1 mb-3 mt-4 font-medium">How do you want to add crypto?</h1>
       <div className="space-y-3">
         {options.map((option) => (

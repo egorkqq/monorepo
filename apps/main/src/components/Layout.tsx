@@ -23,7 +23,6 @@ interface LayoutProps {
 }
 
 export const Layout: React.FC<LayoutProps> = memo(({ platform }) => {
-  const bottomSpacing = platform === "ios" ? "pb-19" : "pb-17";
   const navigate = useNavigate();
   const location = useLocation();
   const showMenu = useAtomValue(showMenuAtom);
@@ -81,17 +80,21 @@ export const Layout: React.FC<LayoutProps> = memo(({ platform }) => {
   ];
 
   return (
-    <div
-      className={cn({
-        "bg-background m-auto box-border flex min-h-screen w-full flex-col p-4": true,
-        [bottomSpacing]: showMenu,
-      })}
-    >
-      <Suspense fallback={<div>load...</div>}>
-        <Outlet />
-      </Suspense>
+    <div className="bg-background flex h-screen flex-col overflow-hidden">
+      <div className="flex-grow overflow-y-auto">
+        <div
+          className={cn({
+            "m-auto box-border flex h-full w-full flex-col p-4": true,
+          })}
+        >
+          <Suspense fallback={<div>load...</div>}>
+            <Outlet />
+          </Suspense>
+        </div>
+      </div>
 
       {showMenu && <Menu standalone={platform === "ios"} items={items} />}
+
       <MainButton />
     </div>
   );

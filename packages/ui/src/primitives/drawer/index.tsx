@@ -50,18 +50,6 @@ export const Drawer = ({ children, isOpen, onClose, title, fullHeight = false }:
     };
   }, [isOpen, onClose]);
 
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
-
-    return () => {
-      document.body.style.overflow = "unset";
-    };
-  }, [isOpen, onClose]);
-
   return (
     <div className="z-40 flex">
       {isOpen && (

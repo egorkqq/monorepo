@@ -106,7 +106,7 @@ export const DepositExternal = () => {
   }, []);
 
   return (
-    <div className="mx-auto flex min-h-screen w-min flex-col items-center gap-3">
+    <div className="mx-auto flex w-min flex-col items-center gap-3">
       <h1 className="text-title-1 mb-3 mt-4 font-medium">Your Address</h1>
       <div className="text-text text-center text-base">
         Deposits should be made exclusively through the <span className="text-accent font-medium">TON</span> network

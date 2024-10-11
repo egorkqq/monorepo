@@ -64,3 +64,10 @@
     --icon-fill: #1e6284;
   }
 }
+
+html,
+body,
+#root {
+  height: 100%;
+  overflow: hidden;
+}
