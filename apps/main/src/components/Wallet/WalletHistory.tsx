@@ -35,7 +35,10 @@ export const WalletHistory = () => {
 
       {history.length === 0 && <div className="text-text-secondary">Empty transaction history</div>}
 
-      <List className={history.length <= 1 ? "p-0" : undefined} onExpand={() => console.log("expand")}>
+      <List
+        className={history.length <= 1 ? "p-0" : undefined}
+        onExpand={history.length > 0 ? () => console.log("expand") : undefined}
+      >
         {history.slice(0, 4).map((tx) => (
           <ListItem
             key={tx.utime}
