@@ -169,7 +169,11 @@ const AuthLayer = () => {
   }, [network, activeWallet]);
 
   useEffect(() => {
-    authMutation.mutate({ authType: "telegram", initDataRaw: undefined, initTon });
+    authMutation.mutate({
+      authType: "telegram",
+      initDataRaw: import.meta.env.PROD ? initDataRaw : undefined,
+      initTon,
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initTon]);
 
