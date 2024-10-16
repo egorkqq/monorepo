@@ -17,7 +17,7 @@ export const WalletItem = memo(
     const popup = usePopup();
     const haptic = useHapticFeedback();
 
-    const humanizedAddress = Address.parse(address).toString({ testOnly: network === "testnet", bounceable: true });
+    const humanizedAddress = Address.parse(address).toString({ testOnly: network === "testnet", bounceable: false });
 
     const trimmedAddress = trimAddress(humanizedAddress);
     const { disconnectWallet, selectWallet } = useTonWallets();
@@ -42,7 +42,7 @@ export const WalletItem = memo(
     };
 
     const handleSelectWallet = () => {
-      haptic.impactOccurred("light");
+      haptic.impactOccurred("medium");
       selectWallet(id);
     };
 

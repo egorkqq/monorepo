@@ -95,14 +95,14 @@ export const PincodeModal = memo(
     }, [isOpen, setTopLevelError]);
 
     const handleNumberClick = (number: number) => {
-      haptic.impactOccurred("light");
+      haptic.impactOccurred("medium");
       if (pin.length < 4) {
         setPin((prevPin) => prevPin + number);
       }
     };
 
     const handleDelete = () => {
-      haptic.impactOccurred("light");
+      haptic.impactOccurred("medium");
       setPin((prevPin) => prevPin.slice(0, -1));
     };
 
@@ -151,7 +151,7 @@ export const PincodeModal = memo(
             <button
               type="button"
               onClick={handleFingerprint}
-              className="border-separator flex h-[72px] w-[72px] items-center justify-center rounded-full border disabled:opacity-40"
+              className="border-separator flex h-[72px] w-[72px] items-center justify-center rounded-full border disabled:opacity-50"
               disabled
             >
               <FingerScanIcon className="stroke-accent h-6 w-6 fill-none" />

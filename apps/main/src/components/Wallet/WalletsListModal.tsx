@@ -11,7 +11,7 @@ interface WalletsListProps {
   onClose: () => void;
 }
 
-export const WalletsList = ({ isOpen, onClose }: WalletsListProps) => {
+export const WalletsListModal = ({ isOpen, onClose }: WalletsListProps) => {
   const collapsedView = false;
   const { list, selectWallet } = useTonWallets();
   const activeWallet = useTonWallet();

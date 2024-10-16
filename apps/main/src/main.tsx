@@ -1,5 +1,4 @@
 import { StrictMode } from "react";
-
 import ReactDOM from "react-dom/client";
 
 // Uncomment this import in case, you would like to develop the application even outside

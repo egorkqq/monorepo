@@ -54,7 +54,7 @@ export const ListItem: React.FC<ListItemProps> = ({
       listItemVariants({ fullWidth, gap }),
       onClick && "active:outline-accent focus:outline-accent",
       withSeparator &&
-        "focus:bg-background-secondary/70 not-last:rounded-b-none border-b border-black/5 focus:outline-none dark:border-white/5",
+        "focus:bg-background-secondary/70 rounded-b-none border-b border-black/5 last:rounded-b-2xl last:border-b-0 focus:outline-none dark:border-white/5",
       className,
     )}
     onClick={onClick}
@@ -75,7 +75,7 @@ export const ListItem: React.FC<ListItemProps> = ({
         {leftBottomText && <span className="text-text-secondary text-subhead">{leftBottomText}</span>}
       </div>
     </div>
-    <div className="flex items-center space-x-3">
+    <div className="max-w-1/2 flex items-center space-x-3">
       <div className="flex flex-col gap-0.5 text-right">
         {rightTopText && <span className="text-text text-headline">{rightTopText}</span>}
 

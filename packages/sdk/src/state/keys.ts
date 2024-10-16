@@ -30,6 +30,6 @@ export const activeWalletAtom = atom<UserWallet | undefined>((get) => {
   return storedWallets.find((wallet) => wallet.id === activeWalletId);
 });
 
-export const walletsCounterAtom = atomWithStorage<number>("@arc/sdk/walletsCounter", 0, undefined, {
+export const walletsCounterAtom = atomWithStorage<number>("@arc/sdk/walletsCounter", 1, undefined, {
   getOnInit: true,
 });

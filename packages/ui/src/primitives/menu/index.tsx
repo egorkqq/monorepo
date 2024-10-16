@@ -16,8 +16,14 @@ interface MenuProps {
   items: MenuItem[];
 }
 
+// TODO: refactor using splitAtom
 const MenuButton: React.FC<MenuItem> = memo(({ label, icon, onClick, active }) => (
-  <button type="button" onClick={onClick} className="flex flex-1 flex-col items-center justify-center gap-1 p-3">
+  <button
+    type="button"
+    disabled={active}
+    onClick={onClick}
+    className="flex flex-1 flex-col items-center justify-center gap-1 p-3"
+  >
     <div className={cn({ "stroke-text-secondary flex fill-none": true, "stroke-accent fill-icon-fill": active })}>
       {icon}
     </div>

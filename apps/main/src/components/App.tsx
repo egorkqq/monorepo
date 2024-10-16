@@ -17,6 +17,7 @@ import {
   useThemeParams,
   useViewport,
 } from "@telegram-apps/sdk-react";
+import { Address } from "@ton/core";
 import { useSetAtom } from "jotai/react";
 
 import { useNetwork, useTonWallet, useTonWallets } from "@arc/sdk";
@@ -27,6 +28,7 @@ import { ErrorBoundary, ErrorBoundaryError } from "@/components/ErrorBoundary";
 import { AppRoute, BankRoute, CatalogRoute, DepositRoute, MarketRoute, RegisterRoute, SettingsRoute } from "@/routes";
 
 import { Layout } from "./Layout";
+import { PageLoader } from "./Loader";
 
 const Home = React.lazy(() => import("@/pages/Home").then((module) => ({ default: module.Home })));
 const Send = React.lazy(() => import("@/pages/Home").then((module) => ({ default: module.Send })));
@@ -152,7 +154,7 @@ const I18NLayer = () => (
 const AuthLayer = () => {
   const activeWallet = useTonWallet();
   const { network } = useNetwork();
-  // const { initDataRaw } = useLaunchParams();
+  const { initDataRaw } = useLaunchParams();
 
   const authMutation = useAuth();
 
@@ -161,7 +163,7 @@ const AuthLayer = () => {
 
     return {
       network,
-      address: activeWallet.address?.toString(),
+      address: Address.parse(activeWallet.address).toString({ bounceable: false }),
       publicKey: activeWallet.publicKey,
     };
   }, [network, activeWallet]);
@@ -198,38 +200,192 @@ const MainRoutes = () => {
     <Routes>
       <Route element={<Layout platform={lp.platform} />}>
         {/* Home group */}
-        <Route path={AppRoute.home} element={<Home />} />
-        <Route path={AppRoute.swap} element={<Swap />} />
-        <Route path={AppRoute.send} element={<Send />} />
+        <Route
+          path={AppRoute.home}
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <Home />
+            </Suspense>
+          }
+        />
+        <Route
+          path={AppRoute.swap}
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <Swap />
+            </Suspense>
+          }
+        />
+        <Route
+          path={AppRoute.send}
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <Send />
+            </Suspense>
+          }
+        />
         {/* Home group --- Bank  */}
-        <Route path={BankRoute.index} element={<Bank />} />
-        <Route path={BankRoute.tasks} element={<BankTasks />} />
-        <Route path={BankRoute.stake} element={<BankStake />} />
-        <Route path={BankRoute.buy} element={<BankBuy />} />
-        <Route path={BankRoute.history} element={<BankHistory />} />
+        <Route
+          path={BankRoute.index}
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <Bank />
+            </Suspense>
+          }
+        />
+        <Route
+          path={BankRoute.tasks}
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <BankTasks />
+            </Suspense>
+          }
+        />
+        <Route
+          path={BankRoute.stake}
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <BankStake />
+            </Suspense>
+          }
+        />
+        <Route
+          path={BankRoute.buy}
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <BankBuy />
+            </Suspense>
+          }
+        />
+        <Route
+          path={BankRoute.history}
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <BankHistory />
+            </Suspense>
+          }
+        />
         {/* Home group --- Deposit  */}
-        <Route path={DepositRoute.index} element={<Deposit />} />
-        <Route path={DepositRoute.external} element={<DepositExternal />} />
+        <Route
+          path={DepositRoute.index}
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <Deposit />
+            </Suspense>
+          }
+        />
+        <Route
+          path={DepositRoute.external}
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <DepositExternal />
+            </Suspense>
+          }
+        />
 
         {/* Catalog group */}
-        <Route path={CatalogRoute.index} element={<Catalog />} />
-        <Route path={CatalogRoute.game} element={<CatalogGame />} />
-        <Route path={CatalogRoute.leaders} element={<CatalogLeaders />} />
-        <Route path={CatalogRoute.category} element={<CatalogCategory />} />
+        <Route
+          path={CatalogRoute.index}
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <Catalog />
+            </Suspense>
+          }
+        />
+        <Route
+          path={CatalogRoute.game}
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <CatalogGame />
+            </Suspense>
+          }
+        />
+        <Route
+          path={CatalogRoute.leaders}
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <CatalogLeaders />
+            </Suspense>
+          }
+        />
+        <Route
+          path={CatalogRoute.category}
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <CatalogCategory />
+            </Suspense>
+          }
+        />
 
         {/* Market group */}
-        <Route path={MarketRoute.index} element={<Market />} />
-        <Route path={MarketRoute.list} element={<OrdersList />} />
-        <Route path={MarketRoute.order} element={<Order />} />
-        <Route path={MarketRoute.create} element={<CreateOrder />} />
-        <Route path={MarketRoute.confirm} element={<ConfirmCreateOrder />} />
+        <Route
+          path={MarketRoute.index}
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <Market />
+            </Suspense>
+          }
+        />
+        <Route
+          path={MarketRoute.list}
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <OrdersList />
+            </Suspense>
+          }
+        />
+        <Route
+          path={MarketRoute.order}
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <Order />
+            </Suspense>
+          }
+        />
+        <Route
+          path={MarketRoute.create}
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <CreateOrder />
+            </Suspense>
+          }
+        />
+        <Route
+          path={MarketRoute.confirm}
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <ConfirmCreateOrder />
+            </Suspense>
+          }
+        />
 
         {/* News group */}
-        <Route path={AppRoute.news} element={<News />} />
+        <Route
+          path={AppRoute.news}
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <News />
+            </Suspense>
+          }
+        />
 
         {/* Settings group */}
-        <Route path={SettingsRoute.index} element={<Settings />} />
-        <Route path={SettingsRoute.walletSafety} element={<WalletSafety />} />
+        <Route
+          path={SettingsRoute.index}
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <Settings />
+            </Suspense>
+          }
+        />
+        <Route
+          path={SettingsRoute.walletSafety}
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <WalletSafety />
+            </Suspense>
+          }
+        />
 
         <Route path="*" element={<Navigate to="/" />} />
       </Route>
@@ -300,7 +456,7 @@ export const RegisterRoutes = () => {
   }, []);
 
   return (
-    <Suspense fallback={<Loading />}>
+    <Suspense fallback={<PageLoader />}>
       <Routes>
         <Route element={<Layout platform={lp.platform} />}>
           <Route path={RegisterRoute.index} element={<RegisterWelcome />} />
@@ -334,5 +490,3 @@ export const RegisterRoutes = () => {
     </Suspense>
   );
 };
-
-const Loading = () => <div>Loading...</div>;

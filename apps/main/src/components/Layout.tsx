@@ -34,7 +34,7 @@ export const Layout: React.FC<LayoutProps> = memo(({ platform }) => {
       label: "Wallet",
       icon: <Wallet2Icon />,
       onClick: () => {
-        haptic.impactOccurred("light");
+        haptic.impactOccurred("medium");
         navigate(AppRoute.home);
       },
       active: !([AppRoute.catalog, AppRoute.market, AppRoute.news, AppRoute.settings] as string[]).includes(
@@ -45,7 +45,7 @@ export const Layout: React.FC<LayoutProps> = memo(({ platform }) => {
       label: "Apps",
       icon: <BriefcaseIcon />,
       onClick: () => {
-        haptic.impactOccurred("light");
+        haptic.impactOccurred("medium");
         navigate(AppRoute.catalog);
       },
       active: location.pathname.startsWith(AppRoute.catalog),
@@ -54,7 +54,7 @@ export const Layout: React.FC<LayoutProps> = memo(({ platform }) => {
       label: "Market",
       icon: <Convert3DCubeIcon />,
       onClick: () => {
-        haptic.impactOccurred("light");
+        haptic.impactOccurred("medium");
         navigate(AppRoute.market);
       },
       active: location.pathname.startsWith(AppRoute.market),
@@ -63,7 +63,7 @@ export const Layout: React.FC<LayoutProps> = memo(({ platform }) => {
       label: "News",
       icon: <BookIcon />,
       onClick: () => {
-        haptic.impactOccurred("light");
+        haptic.impactOccurred("medium");
         navigate(AppRoute.news);
       },
       active: location.pathname.startsWith(AppRoute.news),
@@ -72,7 +72,7 @@ export const Layout: React.FC<LayoutProps> = memo(({ platform }) => {
       label: "Account",
       icon: <UserIcon />,
       onClick: () => {
-        haptic.impactOccurred("light");
+        haptic.impactOccurred("medium");
         navigate(AppRoute.settings);
       },
       active: location.pathname.startsWith(AppRoute.settings),

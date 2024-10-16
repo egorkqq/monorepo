@@ -3,7 +3,7 @@ import { type AxiosResponse } from "axios";
 
 import { useTonWallet } from "@arc/sdk";
 
-import axiosInstance from "@/api/node";
+import nodeAxiosInstance from "@/api/node";
 
 interface Options {
   toAddress: string;
@@ -42,17 +42,17 @@ export const useCreateSendJettonTransfer = (options: Options) => {
         throw new Error("No active wallet");
       }
 
-      const response = await axiosInstance.post<SendJettonTransferRequest, AxiosResponse<SendJettonTransferResponse>>(
-        "/builder/jetton/create-transfer",
-        {
-          user_wallet: activeWallet?.address.toString(),
-          destination_user_wallet: options.toAddress,
-          from_asset: options.fromAsset,
-          amount: options.amount,
-          response_destination: options.toAddress,
-          forward_ton_amount: options.forwardTonAmount,
-        },
-      );
+      const response = await nodeAxiosInstance.post<
+        SendJettonTransferRequest,
+        AxiosResponse<SendJettonTransferResponse>
+      >("/builder/jetton/create-transfer", {
+        user_wallet: activeWallet?.address.toString(),
+        destination_user_wallet: options.toAddress,
+        from_asset: options.fromAsset,
+        amount: options.amount,
+        response_destination: options.toAddress,
+        forward_ton_amount: options.forwardTonAmount,
+      });
 
       return response.data;
     },

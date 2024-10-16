@@ -14,7 +14,7 @@ interface Options {
   network?: "testnet" | "mainnet";
 }
 
-export const useTonClient = (options: Options) => {
+export const useTonClient = (options: Options = {}) => {
   const { network: sdkNetwork } = useNetwork();
 
   return useQuery({

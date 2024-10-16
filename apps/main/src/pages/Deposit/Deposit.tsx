@@ -20,7 +20,7 @@ const Option: React.FC<OptionProps> = ({ icon, title, description, onClick }) =>
   <button
     type="button"
     className={cn(
-      "bg-background-secondary flex w-full items-center justify-between rounded-2xl p-4 shadow-sm disabled:opacity-40",
+      "bg-background-secondary active:outline-accent flex w-full items-center justify-between rounded-2xl p-4 shadow-sm disabled:opacity-50",
     )}
     disabled={!onClick}
     onClick={onClick}
@@ -36,29 +36,27 @@ const Option: React.FC<OptionProps> = ({ icon, title, description, onClick }) =>
   </button>
 );
 
+const options = [
+  {
+    icon: <ScanBarcodeIcon />,
+    title: "External Wallet",
+    description: "Receive from another wallet",
+    link: DepositRoute.external,
+  },
+  {
+    icon: <CardIcon />,
+    title: "Bank Card",
+    description: "Buy with your bank card",
+  },
+  {
+    icon: <EmptyWalletAddIcon />,
+    title: "P2P Market",
+    description: "Buy without intermediaries",
+  },
+];
+
 export const Deposit = () => {
   const navigate = useNavigate();
-
-  const options = [
-    {
-      icon: <ScanBarcodeIcon />,
-      title: "External Wallet",
-      description: "Receive from another wallet",
-      onClick: () => {
-        navigate(DepositRoute.external);
-      },
-    },
-    {
-      icon: <CardIcon />,
-      title: "Bank Card",
-      description: "Buy with your bank card",
-    },
-    {
-      icon: <EmptyWalletAddIcon />,
-      title: "P2P Market",
-      description: "Buy without intermediaries",
-    },
-  ];
 
   return (
     <div className="min-h-full">
@@ -70,7 +68,7 @@ export const Deposit = () => {
             icon={option.icon}
             title={option.title}
             description={option.description}
-            onClick={option.onClick || undefined}
+            onClick={option.link ? () => navigate(option.link) : undefined}
           />
         ))}
       </div>

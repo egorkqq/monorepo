@@ -1,6 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQueries, useQuery } from "@tanstack/react-query";
 
-import stonFiAxios from "@/api/stonFi";
+import stonFiAxiosInstance from "@/api/stonFi";
 
 export const AssetKinds = {
   Ton: "ton",
@@ -36,14 +36,27 @@ export interface GetStonFiAssetResponse {
   asset: StonFiAsset;
 }
 
+const fetchAssetDetails = async (assetAddress: string) => {
+  const response = await stonFiAxiosInstance.get<GetStonFiAssetResponse>(`/assets/${assetAddress}`);
+  return response.data;
+};
+
 export const useAssetDetails = (assetAddress: string) =>
-  useQuery<GetStonFiAssetResponse>({
+  useQuery({
     queryKey: ["assetDetails", assetAddress],
-    queryFn: async () => {
-      const response = await stonFiAxios.get<GetStonFiAssetResponse>(`/v1/assets/${assetAddress}`);
-      return response.data;
-    },
+    queryFn: async () => fetchAssetDetails(assetAddress),
     enabled: !!assetAddress,
     staleTime: 120000,
     gcTime: 300000,
+    retry: 3,
+  });
+
+// try error, try suspensequeries
+export const useMultiAssetDetails = (assetsAddresses: string[]) =>
+  useQueries({
+    queries: assetsAddresses.map((address) => ({
+      queryKey: ["assetDetails", address],
+      queryFn: async () => fetchAssetDetails(address),
+      staleTime: Infinity,
+    })),
   });

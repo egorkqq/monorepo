@@ -29,16 +29,10 @@ export const RegisterExisting = () => {
     }
   };
 
-  const handleInputChange = (index: number, value: string) => {
-    const newSeedPhrase = [...seedPhrase];
-    newSeedPhrase[index] = value;
-    setSeedPhrase(newSeedPhrase);
-  };
-
-  const handlePaste = async () => {
+  const handlePaste = async (pastedText?: string) => {
     try {
-      const text = await navigator.clipboard.readText();
-      const words = text.split(" ");
+      const text = pastedText || (await navigator.clipboard.readText());
+      const words = text.trim().split(/\s+/);
       if (words.length === 24) {
         setSeedPhrase(words);
       } else {
@@ -46,6 +40,17 @@ export const RegisterExisting = () => {
       }
     } catch (err) {
       console.error("Failed to read clipboard contents: ", err);
+    }
+  };
+
+  const handleInputChange = (index: number, value: string) => {
+    const newSeedPhrase = [...seedPhrase];
+    newSeedPhrase[index] = value;
+    setSeedPhrase(newSeedPhrase);
+
+    // Добавляем проверку на вставку seed-фразы
+    if (value.split(" ").length === 24) {
+      handlePaste(value);
     }
   };
 
@@ -65,6 +70,10 @@ export const RegisterExisting = () => {
             type="text"
             value={word}
             onChange={(e) => handleInputChange(index, e.target.value)}
+            onPaste={(e) => {
+              e.preventDefault();
+              handlePaste(e.clipboardData.getData("text"));
+            }}
             className="w-[50%] rounded-md border-2 border-gray-300 p-2"
           />
         ))}
@@ -74,7 +83,7 @@ export const RegisterExisting = () => {
         className={cn(
           "bg-accent mt-4 flex h-10 w-fit items-center gap-1 rounded-full p-2 pl-3 pr-4 text-white shadow-md",
         )}
-        onClick={handlePaste}
+        onClick={() => handlePaste()}
       >
         {t("REGISTER.PASTE")}
       </button>
