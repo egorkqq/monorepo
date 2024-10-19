@@ -5,50 +5,74 @@ import { useAtomValue } from "jotai";
 
 import { isTmaEnvironmentAtom, mainButtonAtom } from "@/atoms/ui";
 
-const MainButtonTMA = memo(({ title, onClick }: { title: string | undefined; onClick: (() => void) | undefined }) => {
-  const mb = useMainButton();
+import { Loader } from "./Loader";
 
-  useEffect(() => {
-    if (onClick !== undefined) {
-      const rmfn = mb.on("click", onClick);
+const MainButtonTMA = memo(
+  ({
+    title,
+    onClick,
+    loading,
+  }: {
+    title: string | undefined;
+    onClick: (() => void) | undefined;
+    loading: boolean | undefined;
+  }) => {
+    const mb = useMainButton();
 
-      return () => rmfn();
-    }
+    useEffect(() => {
+      if (onClick !== undefined) {
+        const rmfn = mb.on("click", onClick);
 
-    return undefined;
-  }, [onClick, mb]);
+        return () => rmfn();
+      }
 
-  useEffect(() => {
-    if (title) {
-      mb.setText(title);
-      mb.hideLoader();
-      mb.enable();
-      mb.show();
-    } else {
-      mb.hide();
-    }
-  }, [title, mb]);
+      return undefined;
+    }, [onClick, mb]);
 
-  return null;
-});
+    useEffect(() => {
+      if (loading) {
+        mb.showLoader();
+      } else {
+        mb.hideLoader();
+      }
+    }, [loading, mb]);
+
+    useEffect(() => {
+      if (title) {
+        mb.setText(title);
+        mb.enable();
+        mb.show();
+      } else {
+        mb.hide();
+      }
+    }, [title, mb]);
+
+    return null;
+  },
+);
 
 MainButtonTMA.displayName = "MainButtonTMA";
 
 export const MainButton = memo(() => {
-  const { onClick, title } = useAtomValue(mainButtonAtom);
+  const { onClick, title, loading } = useAtomValue(mainButtonAtom);
 
   const isTma = useAtomValue(isTmaEnvironmentAtom);
 
-  if (isTma && !import.meta.env.DEV) return <MainButtonTMA title={title} onClick={onClick} />;
+  if (isTma && !import.meta.env.DEV) return <MainButtonTMA title={title} onClick={onClick} loading={loading} />;
 
   return (
     !!onClick && (
       <>
-        <div className="h-32" />
+        <div className="h-20" />
 
-        <div className="fixed bottom-0 left-0 right-0 p-4">
-          <button type="button" onClick={onClick} className="bg-accent w-full rounded-2xl p-3 text-white">
-            {title}
+        <div className="border-separator fixed bottom-0 left-0 right-0 border-t-2 p-4">
+          <button
+            disabled={loading}
+            type="button"
+            onClick={onClick}
+            className="bg-accent w-full rounded-2xl p-3 text-white"
+          >
+            {loading ? <Loader /> : title}
           </button>
         </div>
       </>

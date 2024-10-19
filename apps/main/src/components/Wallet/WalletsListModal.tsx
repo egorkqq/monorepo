@@ -12,7 +12,6 @@ interface WalletsListProps {
 }
 
 export const WalletsListModal = ({ isOpen, onClose }: WalletsListProps) => {
-  const collapsedView = false;
   const { list, selectWallet } = useTonWallets();
   const activeWallet = useTonWallet();
 
@@ -25,7 +24,7 @@ export const WalletsListModal = ({ isOpen, onClose }: WalletsListProps) => {
 
   return (
     <Drawer isOpen={isOpen} title="Wallets" onClose={onClose}>
-      <List withGap={!collapsedView} className="m-4" expandText="Add new" onExpand={() => selectWallet(undefined)}>
+      <List withGap className="m-4" expandText="Add new" onExpand={() => selectWallet(undefined)}>
         {list.map((wallet) => (
           <WalletItem
             key={wallet.id}

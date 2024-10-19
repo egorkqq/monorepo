@@ -1,4 +1,4 @@
-import { memo, useMemo, useState } from "react";
+import { memo, useState } from "react";
 
 import { trimAddress } from "@arc/sdk";
 import { cn } from "@arc/ui/cn";
@@ -7,9 +7,8 @@ import { CopyIcon } from "@arc/ui/icons/copy";
 import { ScannerIcon } from "@arc/ui/icons/scanner";
 import { Setting2Icon } from "@arc/ui/icons/setting-2";
 
-import { useAssetsList } from "@/api/deDust/useAssetsList";
-import { useMultiAssetDetails } from "@/api/stonFi/useAssetDetails";
-import { formatCurrency, formatFromNano } from "@/utils/format";
+import { useWalletTotalBalance } from "@/hooks/useWalletTotalBalance";
+import { formatCurrency } from "@/utils/format";
 
 import { WalletsListModal } from "./WalletsListModal";
 
@@ -85,33 +84,3 @@ export const WalletControls: React.FC<WalletControlsProps> = memo(({ walletName,
 });
 
 WalletControls.displayName = "WalletControls";
-
-const useWalletTotalBalance = (walletAddress: string | undefined) => {
-  const { data: assetsData } = useAssetsList(walletAddress);
-  const assetsAddresses =
-    assetsData?.map((asset) =>
-      asset.asset.type === "jetton" ? asset.asset.address : "EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c",
-    ) || [];
-  const queryResults = useMultiAssetDetails(assetsAddresses);
-
-  const assetAmountsInDollars = useMemo(
-    () =>
-      queryResults.map((assetQuery, index) => {
-        if (assetQuery.isSuccess && assetQuery.data) {
-          const assetPrice = assetQuery.data.asset.dex_price_usd || assetQuery.data.asset.third_party_price_usd || 0;
-          const assetBalanceInNano = assetsData?.[index]?.balance as string;
-          const balanceInUnits = formatFromNano(assetBalanceInNano, assetQuery.data.asset.decimals);
-          const amountInDollars = Number(balanceInUnits) * Number(assetPrice);
-          return amountInDollars;
-        }
-        return 0;
-      }),
-    [assetsData, queryResults],
-  );
-
-  const totalBalance = assetAmountsInDollars?.reduce((sum, amount) => sum + amount, 0);
-
-  const isLoading = !assetsData;
-
-  return { totalBalance, isLoading };
-};

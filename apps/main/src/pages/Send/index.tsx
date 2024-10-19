@@ -1,23 +1,60 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 import { Address, toNano } from "@ton/core";
+import { useSetAtom } from "jotai";
 
 import { useSendTransaction, useTonWallet } from "@arc/sdk";
 import { cn } from "@arc/ui/cn";
 
 import { useCreateSendJettonTransfer } from "@/api/node/useGenerateSend";
+import { showMenuAtom } from "@/atoms/ui";
 import { usePincodeModal } from "@/components/Pincode/usePincodeModal";
 import { useDebounce } from "@/utils/hooks/useDebounce";
 
-const assetOptions = [
-  { value: "TON", label: "Toncoin" },
-  { value: "ARC", label: "ARC Token" },
-] as const;
+import { ChooseAsset } from "./ChooseAsset";
+import { Confirm } from "./Confirm";
+import { EnterAddress } from "./EnterAddress";
+import { EnterAmount } from "./EnterAmount";
 
-export const Send = () => {
-  const [selectedAsset, setSelectedAsset] = useState<string>(assetOptions[0].value);
+export const SendRoutes = () => {
+  const showMenu = useSetAtom(showMenuAtom);
+
+  const [searchParams] = useSearchParams();
+  const assetAddress = searchParams.get("assetAddress");
+  const toAddress = searchParams.get("toAddress");
+  const amount = searchParams.get("amount");
+
+  useEffect(() => {
+    showMenu(false);
+
+    return () => {
+      showMenu(true);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (!assetAddress) {
+    return <ChooseAsset />;
+  }
+
+  if (!toAddress) {
+    return <EnterAddress assetAddress={assetAddress} />;
+  }
+
+  if (!amount) {
+    return <EnterAmount assetAddress={assetAddress} toAddress={toAddress} />;
+  }
+
+  return <Confirm assetAddress={assetAddress} toAddress={toAddress} amount={amount} />;
+};
+
+export const ChooseAssetOld = () => {
+  const [selectedAsset, setSelectedAsset] = useState<string | undefined>(undefined);
   const [recipientAddress, setRecipientAddress] = useState("0QC8OkLiHlll4qYDRRwUYU1Vy0gojzIX1MFKjQKFnndzpKq4");
   const [amount, setAmount] = useState("");
+
+  const activeWallet = useTonWallet();
 
   const debouncedAddress = useDebounce(recipientAddress, 300);
   const debouncedAmount = useDebounce(amount, 300);
@@ -50,7 +87,6 @@ export const Send = () => {
   });
 
   const send = useSendTransaction();
-  const activeWallet = useTonWallet();
   const { promptPincode, PincodeModalComponent } = usePincodeModal();
 
   if (!activeWallet) {
@@ -135,11 +171,11 @@ export const Send = () => {
           onChange={handleAssetChange}
           className="bg-background text-text border-separator w-full rounded-md border p-2"
         >
-          {assetOptions.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
+          {/* {assets.map((asset) => (
+            <option key={asset.symbol} value={asset.symbol}>
+              {asset.name}
+            </option> */}
+          {/* ))} */}
         </select>
       </div>
 

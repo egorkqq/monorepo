@@ -25,6 +25,13 @@ export default defineConfig({
   server: {
     host: "architecton.local",
     port: 1111,
+    proxy: {
+      "/api": {
+        target: "https://tonb.architecton.site",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ""),
+      },
+    },
   },
   css: {
     postcss: {

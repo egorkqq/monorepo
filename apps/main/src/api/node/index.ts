@@ -1,9 +1,10 @@
 import axios from "axios";
 
-export const ARCHITECTON_API_FQDN = import.meta.env.VITE_ARCHITECTON_API_FQDN;
+export const ARCHITECTON_NODE_API_FQDN = import.meta.env.DEV ? "/api" : "https://tonb.architecton.site";
+// Testnet: "https://dev.architecton.site";
 
 const nodeAxiosInstance = axios.create({
-  baseURL: `${ARCHITECTON_API_FQDN}/api/v2/node`,
+  baseURL: `${ARCHITECTON_NODE_API_FQDN}/api/v2/node`,
   headers: {
     "Content-Type": "application/json",
   },

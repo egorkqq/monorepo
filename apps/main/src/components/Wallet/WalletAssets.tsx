@@ -7,6 +7,7 @@ import { useAssetsList } from "@/api/deDust/useAssetsList";
 import { useAssetDetails } from "@/api/stonFi/useAssetDetails";
 import { formatFromNano } from "@/utils/format";
 import { useFormatter } from "@/utils/hooks/useFormatter";
+import { NATIVE_TON_ADDRESS } from "@/utils/isNativeAddress";
 
 import { SkeletonListItem } from "../Skeleton/ListItem";
 
@@ -20,10 +21,8 @@ const useAssetInfo = ({
   nanoBalance: string;
 }) => {
   const { formatTokenValue, formatCurrency } = useFormatter();
-  const { data, isLoading, isError } = useAssetDetails(
-    type !== "native" ? address : "EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c",
-  );
-  const assetName = data?.asset.display_name;
+  const { data, isLoading, isError } = useAssetDetails(type === "native" ? NATIVE_TON_ADDRESS : address);
+  const assetName = data?.asset.symbol || data?.asset.display_name;
   const priceUsd = data?.asset.third_party_price_usd || data?.asset.dex_usd_price;
   const assetIcon = data?.asset.image_url;
 

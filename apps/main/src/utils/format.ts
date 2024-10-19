@@ -75,7 +75,7 @@ export const formatCurrency = (price: number | undefined, lang: string = "en-US"
   return value;
 };
 
-export const formatFromNano = (value: string | bigint | number | undefined, decimals: number = 18) => {
+export const formatFromNano = (value: string | bigint | number | undefined, decimals: number = 9) => {
   if (value === undefined) return "N/A";
 
   let bigValue: bigint;
@@ -98,4 +98,25 @@ export const formatFromNano = (value: string | bigint | number | undefined, deci
   const numValue = Number(beforeDecimalStr + "." + afterDecimalStr);
 
   return numValue;
+};
+
+export const formatToNano = (value: string | number | undefined, decimals: number = 9): bigint => {
+  if (value === undefined) return BigInt(0);
+
+  let strValue: string;
+
+  if (typeof value === "number") {
+    if (Number.isNaN(value)) return BigInt(0);
+    strValue = value.toString();
+  } else {
+    strValue = value;
+  }
+
+  strValue = strValue.replace(",", ".");
+
+  const [integerPart, fractionalPart = ""] = strValue.split(".");
+  const paddedFractionalPart = fractionalPart.padEnd(decimals, "0").slice(0, decimals);
+  const wholePart = `${integerPart}${paddedFractionalPart}`;
+
+  return BigInt(wholePart);
 };
