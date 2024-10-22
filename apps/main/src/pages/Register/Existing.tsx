@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 
 import { useSetAtom } from "jotai";
@@ -27,15 +28,16 @@ export const RegisterExisting = () => {
       const pin = await promptPincode(list.length > 0 ? "get" : "set");
 
       if (!pin) {
-        throw new Error("User cancelled");
+        throw new Error("Operation cancelled. Please try again when you're ready.");
       }
 
       const trimmedSeedPhrase = seedPhrase.map((word) => word.trim());
 
       addWallet(trimmedSeedPhrase, pin, walletVersion);
     } catch (err) {
-      // TODO: Alert
-      console.error("Failed to add wallet: ", err);
+      toast.error(
+        err instanceof Error ? err.message : "We couldn't create your wallet at this time. Please try again later.",
+      );
     }
   };
 
@@ -46,11 +48,12 @@ export const RegisterExisting = () => {
       if (words.length === 24) {
         setSeedPhrase(words);
       } else {
-        // TODO: Alert
-        alert(t("REGISTER.INVALID_CLIPBOARD"));
+        throw new Error("It seems the pasted text doesn't contain 24 words. Please check and try again.");
       }
     } catch (err) {
-      console.error("Failed to read clipboard contents: ", err);
+      toast.error(
+        err instanceof Error ? err.message : "We couldn't access the clipboard. Please try pasting manually.",
+      );
     }
   };
 

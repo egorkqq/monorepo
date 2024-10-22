@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 import { ArrowRightIcon } from "@arc/ui/icons/arrow-right";
@@ -35,6 +36,11 @@ export const Deposit = () => {
             leftTopText={<div className="mt-0.5 text-base">Bank Card</div>}
             leftBottomText={<div className="text-caption-1 text-text-secondary text-left">Buy with your bank card</div>}
             rightIcon={<ArrowRightIcon className="stroke-text fill-none opacity-35" />}
+            onClick={() =>
+              toast.error(
+                "We apologize, but this feature is not available yet. We're working on it and will notify you once it's ready.",
+              )
+            }
           />
           <ListItem
             className="px-5 py-4 opacity-50"
@@ -45,6 +51,11 @@ export const Deposit = () => {
               <div className="text-caption-1 text-text-secondary text-left">Buy without intermediaries</div>
             }
             rightIcon={<ArrowRightIcon className="stroke-text fill-none opacity-35" />}
+            onClick={() =>
+              toast.error(
+                "We're sorry, but the P2P Market is still in development. We'll let you know as soon as it becomes available.",
+              )
+            }
           />
         </List>
       </div>

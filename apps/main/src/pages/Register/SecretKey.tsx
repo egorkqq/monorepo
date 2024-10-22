@@ -1,5 +1,7 @@
 import { useEffect } from "react";
+import toast from "react-hot-toast";
 
+import { useHapticFeedback } from "@telegram-apps/sdk-react";
 import { mnemonicNew } from "@ton/crypto";
 import { atom, useAtom, useSetAtom } from "jotai";
 
@@ -13,6 +15,7 @@ import { usePincodeModal } from "@/components/Pincode/usePincodeModal";
 const mnemonicAtom = atom<string[]>([]);
 
 export const RegisterSecretKey = () => {
+  const haptic = useHapticFeedback();
   const setMainButton = useSetAtom(mainButtonAtom);
   const [mnemonic, setMnemonic] = useAtom(mnemonicAtom);
   const mnemonicExists = mnemonic.length > 0;
@@ -35,19 +38,21 @@ export const RegisterSecretKey = () => {
       const pin = await promptPincode(list.length > 0 ? "get" : "set");
 
       if (!pin) {
-        throw new Error("User cancelled");
+        throw new Error("Operation cancelled. Please try again when you're ready.");
       }
 
       if (!mnemonicExists) {
-        throw new Error("Mnemonic is not set");
+        throw new Error("We encountered an issue generating your secret key. Please restart the app and try again.");
       }
 
       addWallet(mnemonic, pin, "V5R1");
 
       setMnemonic([]);
     } catch (err) {
-      // TODO: Alert
-      console.error("Failed to add wallet: ", err);
+      haptic.notificationOccurred("error");
+      toast.error(
+        err instanceof Error ? err.message : "We couldn't create your wallet at this time. Please try again later.",
+      );
     }
   };
 
@@ -64,7 +69,14 @@ export const RegisterSecretKey = () => {
   }, [handleSubmit]);
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(mnemonic.join(" "));
+    haptic.impactOccurred("light");
+    const promise = navigator.clipboard.writeText(mnemonic.join(" "));
+
+    toast.promise(promise, {
+      loading: "Copying...",
+      success: "Successfully copied!",
+      error: "Failed to copy",
+    });
   };
 
   return (

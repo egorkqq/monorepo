@@ -1,4 +1,5 @@
 import { useCallback, useState } from "react";
+import toast from "react-hot-toast";
 
 import { decodePrivateKeyByPin, useTonWallet, useTonWallets } from "@arc/sdk";
 
@@ -88,7 +89,7 @@ export const usePincodeModal = (initialMode: ModalMode = "get") => {
 
   const handleClose = useCallback(() => {
     if (mode === "set") {
-      // TODO: alert with error, when reg we NEED pin (maybe in future, when wallet will be not main part of app)
+      toast.error("For your security, a PIN is required to continue. Please enter a PIN.", { id: "pincode-required" });
       return;
     }
     handlePinComplete(null);

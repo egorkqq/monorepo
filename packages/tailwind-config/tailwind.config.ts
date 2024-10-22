@@ -3,13 +3,14 @@ import type { Config } from "tailwindcss";
 import plugin from "tailwindcss";
 
 const config: Omit<Config, "content"> = {
-  boxShadow: {
-    none: "0 0 #0000",
-    md: "0px 4px 8px -2px #18181B0F",
-  },
-
   theme: {
     extend: {
+      boxShadow: {
+        none: "0 0 #0000",
+        md: "0px 4px 8px -2px #18181B0F",
+        elevation3: "var(--shadow-elevation-3)",
+      },
+
       spacing: {
         19: "4.75rem",
         17: "4.25rem",

@@ -46,14 +46,12 @@ export const EnterAmount = ({ assetAddress, toAddress }: { assetAddress: string;
     [balance, amount, assetAddress],
   );
 
-  console.log({ balance, amount });
-
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
 
   useEffect(() => {
-    if (!isEnoughBalance || !amount) {
+    if (!isEnoughBalance || !amount || amount === "0") {
       return;
     }
 

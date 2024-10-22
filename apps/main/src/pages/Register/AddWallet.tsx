@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 import { AddSquareIcon } from "@arc/ui/icons/add-square";
@@ -41,7 +42,7 @@ export const RegisterAddWallet = () => {
           rightIcon={<ArrowRightIcon className="stroke-text fill-none opacity-35" />}
           onClick={() => navigate(RegisterRoute.existing)}
         />
-        {/* TODO: alert with info about new politics */}
+
         <ListItem
           className="px-5 py-4 opacity-50"
           leftIcon={<ImportSquareIcon className="stroke-accent fill-none" />}
@@ -53,6 +54,12 @@ export const RegisterAddWallet = () => {
             </div>
           }
           rightIcon={<ArrowRightIcon className="stroke-text fill-none opacity-35" />}
+          onClick={() =>
+            toast(
+              "We're evolving our wallet import feature to enhance your experience. \n \n While it's not available in this app at the moment, we're working on integrating it into our other dApps, such as the catalog and bank staking. \n \n This change allows us to provide you with a more seamless and secure wallet management experience across our ecosystem.  \n \n  Thank you for your understanding and stay tuned for updates!",
+              { duration: 15000, id: "import-wallet-toast" },
+            )
+          }
         />
       </List>
     </>

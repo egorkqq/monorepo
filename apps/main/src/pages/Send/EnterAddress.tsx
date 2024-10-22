@@ -1,6 +1,7 @@
 import type { MouseEventHandler } from "react";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 import { Address } from "@ton/core";
@@ -70,11 +71,18 @@ const AddressInput = ({ onAddressChange, onScan }: AddressInputProps) => {
   };
 
   const handlePaste: MouseEventHandler<HTMLButtonElement> = (e) => {
-    e.stopPropagation();
-    navigator.clipboard.readText().then((text) => {
-      setAddress(text);
-      onAddressChange(text);
-    });
+    try {
+      e.stopPropagation();
+      navigator.clipboard.readText().then((text) => {
+        setAddress(text);
+        onAddressChange(text);
+      });
+    } catch (err) {
+      toast.error(
+        err instanceof Error ? err.message : "We couldn't access the clipboard. Please try pasting manually.",
+        { id: "paste-error" },
+      );
+    }
   };
 
   const handleScan: MouseEventHandler<HTMLButtonElement> = (e) => {

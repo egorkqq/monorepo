@@ -1,5 +1,7 @@
 import type { UseMutationResult } from "@tanstack/react-query";
 
+import toast from "react-hot-toast";
+
 import { useMutation } from "@tanstack/react-query";
 import { type AxiosError, type AxiosResponse } from "axios";
 import { useSetAtom } from "jotai";
@@ -33,6 +35,12 @@ export const useAuth = (): UseMutationResult<AuthResponse, AxiosError, AuthReque
     },
     onSuccess: (data) => {
       setAuthToken(data.access_token);
+    },
+    onError: () => {
+      toast.error(
+        "Authentication was unsuccessful. You may experience limited functionality. We apologize for the inconvenience and encourage you to try again.",
+        { id: "auth-error" },
+      );
     },
   });
 };

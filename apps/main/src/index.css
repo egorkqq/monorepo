@@ -44,6 +44,8 @@
 
   --icon-fill: #b5e7ff;
 
+  --shadow-elevation-3: 0px 0px 2px 0px rgba(0, 0, 0, 0.08), 0px 4px 16px 0px rgba(0, 0, 0, 0.08);
+
   @media (prefers-color-scheme: light) {
     --background: #ffffff;
     --background-secondary: #f7f9fb;
@@ -52,6 +54,8 @@
     --separator: rgba(0, 0, 0, 0.12);
 
     --icon-fill: #b5e7ff;
+
+    --shadow-elevation-3: 0px 0px 2px 0px rgba(0, 0, 0, 0.08), 0px 4px 16px 0px rgba(0, 0, 0, 0.08);
   }
 
   @media (prefers-color-scheme: dark) {
@@ -62,6 +66,8 @@
     --separator: rgba(255, 255, 255, 0.04);
 
     --icon-fill: #1e6284;
+
+    --shadow-elevation-3: 0px 0px 2px 0px rgba(0, 0, 0, 0.3), 0px 4px 16px 0px rgba(0, 0, 0, 0.3);
   }
 }
 

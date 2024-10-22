@@ -1,4 +1,5 @@
 import { useEffect, useMemo } from "react";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 import { Address } from "@ton/core";
@@ -67,13 +68,20 @@ export const Confirm = ({
               },
               {
                 onError: (error) => {
-                  console.log({ error });
+                  toast.error(
+                    error instanceof Error ? error.message : "We couldn't send the transaction. Please try again.",
+                    {
+                      id: "error-send-transaction",
+                    },
+                  );
                 },
               },
             );
           } else {
             if (!transfer) {
-              console.error("Query not ready");
+              toast.error("We couldn't send the transaction. Please try again.", {
+                id: "error-send-transaction",
+              });
               return;
             }
 
@@ -90,7 +98,12 @@ export const Confirm = ({
               },
               {
                 onError: (error) => {
-                  console.log({ error });
+                  toast.error(
+                    error instanceof Error ? error.message : "We couldn't send the transaction. Please try again.",
+                    {
+                      id: "error-send-transaction",
+                    },
+                  );
                 },
               },
             );

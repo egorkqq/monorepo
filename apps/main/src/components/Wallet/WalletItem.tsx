@@ -22,7 +22,6 @@ export const WalletItem = memo(
     const trimmedAddress = trimAddress(humanizedAddress);
     const { disconnectWallet, selectWallet } = useTonWallets();
 
-    // TODO: telegram alert! for confirm
     const handleDisconnectWallet: MouseEventHandler<SVGSVGElement> = (e) => {
       e.stopPropagation();
       popup
@@ -48,10 +47,9 @@ export const WalletItem = memo(
 
     return (
       <ListItem
-        leftTopText={title}
+        leftTopText={`${title} (${version})`}
         leftBottomText={trimmedAddress}
         rightTopText="&nbsp;" // можно баланс выводить
-        rightBottomText={version}
         rightIcon={<LogoutIcon onClick={handleDisconnectWallet} className="stroke-negative fill-none" />}
         onClick={handleSelectWallet}
       />

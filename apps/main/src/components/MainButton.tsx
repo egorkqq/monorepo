@@ -70,7 +70,8 @@ export const MainButton = memo(() => {
 
   const isTma = useAtomValue(isTmaEnvironmentAtom);
 
-  if (isTma) return <MainButtonTMA disabled={disabled} title={title} onClick={onClick} loading={loading} />;
+  if (isTma && window.location.hostname !== "localhost")
+    return <MainButtonTMA disabled={disabled} title={title} onClick={onClick} loading={loading} />;
 
   return (
     !!onClick && (

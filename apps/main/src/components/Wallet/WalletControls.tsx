@@ -1,4 +1,7 @@
 import { memo, useState } from "react";
+import toast from "react-hot-toast";
+
+import { useHapticFeedback } from "@telegram-apps/sdk-react";
 
 import { trimAddress } from "@arc/sdk";
 import { cn } from "@arc/ui/cn";
@@ -18,15 +21,20 @@ interface WalletControlsProps {
 }
 
 export const WalletControls: React.FC<WalletControlsProps> = memo(({ walletName, walletAddress }) => {
+  const haptic = useHapticFeedback();
   const [isOpen, setIsOpen] = useState(false);
   const { totalBalance, isLoading } = useWalletTotalBalance(walletAddress);
 
   const handleCopyAddress = () => {
     if (walletAddress) {
-      navigator.clipboard.writeText(walletAddress);
+      haptic.impactOccurred("light");
+      const promise = navigator.clipboard.writeText(walletAddress);
+      toast.promise(promise, {
+        loading: "Copying...",
+        success: "Successfully copied!",
+        error: "Failed to copy",
+      });
     }
-    // TODO: set copied = success and update icon, then after 1s set it back to false
-    // TODO: add toast
   };
 
   return (
@@ -57,7 +65,7 @@ export const WalletControls: React.FC<WalletControlsProps> = memo(({ walletName,
 
         {walletAddress && (
           <div
-            className="flex items-center"
+            className="flex w-min items-center"
             onClick={handleCopyAddress}
             role="button"
             tabIndex={0}

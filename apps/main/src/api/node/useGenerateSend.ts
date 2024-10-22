@@ -1,3 +1,5 @@
+import toast from "react-hot-toast";
+
 import { useQuery } from "@tanstack/react-query";
 import { type AxiosResponse } from "axios";
 
@@ -38,23 +40,29 @@ export const useCreateSendJettonTransfer = (options: Options) => {
   return useQuery({
     queryKey: ["sendArc", options],
     queryFn: async () => {
-      if (!activeWallet) {
-        throw new Error("No active wallet");
+      try {
+        if (!activeWallet) {
+          throw new Error("No active wallet");
+        }
+
+        const response = await nodeAxiosInstance.post<
+          SendJettonTransferRequest,
+          AxiosResponse<SendJettonTransferResponse>
+        >("/builder/jetton/create-transfer", {
+          user_wallet: activeWallet?.address.toString(),
+          destination_user_wallet: options.toAddress,
+          from_asset: options.fromAsset,
+          amount: options.amount,
+          response_destination: options.toAddress,
+          forward_ton_amount: options.forwardTonAmount,
+        });
+
+        return response.data;
+      } catch (err) {
+        toast.error(err instanceof Error ? err.message : "We couldn't generate the transaction. Please try again.", {
+          id: "error-create-transfer",
+        });
       }
-
-      const response = await nodeAxiosInstance.post<
-        SendJettonTransferRequest,
-        AxiosResponse<SendJettonTransferResponse>
-      >("/builder/jetton/create-transfer", {
-        user_wallet: activeWallet?.address.toString(),
-        destination_user_wallet: options.toAddress,
-        from_asset: options.fromAsset,
-        amount: options.amount,
-        response_destination: options.toAddress,
-        forward_ton_amount: options.forwardTonAmount,
-      });
-
-      return response.data;
     },
     enabled: !!options.toAddress && !!options.fromAsset && !!options.amount,
   });

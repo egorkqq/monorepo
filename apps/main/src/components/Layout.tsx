@@ -17,6 +17,7 @@ import { showMenuAtom } from "@/atoms/ui";
 import { AppRoute } from "@/routes";
 
 import { MainButton } from "./MainButton";
+import { StyledToaster } from "./Toaster";
 
 interface LayoutProps {
   platform: Platform;
@@ -81,6 +82,7 @@ export const Layout: React.FC<LayoutProps> = memo(({ platform }) => {
 
   return (
     <div className="bg-background flex h-screen flex-col overflow-hidden">
+      <StyledToaster />
       <div className="flex-grow overflow-y-auto">
         <div
           className={cn({

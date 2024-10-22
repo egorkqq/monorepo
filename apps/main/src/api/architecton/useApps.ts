@@ -34,6 +34,7 @@ export type AppsResponse = {
   marketings: MarketingItemDTO[];
 };
 
+// TODO: use new service
 export const useApps = (search?: string) =>
   useQuery<AppsResponse>({
     queryKey: ["apps", search],
