@@ -62,6 +62,7 @@ export const useCreateSendJettonTransfer = (options: Options) => {
         toast.error(err instanceof Error ? err.message : "We couldn't generate the transaction. Please try again.", {
           id: "error-create-transfer",
         });
+        return null;
       }
     },
     enabled: !!options.toAddress && !!options.fromAsset && !!options.amount,
