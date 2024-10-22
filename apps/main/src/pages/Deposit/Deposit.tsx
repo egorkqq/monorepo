@@ -1,76 +1,52 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 
-import { cn } from "@arc/ui/cn";
 import { ArrowRightIcon } from "@arc/ui/icons/arrow-right";
 import { CardIcon } from "@arc/ui/icons/card";
 import { EmptyWalletAddIcon } from "@arc/ui/icons/empty-wallet-add";
 import { ScanBarcodeIcon } from "@arc/ui/icons/scan-barcode";
+import { List } from "@arc/ui/list";
+import { ListItem } from "@arc/ui/list-item";
 
 import { DepositRoute } from "@/routes";
-
-interface OptionProps {
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-  onClick: (() => void) | undefined;
-}
-
-const Option: React.FC<OptionProps> = ({ icon, title, description, onClick }) => (
-  <button
-    type="button"
-    className={cn(
-      "bg-background-secondary active:outline-accent flex w-full items-center justify-between rounded-2xl p-4 shadow-sm disabled:opacity-50",
-    )}
-    disabled={!onClick}
-    onClick={onClick}
-  >
-    <div className="flex items-start">
-      <div className="stroke-accent mr-4 fill-none">{icon}</div>
-      <div className="flex flex-col items-start gap-0.5">
-        <div className="text-text text-left text-base">{title}</div>
-        <div className="text-caption-1 text-text-secondary text-left">{description}</div>
-      </div>
-    </div>
-    <ArrowRightIcon className="stroke-text fill-none opacity-35" />
-  </button>
-);
-
-const options = [
-  {
-    icon: <ScanBarcodeIcon />,
-    title: "External Wallet",
-    description: "Receive from another wallet",
-    link: DepositRoute.external,
-  },
-  {
-    icon: <CardIcon />,
-    title: "Bank Card",
-    description: "Buy with your bank card",
-  },
-  {
-    icon: <EmptyWalletAddIcon />,
-    title: "P2P Market",
-    description: "Buy without intermediaries",
-  },
-];
 
 export const Deposit = () => {
   const navigate = useNavigate();
 
   return (
     <div className="min-h-full">
-      <h1 className="text-title-1 mb-3 mt-4 font-medium">How do you want to add crypto?</h1>
+      <h1 className="text-title-1 my-4 font-medium">How do you want to add crypto?</h1>
       <div className="space-y-3">
-        {options.map((option) => (
-          <Option
-            key={option.title}
-            icon={option.icon}
-            title={option.title}
-            description={option.description}
-            onClick={option.link ? () => navigate(option.link) : undefined}
+        <List withGap>
+          <ListItem
+            className="px-5 py-4"
+            leftIcon={<ScanBarcodeIcon className="stroke-accent fill-none" />}
+            leftIconClassName="self-start"
+            leftTopText={<div className="mt-0.5 text-base">External Wallet</div>}
+            leftBottomText={
+              <div className="text-caption-1 text-text-secondary text-left">Receive from another wallet</div>
+            }
+            rightIcon={<ArrowRightIcon className="stroke-text fill-none opacity-35" />}
+            onClick={() => navigate(DepositRoute.external)}
           />
-        ))}
+          <ListItem
+            className="px-5 py-4 opacity-50"
+            leftIcon={<CardIcon className="stroke-accent fill-none" />}
+            leftIconClassName="self-start"
+            leftTopText={<div className="mt-0.5 text-base">Bank Card</div>}
+            leftBottomText={<div className="text-caption-1 text-text-secondary text-left">Buy with your bank card</div>}
+            rightIcon={<ArrowRightIcon className="stroke-text fill-none opacity-35" />}
+          />
+          <ListItem
+            className="px-5 py-4 opacity-50"
+            leftIcon={<EmptyWalletAddIcon className="stroke-accent fill-none" />}
+            leftIconClassName="self-start"
+            leftTopText={<div className="mt-0.5 text-base">P2P Market</div>}
+            leftBottomText={
+              <div className="text-caption-1 text-text-secondary text-left">Buy without intermediaries</div>
+            }
+            rightIcon={<ArrowRightIcon className="stroke-text fill-none opacity-35" />}
+          />
+        </List>
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import { memo, Suspense } from "react";
+import { memo } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
 import { type Platform } from "@telegram-apps/sdk";
@@ -87,9 +87,7 @@ export const Layout: React.FC<LayoutProps> = memo(({ platform }) => {
             "m-auto box-border flex h-full w-full flex-col p-4": true,
           })}
         >
-          <Suspense fallback={<div>load...</div>}>
-            <Outlet />
-          </Suspense>
+          <Outlet />
         </div>
       </div>
 

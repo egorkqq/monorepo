@@ -1,21 +1,63 @@
-import { Link, useLocation } from "react-router-dom";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
+import { useSetAtom } from "jotai";
+
+import { CoinIcon } from "@arc/ui/icons/coin";
+import { GameboyIcon } from "@arc/ui/icons/gameboy";
+import { ShieldTickIcon } from "@arc/ui/icons/shield-tick";
+import { List } from "@arc/ui/list";
+import { ListItem } from "@arc/ui/list-item";
+
+import { mainButtonAtom } from "@/atoms/ui";
 import { RegisterRoute } from "@/routes";
 
 export const RegisterWelcome = () => {
-  const location = useLocation();
+  const navigate = useNavigate();
+
+  const setMainButton = useSetAtom(mainButtonAtom);
+
+  useEffect(() => {
+    setMainButton({
+      title: "Next",
+      onClick: () => navigate(RegisterRoute["add-wallet"]),
+    });
+
+    return () => {
+      setMainButton({});
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <>
-      Its <b>RegisterRoute.index --- {location.pathname}</b>
-      <pre>
-        Welcome to Architec.TON <br />
-        <br />
-        Low transaction fees <br />
-        Combining Game <br />
-        Data Sec Level <br />
-        <br />
-      </pre>
-      <Link to={RegisterRoute["add-wallet"]}>Add wallet</Link>
+      <h1 className="text-title-1 mb-5 mt-4 font-medium">
+        Welcome to <span className="text-accent">Architec.TON</span>
+      </h1>
+
+      <List withGap>
+        <ListItem
+          className="px-5 py-4"
+          leftIconClassName="self-start"
+          leftIcon={<CoinIcon className="stroke-accent h-6 w-6 self-start" />}
+          leftTopText={<div className="mt-0.5">Low transaction fees</div>}
+          leftBottomText="Our wallet has some of the lowest transaction levels on the TON blockchain network in the world. We are working to make sure that you pay even less."
+        />
+        <ListItem
+          className="px-5 py-4"
+          leftIconClassName="self-start"
+          leftIcon={<GameboyIcon className="stroke-accent h-6 w-6" />}
+          leftTopText={<div className="mt-0.5">Combining game projects</div>}
+          leftBottomText="Massive support for tokens of a large number of game projects created on the basis of the TON blockchain. Tokenization of everyday products."
+        />
+        <ListItem
+          className="px-5 py-4"
+          leftIconClassName="self-start"
+          leftIcon={<ShieldTickIcon className="stroke-accent h-6 w-6" />}
+          leftTopText={<div className="mt-0.5">Data security level</div>}
+          leftBottomText="High level of personal data security. Full responsibility for the decentralization of all information."
+        />
+      </List>
     </>
   );
 };

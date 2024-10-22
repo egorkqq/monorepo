@@ -25,22 +25,32 @@ const listItemVariants = cva("flex items-center justify-between bg-background-se
 
 interface ListItemProps extends VariantProps<typeof listItemVariants> {
   leftIcon?: React.ReactNode;
-  leftTopText?: string | React.ReactNode;
-  leftBottomText?: string | React.ReactNode;
+  leftIconClassName?: string;
+
+  leftTopText?: React.ReactNode;
+  leftBottomText?: React.ReactNode;
+
   rightIcon?: React.ReactNode;
-  rightTopText?: string | React.ReactNode;
-  rightBottomText?: string | React.ReactNode;
+  rightIconClassName?: string;
+
+  rightTopText?: React.ReactNode;
+  rightBottomText?: React.ReactNode;
+
   withSeparator?: boolean;
-  children?: React.ReactNode;
+
   className?: string;
+
+  children?: React.ReactNode;
   onClick?: () => void;
 }
 
 export const ListItem: React.FC<ListItemProps> = ({
   leftIcon,
+  leftIconClassName,
   leftTopText,
   leftBottomText,
   rightIcon,
+  rightIconClassName,
   rightTopText,
   rightBottomText,
   withSeparator,
@@ -66,23 +76,23 @@ export const ListItem: React.FC<ListItemProps> = ({
     role="button"
     tabIndex={0}
   >
-    <div className="flex items-center space-x-3">
-      {leftIcon && <div className="flex-shrink-0">{leftIcon}</div>}
+    <div className="flex items-center gap-3">
+      {!!leftIcon && <div className={cn("flex-shrink-0", leftIconClassName)}>{leftIcon}</div>}
 
       <div className="flex flex-col gap-0.5 text-left">
-        {leftTopText && <span className="text-text text-headline">{leftTopText}</span>}
+        {!!leftTopText && <span className="text-text text-headline">{leftTopText}</span>}
 
-        {leftBottomText && <span className="text-text-secondary text-subhead">{leftBottomText}</span>}
+        {!!leftBottomText && <span className="text-text-secondary text-subhead">{leftBottomText}</span>}
       </div>
     </div>
-    <div className="flex items-center space-x-3">
+    <div className="flex items-center gap-3">
       <div className="flex flex-col gap-0.5 text-right">
-        {rightTopText && <span className="text-text text-headline">{rightTopText}</span>}
+        {!!rightTopText && <span className="text-text text-headline">{rightTopText}</span>}
 
-        {rightBottomText && <span className="text-text-secondary text-subhead">{rightBottomText}</span>}
+        {!!rightBottomText && <span className="text-text-secondary text-subhead">{rightBottomText}</span>}
       </div>
 
-      {rightIcon && <div className="flex-shrink-0">{rightIcon}</div>}
+      {rightIcon && <div className={cn("flex-shrink-0", rightIconClassName)}>{rightIcon}</div>}
     </div>
   </div>
 );

@@ -18,6 +18,7 @@ export const RegisterRoute = {
   "confirm-secret-key": `${AppRoute.register}/confirm-secret-key`,
   finish: `${AppRoute.register}/finish`,
   existing: `${AppRoute.register}/existing`,
+  completed: `${AppRoute.register}/completed`,
 } as const;
 
 export const DepositRoute = {

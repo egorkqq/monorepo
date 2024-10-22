@@ -68,7 +68,7 @@ export const WalletControls: React.FC<WalletControlsProps> = memo(({ walletName,
             }}
           >
             <span className="text-text-secondary text-headline font-medium">{trimAddress(walletAddress)}</span>
-            <CopyIcon className="stroke-text-secondary ml-1 h-4 w-4 fill-none" />
+            <CopyIcon bold className="stroke-text-secondary ml-1 h-4 w-4 fill-none" />
           </div>
         )}
       </div>

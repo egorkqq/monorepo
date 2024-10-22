@@ -391,7 +391,7 @@ const MainRoutes = () => {
           }
         />
 
-        <Route path="*" element={<Navigate to="/" />} />
+        <Route path="*" element={<Navigate to={AppRoute.home} />} />
       </Route>
     </Routes>
   );

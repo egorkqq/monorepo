@@ -50,7 +50,7 @@ export const WalletItem = memo(
       <ListItem
         leftTopText={title}
         leftBottomText={trimmedAddress}
-        rightTopText="3 TON" // можно баланс выводить
+        rightTopText="&nbsp;" // можно баланс выводить
         rightBottomText={version}
         rightIcon={<LogoutIcon onClick={handleDisconnectWallet} className="stroke-negative fill-none" />}
         onClick={handleSelectWallet}

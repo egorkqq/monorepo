@@ -1,17 +1,25 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { useSetAtom } from "jotai";
+
 import { useTonWallets } from "@arc/sdk";
 import { cn } from "@arc/ui/cn";
 
+import { mainButtonAtom } from "@/atoms/ui";
 import { usePincodeModal } from "@/components/Pincode/usePincodeModal";
+
+// TODO: move to SDK
+const WALLET_VERSIONS = ["V5R1", "V4"] as const;
+type WalletVersion = (typeof WALLET_VERSIONS)[number];
 
 export const RegisterExisting = () => {
   const { t } = useTranslation();
+
   const { promptPincode, PincodeModalComponent } = usePincodeModal();
   const [seedPhrase, setSeedPhrase] = useState<string[]>(Array(24).fill(""));
   const [isValid, setIsValid] = useState(false);
-
+  const [walletVersion, setWalletVersion] = useState<WalletVersion>("V5R1");
   const { addWallet, list } = useTonWallets();
 
   const handleSubmit = async () => {
@@ -22,7 +30,9 @@ export const RegisterExisting = () => {
         throw new Error("User cancelled");
       }
 
-      addWallet(seedPhrase, pin, "V5R1");
+      const trimmedSeedPhrase = seedPhrase.map((word) => word.trim());
+
+      addWallet(trimmedSeedPhrase, pin, walletVersion);
     } catch (err) {
       // TODO: Alert
       console.error("Failed to add wallet: ", err);
@@ -36,6 +46,7 @@ export const RegisterExisting = () => {
       if (words.length === 24) {
         setSeedPhrase(words);
       } else {
+        // TODO: Alert
         alert(t("REGISTER.INVALID_CLIPBOARD"));
       }
     } catch (err) {
@@ -48,7 +59,6 @@ export const RegisterExisting = () => {
     newSeedPhrase[index] = value;
     setSeedPhrase(newSeedPhrase);
 
-    // Добавляем проверку на вставку seed-фразы
     if (value.split(" ").length === 24) {
       handlePaste(value);
     }
@@ -58,47 +68,61 @@ export const RegisterExisting = () => {
     setIsValid(seedPhrase.every((word) => word.trim().length > 0));
   }, [seedPhrase]);
 
+  const setMainButton = useSetAtom(mainButtonAtom);
+  useEffect(() => {
+    setMainButton({
+      title: t("REGISTER.NEXT"),
+      onClick: handleSubmit,
+      disabled: !isValid,
+    });
+
+    return () => {
+      setMainButton({});
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [handleSubmit, isValid]);
+
   return (
-    <div>
-      Its <b>RegisterRoute.existing</b>
-      <h1>{t("REGISTER.EXISTING")}</h1>
-      <div>
+    <>
+      <div className="flex items-center justify-between gap-2">
+        <h1 className="text-title-1 mb-5 mt-4 font-medium">{t("REGISTER.EXISTING")}</h1>
+        <div className="bg-background-secondary mb-4 flex gap-2 rounded-xl p-2">
+          {WALLET_VERSIONS.map((version) => (
+            <button
+              type="button"
+              key={version}
+              className={cn(
+                "text-caption-1 rounded-lg px-2 py-1",
+                walletVersion === version && "bg-accent text-caption-1",
+              )}
+              onClick={() => setWalletVersion(version)}
+            >
+              {version}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="grid grid-flow-col grid-cols-2 grid-rows-12 gap-2">
         {seedPhrase.map((word, index) => (
-          <input
-            // eslint-disable-next-line react/no-array-index-key
-            key={index}
-            type="text"
-            value={word}
-            onChange={(e) => handleInputChange(index, e.target.value)}
-            onPaste={(e) => {
-              e.preventDefault();
-              handlePaste(e.clipboardData.getData("text"));
-            }}
-            className="w-[50%] rounded-md border-2 border-gray-300 p-2"
-          />
+          // eslint-disable-next-line react/no-array-index-key
+          <div key={index} className="bg-background-secondary flex items-center gap-2 rounded-2xl px-5 py-4">
+            <div className="text-text-secondary">{index + 1}.</div>
+            <input
+              type="text"
+              value={word}
+              onChange={(e) => handleInputChange(index, e.target.value)}
+              onPaste={(e) => {
+                e.preventDefault();
+                handlePaste(e.clipboardData.getData("text"));
+              }}
+              className="w-full bg-transparent focus:outline-none"
+            />
+          </div>
         ))}
       </div>
-      <button
-        type="button"
-        className={cn(
-          "bg-accent mt-4 flex h-10 w-fit items-center gap-1 rounded-full p-2 pl-3 pr-4 text-white shadow-md",
-        )}
-        onClick={() => handlePaste()}
-      >
-        {t("REGISTER.PASTE")}
-      </button>
-      <button
-        type="button"
-        className={cn(
-          "mt-4 flex h-10 w-fit items-center gap-1 rounded-full p-2 pl-3 pr-4 text-white shadow-md",
-          isValid ? "bg-accent" : "bg-gray-400",
-        )}
-        disabled={!isValid}
-        onClick={handleSubmit}
-      >
-        {t("REGISTER.NEXT")}
-      </button>
+
       {PincodeModalComponent}
-    </div>
+    </>
   );
 };

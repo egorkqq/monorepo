@@ -27,6 +27,8 @@
     "EXISTING": "Existing Wallet",
     "PASTE": "Paste",
     "NEXT": "Next",
-    "INVALID_CLIPBOARD": "Clipboard does not contain 24 words"
+    "INVALID_CLIPBOARD": "Clipboard does not contain 24 words",
+    "COMPLETED": "Registration is сompleted",
+    "LETSGO": "Let's go"
   }
 }
