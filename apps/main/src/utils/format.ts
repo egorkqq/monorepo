@@ -1,4 +1,4 @@
-export const formatDate = (date: Date | undefined, lang: string = "en-US") => {
+export const formatDate = (date: Date | undefined, detailed: boolean = true, lang: string = "en-US") => {
   if (!date) return "";
 
   const now = new Date();
@@ -13,11 +13,13 @@ export const formatDate = (date: Date | undefined, lang: string = "en-US") => {
   };
 
   if (isToday) {
-    return `Today, ${date.toLocaleTimeString(lang, options)}`;
+    return detailed ? `Today, ${date.toLocaleTimeString(lang, options)}` : "Today";
   } else if (isYesterday) {
-    return `Yesterday, ${date.toLocaleTimeString(lang, options)}`;
+    return detailed ? `Yesterday, ${date.toLocaleTimeString(lang, options)}` : "Yesterday";
   } else {
-    return `${date.toLocaleDateString(lang, { day: "numeric", month: "long" })}, ${date.toLocaleTimeString(lang, options)}`;
+    return detailed
+      ? `${date.toLocaleDateString(lang, { day: "numeric", month: "long" })}, ${date.toLocaleTimeString(lang, options)}`
+      : date.toLocaleDateString(lang, { day: "numeric", month: "long" });
   }
 };
 

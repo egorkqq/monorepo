@@ -4,6 +4,7 @@ export const AppRoute = {
   catalog: "/catalog",
   news: "/news",
   deposit: "/deposit",
+  history: "/history",
   bank: "/bank",
   swap: "/swap",
   send: "/send",

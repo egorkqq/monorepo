@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 import { trimAddress } from "@arc/sdk";
 import { cn } from "@arc/ui/cn";
 import { ArrowCircleDown2Icon } from "@arc/ui/icons/arrow-circle-down-2";
@@ -6,11 +8,15 @@ import { List } from "@arc/ui/list";
 import { ListItem } from "@arc/ui/list-item";
 
 import { useWalletsInfo } from "@/api/architecton/useWalletsInfo";
-import { formatDate } from "@/utils/format";
+import { AppRoute } from "@/routes";
+import { useFormatter } from "@/utils/hooks/useFormatter";
 
 import { SkeletonListItem } from "../Skeleton/ListItem";
 
 export const WalletHistory = () => {
+  const navigate = useNavigate();
+  const { formatDate, formatTokenValue } = useFormatter();
+
   const { data, isLoading } = useWalletsInfo();
 
   if (isLoading)
@@ -37,7 +43,7 @@ export const WalletHistory = () => {
 
       <List
         className={history.length <= 1 ? "p-0" : undefined}
-        onExpand={history.length > 0 ? () => console.log("expand") : undefined}
+        onExpand={history.length > 0 ? () => navigate(AppRoute.history) : undefined}
       >
         {history.slice(0, 4).map((tx) => (
           <ListItem
@@ -54,7 +60,7 @@ export const WalletHistory = () => {
             rightTopText={
               <p
                 className={cn("font-medium", tx.type === "in" && "text-positive")}
-              >{`${tx.type === "in" ? "+" : "-"}${tx.value} ${tx.symbol}`}</p>
+              >{`${tx.type === "in" ? "+" : "-"}${formatTokenValue(tx.value)} ${tx.symbol}`}</p>
             }
             rightBottomText={formatDate(new Date(tx.utime * 1000))}
             withSeparator

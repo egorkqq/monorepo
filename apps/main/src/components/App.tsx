@@ -33,7 +33,7 @@ import { PageLoader } from "./Loader";
 const Home = React.lazy(() => import("@/pages/Home").then((module) => ({ default: module.Home })));
 const Swap = React.lazy(() => import("@/pages/Home").then((module) => ({ default: module.Swap })));
 const SendRoutes = React.lazy(() => import("@/pages/Send").then((module) => ({ default: module.SendRoutes })));
-
+const History = React.lazy(() => import("@/pages/Home").then((module) => ({ default: module.History })));
 const Bank = React.lazy(() => import("@/pages/Bank").then((module) => ({ default: module.Bank })));
 const BankTasks = React.lazy(() => import("@/pages/Bank").then((module) => ({ default: module.BankTasks })));
 const BankStake = React.lazy(() => import("@/pages/Bank").then((module) => ({ default: module.BankStake })));
@@ -225,6 +225,14 @@ const MainRoutes = () => {
           element={
             <Suspense fallback={<PageLoader />}>
               <SendRoutes />
+            </Suspense>
+          }
+        />
+        <Route
+          path={AppRoute.history}
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <History />
             </Suspense>
           }
         />
