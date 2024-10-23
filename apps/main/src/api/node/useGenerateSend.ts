@@ -3,9 +3,9 @@ import toast from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
 import { type AxiosResponse } from "axios";
 
-import { useTonWallet } from "@arc/sdk";
+import { useNetwork, useTonWallet } from "@arc/sdk";
 
-import nodeAxiosInstance from "@/api/node";
+import nodeAxiosInstance, { getArcNodeBaseUrl } from "@/api/node";
 
 interface Options {
   toAddress: string;
@@ -36,6 +36,7 @@ interface SendJettonTransferResponse {
 
 export const useCreateSendJettonTransfer = (options: Options) => {
   const activeWallet = useTonWallet();
+  const { network } = useNetwork();
 
   return useQuery({
     queryKey: ["sendArc", options],
@@ -48,14 +49,18 @@ export const useCreateSendJettonTransfer = (options: Options) => {
         const response = await nodeAxiosInstance.post<
           SendJettonTransferRequest,
           AxiosResponse<SendJettonTransferResponse>
-        >("/builder/jetton/create-transfer", {
-          user_wallet: activeWallet?.address.toString(),
-          destination_user_wallet: options.toAddress,
-          from_asset: options.fromAsset,
-          amount: options.amount,
-          response_destination: options.toAddress,
-          forward_ton_amount: options.forwardTonAmount,
-        });
+        >(
+          "/builder/jetton/create-transfer",
+          {
+            user_wallet: activeWallet?.address.toString(),
+            destination_user_wallet: options.toAddress,
+            from_asset: options.fromAsset,
+            amount: options.amount,
+            response_destination: options.toAddress,
+            forward_ton_amount: options.forwardTonAmount,
+          },
+          { baseURL: getArcNodeBaseUrl(network) },
+        );
 
         return response.data;
       } catch (err) {

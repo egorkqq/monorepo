@@ -41,6 +41,7 @@ export const Layout: React.FC<LayoutProps> = memo(({ platform }) => {
       active: !([AppRoute.catalog, AppRoute.market, AppRoute.news, AppRoute.settings] as string[]).includes(
         location.pathname,
       ),
+      disabled: location.pathname === AppRoute.home,
     },
     {
       label: "Apps",
@@ -50,6 +51,7 @@ export const Layout: React.FC<LayoutProps> = memo(({ platform }) => {
         navigate(AppRoute.catalog);
       },
       active: location.pathname.startsWith(AppRoute.catalog),
+      disabled: location.pathname === AppRoute.catalog,
     },
     {
       label: "Market",
@@ -59,6 +61,7 @@ export const Layout: React.FC<LayoutProps> = memo(({ platform }) => {
         navigate(AppRoute.market);
       },
       active: location.pathname.startsWith(AppRoute.market),
+      disabled: location.pathname === AppRoute.market,
     },
     {
       label: "News",
@@ -68,6 +71,7 @@ export const Layout: React.FC<LayoutProps> = memo(({ platform }) => {
         navigate(AppRoute.news);
       },
       active: location.pathname.startsWith(AppRoute.news),
+      disabled: location.pathname === AppRoute.news,
     },
     {
       label: "Account",
@@ -77,6 +81,7 @@ export const Layout: React.FC<LayoutProps> = memo(({ platform }) => {
         navigate(AppRoute.settings);
       },
       active: location.pathname.startsWith(AppRoute.settings),
+      disabled: location.pathname === AppRoute.settings,
     },
   ];
 

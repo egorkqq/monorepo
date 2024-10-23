@@ -3,12 +3,18 @@ import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 
 import { useTonWallets } from "@arc/sdk";
+import { TabGroup } from "@arc/ui/tab-group";
 
 import { ShowMainButton } from "@/components/MainButton";
 import { usePincodeModal } from "@/components/Pincode/usePincodeModal";
 
 // TODO: move to SDK
 const WALLET_VERSIONS = ["V5R1", "V4"] as const;
+const WALLET_VERSIONS_MAP = {
+  V5R1: "V5",
+  V4: "V4",
+} as const;
+
 type WalletVersion = (typeof WALLET_VERSIONS)[number];
 
 export const RegisterExisting = () => {
@@ -75,18 +81,12 @@ export const RegisterExisting = () => {
     >
       <div className="flex items-center justify-between gap-2">
         <h1 className="text-title-1 mb-5 mt-4 font-medium">{t("REGISTER.EXISTING")}</h1>
-        <div className="bg-background-secondary mb-4 flex gap-2 rounded-xl p-2">
-          {WALLET_VERSIONS.map((version) => (
-            <button
-              type="button"
-              key={version}
-              className={`text-caption-1 text-text-secondary rounded-lg px-2 py-1 ${walletVersion === version && "bg-accent text-white"}`}
-              onClick={() => setWalletVersion(version)}
-            >
-              {version}
-            </button>
-          ))}
-        </div>
+
+        <TabGroup<WalletVersion>
+          items={WALLET_VERSIONS.map((version) => ({ label: WALLET_VERSIONS_MAP[version], value: version }))}
+          value={walletVersion}
+          onSelect={setWalletVersion}
+        />
       </div>
 
       <div className="grid grid-flow-col grid-cols-2 grid-rows-12 gap-2">

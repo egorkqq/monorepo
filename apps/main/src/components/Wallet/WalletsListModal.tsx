@@ -23,7 +23,7 @@ export const WalletsListModal = ({ isOpen, onClose }: WalletsListProps) => {
   }, [list.length, activeWallet?.id]);
 
   return (
-    <Drawer isOpen={isOpen} title="Wallets" onClose={onClose}>
+    <Drawer isOpen={isOpen} title="Wallets" onClose={onClose} fullHeight={list.length > 3}>
       <List withGap className="m-4" expandText="Add new" onExpand={() => selectWallet(undefined)}>
         {list.map((wallet) => (
           <WalletItem

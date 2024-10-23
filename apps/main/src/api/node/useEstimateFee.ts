@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { type AxiosResponse } from "axios";
 
-import { useTonWallet } from "@arc/sdk";
+import { useNetwork, useTonWallet } from "@arc/sdk";
 
-import nodeAxiosInstance from "@/api/node";
+import nodeAxiosInstance, { getArcNodeBaseUrl } from "@/api/node";
 
 interface Options {
   address: string;
@@ -27,6 +27,7 @@ interface SendJettonTransferResponse {
 
 export const useEstimateFee = (options: Options) => {
   const activeWallet = useTonWallet();
+  const { network } = useNetwork();
 
   return useQuery({
     queryKey: ["estimateFee", options],
@@ -38,13 +39,17 @@ export const useEstimateFee = (options: Options) => {
       const response = await nodeAxiosInstance.post<
         SendJettonTransferRequest,
         AxiosResponse<SendJettonTransferResponse>
-      >("/estimateFee", {
-        address: options.address,
-        body: options.body,
-        ignore_chksig: true,
-        init_code: "",
-        init_data: "",
-      });
+      >(
+        "/estimateFee",
+        {
+          address: options.address,
+          body: options.body,
+          ignore_chksig: true,
+          init_code: "",
+          init_data: "",
+        },
+        { baseURL: getArcNodeBaseUrl(network) },
+      );
 
       return response.data;
     },

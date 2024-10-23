@@ -9,6 +9,7 @@ export interface MenuItem {
   icon: React.ReactNode;
   onClick: () => void;
   active: boolean;
+  disabled?: boolean;
 }
 
 interface MenuProps {
@@ -17,10 +18,10 @@ interface MenuProps {
 }
 
 // TODO: refactor using splitAtom
-const MenuButton: React.FC<MenuItem> = memo(({ label, icon, onClick, active }) => (
+const MenuButton: React.FC<MenuItem> = memo(({ label, icon, onClick, active, disabled }) => (
   <button
     type="button"
-    disabled={active}
+    disabled={disabled}
     onClick={onClick}
     className="flex flex-1 flex-col items-center justify-center gap-1 p-3"
   >
@@ -50,7 +51,14 @@ export const Menu: React.FC<MenuProps> = ({ standalone, items }) => (
   >
     <div className="flex w-full justify-between">
       {items.map((item) => (
-        <MenuButton key={item.label} label={item.label} icon={item.icon} onClick={item.onClick} active={item.active} />
+        <MenuButton
+          key={item.label}
+          label={item.label}
+          icon={item.icon}
+          onClick={item.onClick}
+          active={item.active}
+          disabled={item.disabled}
+        />
       ))}
     </div>
   </nav>
