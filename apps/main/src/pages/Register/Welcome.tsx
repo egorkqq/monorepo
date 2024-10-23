@@ -1,7 +1,4 @@
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
-import { useSetAtom } from "jotai";
 
 import { CoinIcon } from "@arc/ui/icons/coin";
 import { GameboyIcon } from "@arc/ui/icons/gameboy";
@@ -9,28 +6,14 @@ import { ShieldTickIcon } from "@arc/ui/icons/shield-tick";
 import { List } from "@arc/ui/list";
 import { ListItem } from "@arc/ui/list-item";
 
-import { mainButtonAtom } from "@/atoms/ui";
+import { ShowMainButton } from "@/components/MainButton";
 import { RegisterRoute } from "@/routes";
 
 export const RegisterWelcome = () => {
   const navigate = useNavigate();
 
-  const setMainButton = useSetAtom(mainButtonAtom);
-
-  useEffect(() => {
-    setMainButton({
-      title: "Next",
-      onClick: () => navigate(RegisterRoute["add-wallet"]),
-    });
-
-    return () => {
-      setMainButton({});
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return (
-    <>
+    <ShowMainButton onClick={() => navigate(RegisterRoute["add-wallet"])} title="Next">
       <h1 className="text-title-1 mb-5 mt-4 font-medium">
         Welcome to <span className="text-accent">Architec.TON</span>
       </h1>
@@ -58,6 +41,6 @@ export const RegisterWelcome = () => {
           leftBottomText="High level of personal data security. Full responsibility for the decentralization of all information."
         />
       </List>
-    </>
+    </ShowMainButton>
   );
 };

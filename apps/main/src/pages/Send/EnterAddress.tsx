@@ -5,19 +5,16 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 import { Address } from "@ton/core";
-import { useSetAtom } from "jotai";
 
 import { cn } from "@arc/ui/cn";
 import { ScannerIcon } from "@arc/ui/icons/scanner";
 
-import { mainButtonAtom } from "@/atoms/ui";
+import { ShowMainButton } from "@/components/MainButton";
 
 export const EnterAddress = ({ assetAddress }: { assetAddress: string }) => {
   const navigate = useNavigate();
 
   const [address, setAddress] = useState("");
-
-  const setMainButton = useSetAtom(mainButtonAtom);
 
   const isValidAddress = useCallback(() => {
     try {
@@ -28,31 +25,19 @@ export const EnterAddress = ({ assetAddress }: { assetAddress: string }) => {
     }
   }, [address]);
 
-  useEffect(() => {
-    if (!isValidAddress()) {
-      return;
-    }
-
-    setMainButton({
-      title: "Continue",
-      onClick: () => navigate(`/send?assetAddress=${assetAddress}&toAddress=${address}`),
-    });
-
-    return () => {
-      setMainButton({});
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [address]);
-
   return (
-    <div>
+    <ShowMainButton
+      onClick={() => navigate(`/send?assetAddress=${assetAddress}&toAddress=${address}`)}
+      title="Continue"
+      hidden={!isValidAddress()}
+    >
       <AddressInput onAddressChange={setAddress} onScan={() => {}} />
       <div className="bg-separator -mx-4 my-4 h-0.5 w-[calc(100%+2rem)]" />
       <h3 className="text-title-2 text-text mb-2 font-medium">Recent</h3>
       <div className="text-text-secondary">
         Your recent wallets will be displayed here. The list is empty for now, but not for long!
       </div>
-    </div>
+    </ShowMainButton>
   );
 };
 

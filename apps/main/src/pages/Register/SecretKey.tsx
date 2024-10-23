@@ -1,24 +1,24 @@
-import { useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 import { useHapticFeedback } from "@telegram-apps/sdk-react";
 import { mnemonicNew } from "@ton/crypto";
-import { atom, useAtom, useSetAtom } from "jotai";
+import { atom, useAtom } from "jotai";
 
 import { useTonWallets } from "@arc/sdk";
 import { CopyIcon } from "@arc/ui/icons/copy";
 
-import { mainButtonAtom } from "@/atoms/ui";
 import { Loader } from "@/components/Loader";
+import { ShowMainButton } from "@/components/MainButton/ShowMainButton";
 import { usePincodeModal } from "@/components/Pincode/usePincodeModal";
 
 const mnemonicAtom = atom<string[]>([]);
 
 export const RegisterSecretKey = () => {
   const haptic = useHapticFeedback();
-  const setMainButton = useSetAtom(mainButtonAtom);
   const [mnemonic, setMnemonic] = useAtom(mnemonicAtom);
   const mnemonicExists = mnemonic.length > 0;
+  const [hideMainButton, setHideMainButton] = useState(false);
 
   const { promptPincode, PincodeModalComponent } = usePincodeModal();
 
@@ -33,7 +33,8 @@ export const RegisterSecretKey = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleSubmit = async () => {
+  const handleSubmit = useCallback(async () => {
+    setHideMainButton(true);
     try {
       const pin = await promptPincode(list.length > 0 ? "get" : "set");
 
@@ -49,24 +50,13 @@ export const RegisterSecretKey = () => {
 
       setMnemonic([]);
     } catch (err) {
+      setHideMainButton(false);
       haptic.notificationOccurred("error");
       toast.error(
         err instanceof Error ? err.message : "We couldn't create your wallet at this time. Please try again later.",
       );
     }
-  };
-
-  useEffect(() => {
-    setMainButton({
-      title: "Next",
-      onClick: handleSubmit,
-    });
-
-    return () => {
-      setMainButton({});
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [handleSubmit]);
+  }, [mnemonic, mnemonicExists, addWallet, promptPincode, list.length, haptic, setMnemonic]);
 
   const handleCopy = () => {
     haptic.impactOccurred("light");
@@ -80,7 +70,7 @@ export const RegisterSecretKey = () => {
   };
 
   return (
-    <>
+    <ShowMainButton onClick={hideMainButton ? undefined : handleSubmit} title={hideMainButton ? undefined : "Next"}>
       <h1 className="text-title-1 mb-5 mt-4 font-medium">Your secret key</h1>
 
       {/* TODO: skeleton */}
@@ -111,6 +101,6 @@ export const RegisterSecretKey = () => {
       )}
 
       {PincodeModalComponent}
-    </>
+    </ShowMainButton>
   );
 };

@@ -1,9 +1,8 @@
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 import { Address } from "@ton/core";
-import { useSetAtom } from "jotai";
 
 import { trimAddress, useSendTransaction, useTonWallet } from "@arc/sdk";
 import { ArrowCircleUp2Icon } from "@arc/ui/icons/arrow-circle-up-2";
@@ -12,7 +11,7 @@ import { ListItem } from "@arc/ui/list-item";
 
 import { useCreateSendJettonTransfer } from "@/api/node/useGenerateSend";
 import { useAssetDetails } from "@/api/stonFi/useAssetDetails";
-import { mainButtonAtom } from "@/atoms/ui";
+import { ShowMainButton } from "@/components/MainButton";
 import { usePincodeModal } from "@/components/Pincode/usePincodeModal";
 import { formatToNano } from "@/utils/format";
 import { isNativeAddress, NATIVE_TON_ADDRESS } from "@/utils/isNativeAddress";
@@ -30,7 +29,7 @@ export const Confirm = ({
   amount: string;
 }) => {
   const navigate = useNavigate();
-  const setMainButton = useSetAtom(mainButtonAtom);
+
   const activeWallet = useTonWallet();
   const { data: asset } = useAssetDetails(assetAddress);
 
@@ -119,54 +118,42 @@ export const Confirm = ({
     }
   };
 
-  useEffect(() => {
-    if (!canSend) {
-      setMainButton({});
-      return;
-    }
-
-    if (!isTransferFetching && !transfer && !isNativeAddress(assetAddress)) {
-      setMainButton({});
-      return;
-    }
-
-    setMainButton({
-      title: "Confirm",
-      onClick: handleSend,
-      loading: isTransferFetching,
-    });
-
-    return () => {
-      setMainButton({});
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [canSend, isTransferFetching]);
-
   const averageFee = assetAddress === NATIVE_TON_ADDRESS ? 0.0055 : 0.037;
 
   return (
-    <div className="flex h-full flex-col">
-      <div className="flex items-center gap-2">
-        <ArrowCircleUp2Icon className="bg-accent flex h-8 w-8 items-center justify-center rounded-full stroke-white p-1" />
+    <ShowMainButton
+      hidden={!canSend || (!isTransferFetching && !transfer && !isNativeAddress(assetAddress))}
+      onClick={handleSend}
+      title="Confirm"
+      loading={isTransferFetching}
+    >
+      <div className="flex h-full flex-col">
+        <div className="flex items-center gap-2">
+          <ArrowCircleUp2Icon className="bg-accent flex h-8 w-8 items-center justify-center rounded-full stroke-white p-1" />
 
-        <h2 className="text-title-2 text-text font-medium">Send to {trimAddress(toAddress)}</h2>
+          <h2 className="text-title-2 text-text font-medium">Send to {trimAddress(toAddress)}</h2>
+        </div>
+
+        <div className="bg-separator -mx-4 my-4 h-0.5 w-[calc(100%+2rem)]" />
+
+        <List>
+          <ListItem leftTopText="Recipient" rightTopText={trimAddress(toAddress)} withSeparator />
+          <ListItem leftTopText="Currency" rightTopText={asset?.asset.symbol} withSeparator />
+          {!Number.isNaN(Number(amount)) && (
+            <ListItem leftTopText="Amount" rightTopText={Number(amount)} withSeparator />
+          )}
+          <ListItem leftTopText="Commision" rightTopText={`~ ${averageFee} TON`} withSeparator />
+          {comment && <ListItem leftTopText="Comment" rightTopText="In process" withSeparator />}
+        </List>
+
+        {!canSend && (
+          <div className="text-negative text-headline p-2">Please enter valid address, asset and amount</div>
+        )}
+        {!isTransferFetching && !transfer && !isNativeAddress(assetAddress) && (
+          <div className="text-negative text-headline p-2">Error when create transaction body</div>
+        )}
+        {PincodeModalComponent}
       </div>
-
-      <div className="bg-separator -mx-4 my-4 h-0.5 w-[calc(100%+2rem)]" />
-
-      <List>
-        <ListItem leftTopText="Recipient" rightTopText={trimAddress(toAddress)} withSeparator />
-        <ListItem leftTopText="Currency" rightTopText={asset?.asset.symbol} withSeparator />
-        {!Number.isNaN(Number(amount)) && <ListItem leftTopText="Amount" rightTopText={Number(amount)} withSeparator />}
-        <ListItem leftTopText="Commision" rightTopText={`~ ${averageFee} TON`} withSeparator />
-        {comment && <ListItem leftTopText="Comment" rightTopText="In process" withSeparator />}
-      </List>
-
-      {!canSend && <div className="text-negative text-headline p-2">Please enter valid address, asset and amount</div>}
-      {!isTransferFetching && !transfer && !isNativeAddress(assetAddress) && (
-        <div className="text-negative text-headline p-2">Error when create transaction body</div>
-      )}
-      {PincodeModalComponent}
-    </div>
+    </ShowMainButton>
   );
 };

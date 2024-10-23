@@ -12,9 +12,10 @@ export const isTmaEnvironmentAtom = atom(() => {
   }
 });
 
-export const mainButtonAtom = atom<{ title?: string; onClick?: () => void; loading?: boolean; disabled?: boolean }>({
-  title: undefined,
-  onClick: undefined,
-  loading: false,
-  disabled: false,
-});
+export const mainButtonAtom = atom<{
+  title?: string;
+  onClick?: () => void;
+  loading?: boolean;
+  disabled?: boolean;
+  hidden?: boolean;
+}>({});

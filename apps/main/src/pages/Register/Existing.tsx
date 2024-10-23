@@ -1,13 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 
-import { useSetAtom } from "jotai";
-
 import { useTonWallets } from "@arc/sdk";
-import { cn } from "@arc/ui/cn";
 
-import { mainButtonAtom } from "@/atoms/ui";
+import { ShowMainButton } from "@/components/MainButton";
 import { usePincodeModal } from "@/components/Pincode/usePincodeModal";
 
 // TODO: move to SDK
@@ -19,11 +16,12 @@ export const RegisterExisting = () => {
 
   const { promptPincode, PincodeModalComponent } = usePincodeModal();
   const [seedPhrase, setSeedPhrase] = useState<string[]>(Array(24).fill(""));
-  const [isValid, setIsValid] = useState(false);
+  const [hideButton, setHideButton] = useState(false);
   const [walletVersion, setWalletVersion] = useState<WalletVersion>("V5R1");
   const { addWallet, list } = useTonWallets();
 
   const handleSubmit = async () => {
+    setHideButton(true);
     try {
       const pin = await promptPincode(list.length > 0 ? "get" : "set");
 
@@ -35,6 +33,7 @@ export const RegisterExisting = () => {
 
       addWallet(trimmedSeedPhrase, pin, walletVersion);
     } catch (err) {
+      setHideButton(false);
       toast.error(
         err instanceof Error ? err.message : "We couldn't create your wallet at this time. Please try again later.",
       );
@@ -67,26 +66,13 @@ export const RegisterExisting = () => {
     }
   };
 
-  useEffect(() => {
-    setIsValid(seedPhrase.every((word) => word.trim().length > 0));
-  }, [seedPhrase]);
-
-  const setMainButton = useSetAtom(mainButtonAtom);
-  useEffect(() => {
-    setMainButton({
-      title: t("REGISTER.NEXT"),
-      onClick: handleSubmit,
-      disabled: !isValid,
-    });
-
-    return () => {
-      setMainButton({});
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [handleSubmit, isValid]);
-
   return (
-    <>
+    <ShowMainButton
+      onClick={handleSubmit}
+      title={t("REGISTER.NEXT")}
+      disabled={seedPhrase.some((word) => word.trim().length === 0)}
+      hidden={hideButton}
+    >
       <div className="flex items-center justify-between gap-2">
         <h1 className="text-title-1 mb-5 mt-4 font-medium">{t("REGISTER.EXISTING")}</h1>
         <div className="bg-background-secondary mb-4 flex gap-2 rounded-xl p-2">
@@ -94,10 +80,7 @@ export const RegisterExisting = () => {
             <button
               type="button"
               key={version}
-              className={cn(
-                "text-caption-1 rounded-lg px-2 py-1",
-                walletVersion === version && "bg-accent text-caption-1",
-              )}
+              className={`text-caption-1 text-text-secondary rounded-lg px-2 py-1 ${walletVersion === version && "bg-accent text-white"}`}
               onClick={() => setWalletVersion(version)}
             >
               {version}
@@ -126,6 +109,6 @@ export const RegisterExisting = () => {
       </div>
 
       {PincodeModalComponent}
-    </>
+    </ShowMainButton>
   );
 };

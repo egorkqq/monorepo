@@ -1,14 +1,12 @@
 import { forwardRef, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { useSetAtom } from "jotai";
-
 import { trimAddress } from "@arc/sdk";
 import { cn } from "@arc/ui/cn";
 import { ArrowCircleUp2Icon } from "@arc/ui/icons/arrow-circle-up-2";
 
 import { useAssetDetails } from "@/api/stonFi/useAssetDetails";
-import { mainButtonAtom } from "@/atoms/ui";
+import { ShowMainButton } from "@/components/MainButton";
 import { useAssetBalance } from "@/hooks/useAssetBalance";
 import { useFormatter } from "@/utils/hooks/useFormatter";
 import { NATIVE_TON_ADDRESS } from "@/utils/isNativeAddress";
@@ -19,7 +17,6 @@ export const EnterAmount = ({ assetAddress, toAddress }: { assetAddress: string;
 
   const navigate = useNavigate();
   const { formatCurrency, formatFromNano } = useFormatter();
-  const setMainButton = useSetAtom(mainButtonAtom);
 
   const [amount, setAmount] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -39,9 +36,7 @@ export const EnterAmount = ({ assetAddress, toAddress }: { assetAddress: string;
     [balanceInNano, asset?.asset.decimals, formatFromNano],
   );
 
-  const isEnoughBalance = useMemo(() => balance >= Number(amount), [balance, amount]);
-
-  const isEnoughBalanceWithFee = useMemo(
+  const isEnoughBalance = useMemo(
     () => (assetAddress !== NATIVE_TON_ADDRESS ? true : balance >= Number(amount) + 0.01),
     [balance, amount, assetAddress],
   );
@@ -50,71 +45,58 @@ export const EnterAmount = ({ assetAddress, toAddress }: { assetAddress: string;
     inputRef.current?.focus();
   }, []);
 
-  useEffect(() => {
-    if (!isEnoughBalance || !amount || amount === "0") {
-      return;
-    }
-
-    setMainButton({
-      title: "Continue",
-      onClick: () => navigate(`/send?assetAddress=${assetAddress}&toAddress=${toAddress}&amount=${amount}`),
-    });
-
-    return () => {
-      setMainButton({});
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isEnoughBalance, amount]);
-
   return (
-    <div className="flex h-full flex-col">
-      <div className="flex items-center gap-2">
-        <ArrowCircleUp2Icon className="bg-accent flex h-8 w-8 items-center justify-center rounded-full stroke-white p-1" />
+    <ShowMainButton
+      onClick={() => navigate(`/send?assetAddress=${assetAddress}&toAddress=${toAddress}&amount=${amount}`)}
+      title="Continue"
+      hidden={!isEnoughBalance || !amount || amount === "0"}
+    >
+      <div className="flex h-full flex-col">
+        <div className="flex items-center gap-2">
+          <ArrowCircleUp2Icon className="bg-accent flex h-8 w-8 items-center justify-center rounded-full stroke-white p-1" />
 
-        <h2 className="text-title-2 text-text font-medium">Send to {trimAddress(toAddress)}</h2>
-      </div>
-
-      <div className="bg-separator -mx-4 my-4 h-0.5 w-[calc(100%+2rem)]" />
-
-      <div className="flex h-16 max-w-full gap-3 pb-2 pt-3">
-        <TokenAmountInput
-          className={cn("text-text bg-background w-0 min-w-[1ch] text-[40px] font-medium outline-none", {
-            "text-negative": !isEnoughBalance || !isEnoughBalanceWithFee,
-          })}
-          value={amount}
-          onChange={(value) => setAmount(value)}
-        />
-        <div
-          className={cn("text-text-secondary flex-shrink-0 self-end text-[20px] font-medium", {
-            "text-negative": !isEnoughBalance || !isEnoughBalanceWithFee,
-          })}
-        >
-          {asset?.asset.symbol}
-        </div>
-      </div>
-      {amountInUsd && isEnoughBalance && isEnoughBalanceWithFee && (
-        <div className="text-text-secondary text-headline overflow-hidden text-ellipsis whitespace-nowrap">
-          ≈ $ {amountInUsd}
-        </div>
-      )}
-      {!isEnoughBalance && <div className="text-negative text-headline">Not enough balance</div>}
-      {isEnoughBalance && !isEnoughBalanceWithFee && (
-        <div className="text-negative text-headline">Not enough balance incl. fees</div>
-      )}
-
-      <div className="mt-auto flex items-center gap-2 pt-3">
-        <div className="h-8 w-8 flex-shrink-0">
-          <img className="h-full w-full rounded-full" src={asset?.asset.image_url} alt={asset?.asset.display_name} />
+          <h2 className="text-title-2 text-text font-medium">Send to {trimAddress(toAddress)}</h2>
         </div>
 
-        <div className="flex w-full flex-col gap-0.5">
-          <div className="text-caption-1 text-text-secondary">From Balance</div>
-          <div className="text-subhead text-text">
-            {balance} {asset?.asset.symbol}
+        <div className="bg-separator -mx-4 my-4 h-0.5 w-[calc(100%+2rem)]" />
+
+        <div className="flex h-16 max-w-full gap-3 pb-2 pt-3">
+          <TokenAmountInput
+            className={cn("text-text bg-background w-0 min-w-[1ch] text-[40px] font-medium outline-none", {
+              "text-negative": !isEnoughBalance,
+            })}
+            value={amount}
+            onChange={(value) => setAmount(value)}
+          />
+          <div
+            className={cn("text-text-secondary flex-shrink-0 self-end text-[20px] font-medium", {
+              "text-negative": !isEnoughBalance,
+            })}
+          >
+            {asset?.asset.symbol}
+          </div>
+        </div>
+        {amountInUsd && isEnoughBalance && (
+          <div className="text-text-secondary text-headline overflow-hidden text-ellipsis whitespace-nowrap">
+            ≈ $ {amountInUsd}
+          </div>
+        )}
+        {!isEnoughBalance && <div className="text-negative text-headline">Not enough balance</div>}
+
+        <div className="mt-auto flex items-center gap-2 pt-3">
+          <div className="h-8 w-8 flex-shrink-0">
+            <img className="h-full w-full rounded-full" src={asset?.asset.image_url} alt={asset?.asset.display_name} />
+          </div>
+
+          <div className="flex w-full flex-col gap-0.5">
+            <div className="text-caption-1 text-text-secondary">From Balance</div>
+            <div className="text-subhead text-text">
+              {balance} {asset?.asset.symbol}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </ShowMainButton>
   );
 };
 
