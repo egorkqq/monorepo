@@ -36,10 +36,11 @@ export const EnterAmount = ({ assetAddress, toAddress }: { assetAddress: string;
     [balanceInNano, asset?.asset.decimals, formatFromNano],
   );
 
-  const isEnoughBalance = useMemo(
-    () => (assetAddress !== NATIVE_TON_ADDRESS ? true : balance >= Number(amount) + 0.01),
-    [balance, amount, assetAddress],
-  );
+  const isEnoughBalance = useMemo(() => {
+    if (assetAddress !== NATIVE_TON_ADDRESS) return balance >= Number(amount);
+
+    return balance >= Number(amount) + 0.01;
+  }, [balance, amount, assetAddress]);
 
   useEffect(() => {
     inputRef.current?.focus();
