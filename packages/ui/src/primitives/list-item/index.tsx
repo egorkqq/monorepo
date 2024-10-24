@@ -62,7 +62,6 @@ export const ListItem: React.FC<ListItemProps> = ({
   <div
     className={cn(
       listItemVariants({ fullWidth, gap }),
-      onClick && "active:outline-accent focus:outline-accent",
       withSeparator &&
         "focus:bg-background-secondary/70 rounded-b-none border-b border-black/5 last:rounded-b-2xl last:border-b-0 focus:outline-none dark:border-white/5",
       className,

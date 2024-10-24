@@ -16,6 +16,7 @@ import { Menu } from "@arc/ui/menu";
 import { showMenuAtom } from "@/atoms/ui";
 import { AppRoute } from "@/routes";
 
+import BackButton from "./BackButton";
 import { MainButton } from "./MainButton";
 import { StyledToaster } from "./Toaster";
 
@@ -101,6 +102,7 @@ export const Layout: React.FC<LayoutProps> = memo(({ platform }) => {
       {showMenu && <Menu standalone={platform === "ios"} items={items} />}
 
       <MainButton />
+      <BackButton />
     </div>
   );
 });

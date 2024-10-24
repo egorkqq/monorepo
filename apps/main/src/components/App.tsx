@@ -496,7 +496,10 @@ export const RegisterRoutes = () => {
               </div>
             }
           />
-          <Route path="*" element={<Navigate to={RegisterRoute.index} />} />
+          <Route
+            path="*"
+            element={<Navigate to={list.length === 0 ? RegisterRoute.index : RegisterRoute["add-wallet"]} />}
+          />
         </Route>
       </Routes>
     </Suspense>
